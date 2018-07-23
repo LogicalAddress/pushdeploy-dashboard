@@ -1,0 +1,190 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import AppTable from './AppTable.jsx';
+var Link = require('react-router-dom').Link;
+import AppSetupAction from '../actions/AppSetup';
+import {error, success} from '../utils/toastr';
+import {isWorking, isDoneWorking } from '../actions/Common';
+import req from '../api/req.js';
+import ServerLogs from './ServerLogs';
+
+class Server extends React.Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+          data: ''
+        };
+        
+        this.createApp = this.createApp.bind(this);
+     }
+  
+    componentDidMount() {
+        this.props.update({server: this.props.match.params.id});
+    }
+    
+    remoteAppValidation(payload, type){
+        this.props.isWorking();
+        payload = Object.assign(payload, {git_provider: type});
+        req.post('/v1/app/validate', payload, /*"http://techpool-dretnan.c9users.io"*/"https://launcher-dretnan.c9users.io")
+            .then((response) => {
+                console.log("DEBUG", response);
+                return response.json();
+            }).then((response) => {
+                this.props.isDoneWorking();
+                if (response && response.body && response.body.status === "success") {
+                    var repoData = response.body.data;
+                    if(!repoData.hasRead && this.props.draft.app_repository.indexOf("github.com") > -1 && 
+                      !this.props.credentials.github_username){
+                      error('Gosh', 'You have not connected github to your account yet');
+                      return;
+                    }
+                    if(!repoData.hasRead && this.props.draft.app_repository.indexOf("bitbucket.org") > -1 && 
+                        !this.props.credentials.bitbucket_username){
+                      error('Gosh', 'You have not connected bitbucket to your account yet');
+                      return;
+                    }
+                    if(!repoData.hasRead){
+                        error('Gosh', 'You don\'t have the read permission to this repo');
+                        return;
+                    }
+                    success("Validated", 'Still working..');
+                    this.props.update({repo_meta_data: repoData});
+                    this.props.createApp(this.props.draft);
+                    return;
+                }
+                error("Damn!", "Something unexpected occured");
+                console.log("DEBUG", response);
+            }).catch((err) => {
+                console.log(err);
+                this.props.isDoneWorking();
+                error("Damn!", err.message);
+            });
+    }
+    
+    createApp() {
+        
+        if(!this.props.draft.app_name.length){
+          return error('Gosh', 'Your domain is required');
+        }
+        
+        if (!(/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(this.props.draft.app_name))){
+              return error('Gosh', 'Not a valid domain name');
+        }
+        
+        if(this.props.draft.app_repository.length === 0){
+          return error('Gosh', 'A git repo is required');
+        }
+        
+        if(this.props.draft.app_repository.indexOf("github.com") < 0 && 
+          this.props.draft.app_repository.indexOf("bitbucket.org") < 0  ){
+          return error('Oh Gosh', 'Only github and bitbucket are supported at the moment');
+        }
+        
+        var git_provider = this.props.draft.app_repository.indexOf("github.com") >-1 ? 'github' : 'bitbucket';
+        this.remoteAppValidation(this.props.draft, git_provider);
+    }
+    
+    render() {
+        var server = {};
+        var apps = [];
+        var servers = this.props.servers;
+        for(var i = 0; i < servers.length; i++){
+            if(servers[i]._id === this.props.match.params.id){
+                server = servers[i];
+                apps = servers[i].apps;
+                break;
+            }
+        }
+        
+      return (
+         <div className="container">
+            <div className="float-right">
+                <div className="server-summary">
+                    <span className="horizontal-space">{server.server_name}</span>
+                    <span className="horizontal-space">{server.state}</span>
+                    <span className="horizontal-space">{server.ipv4}</span>
+                </div>
+            </div>
+            <div className="row">
+                <div className="column column-20">
+                    <h3>Server Details</h3>
+                    <ul>
+                        <li><Link to={"/mongodb/" + server._id}>MongoDB</Link></li>
+                        <li><Link to={"/mongodb/" + server._id}>Mysql</Link></li>
+                        <hr/>
+                    </ul>
+                    <ul>
+                        <li><ServerLogs server={server}/></li>
+                    </ul>
+                </div>
+                <div className="column column-80">
+                    <div className="white panel">
+                        <h3>Create App</h3>
+                        <form>
+                            <fieldset>
+                                <label htmlFor="nameField">Root Domain</label>
+                                <input value={this.props.draft.app_name} onChange={(e) => this.props.update({app_name: e.target.value})} placeholder="e.g domain.com" id="nameField" type="text"/>
+                                <div className="row">
+                                  <div className="column column-50">
+                                      <label htmlFor="template">Template</label>
+                                      <select id="template" name="template" value={this.props.draft.template} onChange={(e) => this.props.update({template: e.target.value})}>
+                                          <option value="nodejs">NodeJS</option>
+                                      </select>
+                                  </div>
+                                  <div className="column column-50">
+                                      <label htmlFor="template_variation">Template Variation</label>
+                                      <select id="template_variation" name="template_variation" value={this.props.draft.template_variation} onChange={(e) => this.props.update({template_variation: e.target.value})}>
+                                          <option value="v8.9.3">v8.9.3</option>
+                                      </select>
+                                  </div>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="app_repository">Git Repository</label>
+                                  <input placeholder="e.g git@github.com:dretnan/droauth.git" id="app_repository" type="text" value={this.props.draft.app_repository} onChange={(e) => this.props.update({app_repository: e.target.value})}/>
+                                </div>
+                                <div className="row">
+                                    <div className="column">
+                                      <a className="button" onClick={this.createApp}>Add App</a>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div className="white panel">
+                        <h3>Active Apps</h3>
+                        <AppTable apps={apps}/>
+                    </div>
+                </div>
+            </div>
+         </div>
+      )
+   }
+}
+
+Server.propTypes = {
+  servers: PropTypes.array,
+  credentials: PropTypes.object.isRequired,
+  isWorking: PropTypes.func,
+  isDoneWorking: PropTypes.func,
+};
+
+const mapStoreToProps = (storeState) => (
+    {
+        servers: storeState.servers,
+        draft: storeState.appSetupDraft,
+        credentials: storeState.credentials,
+        
+    }
+);
+
+const mapDispatchToProps = (dispatch) => ({
+  createApp: (draft) => dispatch(AppSetupAction.createApp(draft)),
+  update: (draft) => dispatch(AppSetupAction.updateDraft(draft)),
+  isWorking: ()=> dispatch(isWorking()),
+  isDoneWorking: ()=> dispatch(isDoneWorking()),
+
+});
+
+export default connect(mapStoreToProps, mapDispatchToProps)(Server)
