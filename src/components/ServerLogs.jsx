@@ -26,10 +26,10 @@ class ServerLogs extends React.Component {
               this.setState({logs: response.body.data});
               return;
           }
-          error("Damn!", "Unable to retrieve log, hit the reload button");
+          error('Notification', "Unable to retrieve log, hit the reload button");
           console.log("DEBUG", response);
       }).catch((err) => {
-          error("Damn!", err.message);
+          error('Notification', err.message);
       });
   }
 

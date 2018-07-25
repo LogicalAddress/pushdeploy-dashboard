@@ -4,7 +4,7 @@ import req from '../../api/req.js';
 import {error, success} from '../../utils/toastr';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {isWorking, isDoneWorking, updatePlan } from '../../actions/Common';
+import {isWorking, isDoneWorking, updatePlan, changeRoute } from '../../actions/Common';
 import Constants from '../../Constants';
 
 class Stripe extends React.Component {
@@ -28,21 +28,19 @@ class Stripe extends React.Component {
                 return response.json();
             }).then((response) => {
                 this.props.isDoneWorking();
-                if (response.status) {
+                if (response.body && response.body.status === 'success') {
                     this.props.updatePlan({
                         primaryPlan: this.state.selectedPlan
                     });
-                    success("Congrats!", 'You can start launching your apps now');
-                    // this.history.pushState(null, '/');
+                    success('Notification', 'You can start launching your apps now');
+                    this.props.changeRoute('/');
                     return;
                 }
-                error("Damn!", "something unexpected occured");
-                console.log("DEBUG", response);
                 throw new Error("Unexpected response please try again");
             }).catch((err) => {
                 // this.props.stopProgress();
                 this.props.isDoneWorking();
-                error("Damn!", err.message);
+                error('Notification', err.message);
             });
     }
     
@@ -113,6 +111,7 @@ const mapDispatchToProps = (dispatch) => (
         isWorking: ()=> dispatch(isWorking()),
         isDoneWorking: ()=> dispatch(isDoneWorking()),
         updatePlan: (plan) => dispatch(updatePlan(plan)),
+        changeRoute: (route)=> dispatch(changeRoute(route)),
       }
     );
 

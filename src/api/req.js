@@ -20,12 +20,13 @@ let req = {
         if(!baseURL) baseURL = constants.API_URL;
         var user = sessionStorage.getItem('user');
         user = (user ? JSON.parse(user) : null);
+        var access_token = user ? user.access_token : '';
         return fetch(baseURL + route, { /* global fetch */
-          credentials: 'same-origin',
-          headers: {
-                // 'Content-Type': 'application/json', //don't uncomment
-                'x-access-token': user ? user.access_token: ""
-            },
+          method: 'GET',
+          headers: new Headers({ /*global Headers*/
+                "Content-Type": "application/json",
+                'X-Access-Token': access_token
+            }),
         })
     },
     
@@ -33,17 +34,16 @@ let req = {
         if(!baseURL) baseURL = constants.API_URL;
         var user = sessionStorage.getItem('user');
         user = (user ? JSON.parse(user) : null);
-        if(!user) return console.log("Unresponsive Mode");
+        var access_token = user ? user.access_token : '';
         return fetch(baseURL + route, {
             method: 'POST',
             body: JSON.stringify(payload),
             headers: new Headers({ /*global Headers*/
                 "Content-Type": "application/json",
-                'X-Access-Token': user.access_token
+                'X-Access-Token': access_token
             }),
         });
     }
-
 }
 
 export default req;

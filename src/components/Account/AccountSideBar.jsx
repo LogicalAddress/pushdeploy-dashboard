@@ -14,11 +14,11 @@ class AccountSideBar extends React.Component {
         req.get('/logout')
         .then((response) => {
             sessionStorage.removeItem('user');
-            success("Congrats!", 'You are logged out');
+            success('Notification', 'You are logged out');
             window.location = "/";
         }).catch((err) => {
             this.props.isDoneWorking();
-            error("Damn!", err.message);
+            error('Notification', err.message);
         });
     }
     

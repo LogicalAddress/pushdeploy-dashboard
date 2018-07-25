@@ -1,15 +1,23 @@
 export default {
     
-  API_URL: 'https://launcher-dretnan.c9users.io',
+  // API_URL: 'https://launcher-dretnan.c9users.io',
+  API_URL: 'https://techpool-dretnan.c9users.io',
   // API_URL: 'https://demo3709686.mockable.io',
   
   FETCH_PROFILE: 'fetch profile',
   FETCH_PROFILE_SUCCESS: 'fetch profile success',
   FETCH_PROFILE_ERROR: 'fetch profile error',
   
-  FETCH_USER: 'fetch user',
-  FETCH_USER_SUCCESS: 'fetch user success',
-  FETCH_USER_ERROR: 'fetch user error',
+  UPDATE_USER_DRAFT: 'update user draft',
+  SET_LOGGEDIN_USER: 'set logged in user',
+  
+  LOGIN_USER: 'login user',
+  LOGIN_USER_SUCCESS: 'login user success',
+  LOGIN_USER_ERROR: 'login user error',
+  
+  REGISTER_USER: 'register user',
+  REGISTER_USER_SUCCESS: 'register user success',
+  REGISTER_USER_ERROR: 'register user error',
   
   FETCH_SERVERS: 'fetch servers',
   FETCH_SERVERS_SUCCESS: 'fetch servers success',

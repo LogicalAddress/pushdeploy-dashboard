@@ -35,11 +35,11 @@ class App extends React.Component {
               success("Notification", "Deploy Successful");
               return;
           }
-          error("Damn!", "Unable deploy this app");
+          error('Notification', "Unable deploy this app");
           console.log("DEBUG", response);
         }).catch((err) => {
             this.setState({isDeploying: false});
-            error("Damn!", err.message);
+            error('Notification', err.message);
         });
     }
     

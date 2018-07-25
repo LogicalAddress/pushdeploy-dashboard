@@ -27,7 +27,7 @@ class Server extends React.Component {
     remoteAppValidation(payload, type){
         this.props.isWorking();
         payload = Object.assign(payload, {git_provider: type});
-        req.post('/v1/app/validate', payload, /*"http://techpool-dretnan.c9users.io"*/"https://launcher-dretnan.c9users.io")
+        req.post('/v1/app/validate', payload)
             .then((response) => {
                 console.log("DEBUG", response);
                 return response.json();
@@ -49,17 +49,17 @@ class Server extends React.Component {
                         error('Gosh', 'You don\'t have the read permission to this repo');
                         return;
                     }
-                    success("Validated", 'Still working..');
+                    success('Notification', 'Still working..');
                     this.props.update({repo_meta_data: repoData});
                     this.props.createApp(this.props.draft);
                     return;
                 }
-                error("Damn!", "Something unexpected occured");
+                error('Notification', "Something unexpected occured");
                 console.log("DEBUG", response);
             }).catch((err) => {
                 console.log(err);
                 this.props.isDoneWorking();
-                error("Damn!", err.message);
+                error('Notification', err.message);
             });
     }
     

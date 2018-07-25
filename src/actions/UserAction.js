@@ -1,16 +1,37 @@
 import { dispatchAsync } from '../ReduxDispatcher';
 import constants from '../Constants.js';
 import UserAPI from '../api/UserAPI.js';
-
 let UserAction = {
   
-  fetchUser() {
+  updateDraft(payload) {
     return (dispatch) => {
-      dispatchAsync(UserAPI.fetchUser, dispatch, {
-        request: constants.FETCH_USER,
-        success: constants.FETCH_USER_SUCCESS,
-        failure: constants.FETCH_USER_ERROR
-      });
+      dispatch({ type: constants.UPDATE_USER_DRAFT, payload});
+    };
+  },
+  
+  setLoggedInUser(payload) {
+    return (dispatch) => {
+      dispatch({ type: constants.SET_LOGGEDIN_USER, payload});
+    };
+  },
+  
+  login(payload) {
+    return (dispatch) => {
+      dispatchAsync(UserAPI.login, dispatch, {
+        request: constants.LOGIN_USER,
+        success: constants.LOGIN_USER_SUCCESS,
+        failure: constants.LOGIN_USER_ERROR
+      }, payload);
+    }
+  },
+  
+  register(payload) {
+    return (dispatch) => {
+      dispatchAsync(UserAPI.register, dispatch, {
+        request: constants.REGISTER_USER,
+        success: constants.REGISTER_USER_SUCCESS,
+        failure: constants.REGISTER_USER_ERROR
+      }, payload);
     }
   },
 

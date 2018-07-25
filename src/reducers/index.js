@@ -12,7 +12,7 @@ import appSetupDraft from './AppSetupDraftReducer';
 import subscription from './SubscriptionReducer';
 import credentials from './CredentialsReducer';
 import activeApp from './ActiveApp';
-import activeServer from './ActiveServer'
+import activeServer from './ActiveServer';
 const reducers = combineReducers({
   profile,
   profileDraft,

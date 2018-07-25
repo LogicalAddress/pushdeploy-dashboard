@@ -8,9 +8,6 @@ const initialState = {
  
 const profile = (state = initialState, action) => {
     switch (action.type) {
-      case constants.FETCH_USER_SUCCESS:
-        var user = action.payload.response.body.data;
-        return {...state, ...user};
       case constants.FETCH_PROFILE_SUCCESS:
         return {...state, ...action.payload.response.body.data }
       case constants.FETCH_PROFILE_ERROR:

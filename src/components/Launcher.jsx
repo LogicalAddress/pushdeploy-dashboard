@@ -1,33 +1,62 @@
 import React from 'react';
-import Header from './Header.jsx';
+import Header from './Header';
+// import Login from './Account/Login';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import Footer from './Footer.jsx';
 import Loader from '../lib/loader';
 import PropTypes from 'prop-types';
-// import { bindActionCreators } from 'redux'
 import UserAction from '../actions/UserAction';
 import ServersAction from '../actions/ServersAction';
 import CredentialsAction from '../actions/CredentialsAction';
 // import ProfileAction from '../actions/ProfileAction';
+import {error, success} from '../utils/toastr';
+import req from '../api/req.js';
+import {isWorking, isDoneWorking, changeRoute } from '../actions/Common';
 
 class Launcher extends React.Component {
+  
+  constructor(props){
+    super(props);
+    this.state = {
+        loggedIn: false,
+    };
+  }
+    
   componentDidMount() {
-    //dispatch everything here
-    this.props.fetchUser();
-    this.props.fetchUserCredentials();
-    this.props.fetchServers();
-    // this.props.fetchProfile();
-    // this.props.fetchSubscription();
+    this.props.isWorking();
+    req.get('/v1/user')
+    .then((response) => {
+        return response.json();
+    }).then((response) => {
+      this.props.isDoneWorking();
+      if (response.body && response.body.status === 'success') {
+          success('Notification', 'You are logged in');
+          this.setState({loggedIn: true});
+          this.props.setLoggedInUser(response.body.data);
+          this.props.fetchUserCredentials();
+          this.props.fetchServers();
+          this.props.changeRoute('/');
+          return;
+      }
+      throw new Error("Unexpected response please try again");
+    }).catch((err) => {
+        this.props.isDoneWorking();
+        if(this.props.UrlPathname === '/register'){
+          return;
+        }
+        error("Notification!", "Please login to continue");
+        this.props.changeRoute('/login');
+    });
   }
   
   render() {
       return (
         <div>
-          {this.props.loading && <Loader />}
-          <Header />
-          {this.props.children}
-          <Footer/>
+          { this.props.loading && <Loader /> }
+          { this.state.loggedIn && <Header loggedIn={this.state.loggedIn}/> }
+          { this.props.children }
+          { this.state.loggedIn && <Footer loggedIn={this.state.loggedIn}/> }
         </div>
       );
   }
@@ -42,13 +71,21 @@ Launcher.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchUser: () => dispatch(UserAction.fetchUser()),
+  setLoggedInUser: (payload) => dispatch(UserAction.setLoggedInUser(payload)),
   fetchServers: () => dispatch(ServersAction.fetchServers()),
+  isWorking: ()=> dispatch(isWorking()),
+  changeRoute: (route)=> dispatch(changeRoute(route)),
+  isDoneWorking: ()=> dispatch(isDoneWorking()),
   fetchUserCredentials: () => dispatch(CredentialsAction.fetchUserCredentials()),
   // fetchProfile: () => dispatch(ProfileAction.fetchProfile()),
 });
 
 export default withRouter(connect(
   (state) => ({
-    loading: state.loading.loading
+    loading: state.loading.loading,
+    user: state.user,
+    UrlPathname: state.router.location.pathname,
+    Urlsearch: state.router.location.search,
+    UrlHash: state.router.location.hash,
   }), mapDispatchToProps
 )(Launcher));

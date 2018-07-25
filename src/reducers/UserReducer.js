@@ -1,16 +1,40 @@
 import constants from '../Constants';
+import {error, success} from '../utils/toastr.js';
 
 const initialState = {};
  
 const user = (state = initialState, action) => {
     switch (action.type) {
-      case constants.FETCH_USER_SUCCESS:
-        return {...state, ...action.payload.response.body.data}
-      case constants.FETCH_USER_ERROR:
-        return state
+      case constants.UPDATE_USER_DRAFT:
+        return {...state, ...action.payload};
+      case constants.SET_LOGGEDIN_USER:
+         var localUser = sessionStorage.getItem('user');
+        localUser = (localUser ? JSON.parse(localUser) : {});
+        return {...state, ...localUser};
+      case constants.LOGIN_USER_SUCCESS:
+        success("Notification", "Login Successful");
+        var remoteUser = Object.assign(action.payload.response.body.data, 
+        {timestamp: new Date()});
+        console.log("Setting", JSON.stringify(remoteUser));
+        sessionStorage.setItem('user', 
+        JSON.stringify(remoteUser));
+        window.location = "/";
+        return {...state, ...remoteUser};
+      case constants.REGISTER_USER_SUCCESS:
+        success("Notification", "Registration Successful");
+        sessionStorage.setItem('user', 
+        JSON.stringify(Object.assign(action.payload.response.body.data, 
+        {timestamp: new Date()})));
+        return {...state, ...action.payload.response.body.data};
+      case constants.LOGIN_USER_ERROR:
+        error('Oopse!', action.payload.error || "Please check your input and try again");
+        return state;
+      case constants.REGISTER_USER_ERROR:
+        error('Oopse!', action.payload.error || "Please check your input and try again");
+        return state;
       default:
         return state;
     }
-}
+};
  
 export default user;
