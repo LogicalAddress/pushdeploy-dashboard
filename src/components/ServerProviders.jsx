@@ -53,7 +53,7 @@ class ServerProviders extends React.Component {
         <div className="row">
           <div className="column">
             <center>
-            <button onClick={this.displayLinode}>Add Linode</button> <button className="button-outline" onClick={this.displayAWS}>Add AWS</button> <button onClick={this.displayCustom} className="button button-outline">Add Custom</button>
+            {/*<button onClick={this.displayLinode}>Add Linode</button> */}<button onClick={this.displayAWS}>Add AWS</button> <button onClick={this.displayCustom} className="button button-outline">Add Custom</button>
             </center>
           </div>
         </div>

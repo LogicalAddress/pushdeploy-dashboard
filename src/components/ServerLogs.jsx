@@ -49,7 +49,7 @@ class ServerLogs extends React.Component {
 
   render() {
     return (
-      <Popup onOpen={() => this.getLogs(this.props.server._id)} trigger={<Link to="#" onClick={(e) => { e.preventDefault()}}> View Server Log</Link>} modal>
+      <Popup onOpen={() => this.getLogs(this.props.server._id)} trigger={<Link to="#" onClick={(e) => { e.preventDefault()}}> View Last 100 Lines of Server Log</Link>} modal>
       {close => (
           <div className="modal">
             <a className="close" onClick={close}>

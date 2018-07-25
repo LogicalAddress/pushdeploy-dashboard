@@ -124,12 +124,7 @@ class Server extends React.Component {
                 <div className="column column-20">
                     <h3>Server Details</h3>
                     <ul>
-                        <li><Link to={"/mongodb/" + server._id}>MongoDB</Link></li>
-                        <li><Link to={"/mongodb/" + server._id}>Mysql</Link></li>
-                        <hr/>
-                    </ul>
-                    <ul>
-                        <li><ServerLogs server={server}/></li>
+                        <li><Link to={"/mongodb/" + server._id}>Database</Link></li>
                     </ul>
                 </div>
                 <div className="column column-80">
@@ -161,6 +156,10 @@ class Server extends React.Component {
                                     <div className="column">
                                       <a className="button" onClick={this.createApp}>Add App</a>
                                     </div>
+                                    <div className="column">
+                                        <ServerLogs server={server}/>
+                                    </div>
+                                    <div className="clear"></div>
                                 </div>
                             </fieldset>
                         </form>
