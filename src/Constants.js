@@ -15,6 +15,11 @@ export default {
   LOGIN_USER_SUCCESS: 'login user success',
   LOGIN_USER_ERROR: 'login user error',
   
+  MYSQL_UPDATE_DRAFT: 'update the mysql create wizard',
+  MYSQL_CREATE_DATABASE: 'create a mysql database with the default user',
+  MYSQL_CREATE_DATABASE_SUCCESS: 'create mysql database success',
+  MYSQL_CREATE_DATABASE_ERROR: 'create mysql database failed',
+  
   REGISTER_USER: 'register user',
   REGISTER_USER_SUCCESS: 'register user success',
   REGISTER_USER_ERROR: 'register user error',

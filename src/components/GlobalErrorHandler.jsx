@@ -27,7 +27,7 @@ class GlobalErrorHandler extends React.Component {
         <div>
           <div className="outer">
           <div className="middle">
-            <div class="row" style={{width: 'auto'}}>
+            <div className="row" style={{width: 'auto'}}>
             <div className="column column-50 column-offset-25">
             <center><img src={logo} height="100" alt="PushDeploy"/></center><br/>
             <div className="white panel">

@@ -124,7 +124,7 @@ class Server extends React.Component {
                 <div className="column column-20">
                     <h3>Server Details</h3>
                     <ul>
-                        <li><Link to={"/mongodb/" + server._id}>Database</Link></li>
+                        <li><Link to={"/databases/" + server._id}>Database</Link></li>
                     </ul>
                 </div>
                 <div className="column column-80">

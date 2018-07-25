@@ -13,6 +13,8 @@ import subscription from './SubscriptionReducer';
 import credentials from './CredentialsReducer';
 import activeApp from './ActiveApp';
 import activeServer from './ActiveServer';
+import mysqlDraft from './MysqlDraftReducer';
+
 const reducers = combineReducers({
   profile,
   profileDraft,
@@ -28,6 +30,7 @@ const reducers = combineReducers({
   credentials,
   activeApp,
   activeServer,
+  mysqlDraft,
 });
 
 export default reducers;
