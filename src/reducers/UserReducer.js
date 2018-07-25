@@ -1,7 +1,12 @@
 import constants from '../Constants';
 import {error, success} from '../utils/toastr.js';
 
-const initialState = {};
+const initialState = {
+  name: '',
+  email: '',
+  password: '',
+  mobileNumber: '',
+};
  
 const user = (state = initialState, action) => {
     switch (action.type) {
@@ -25,6 +30,7 @@ const user = (state = initialState, action) => {
         sessionStorage.setItem('user', 
         JSON.stringify(Object.assign(action.payload.response.body.data, 
         {timestamp: new Date()})));
+        window.location = "/";
         return {...state, ...action.payload.response.body.data};
       case constants.LOGIN_USER_ERROR:
         error('Oopse!', action.payload.error || "Please check your input and try again");

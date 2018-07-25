@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import UserAction from '../../actions/UserAction';
 import { error } from '../../utils/toastr';
 import logo from '../../../assets/images/logo.png';
+var Link = require('react-router-dom').Link;
 
 class Login extends React.Component {
   
@@ -32,7 +33,7 @@ class Login extends React.Component {
         <div>
           <div className="outer">
           <div className="middle">
-            <div class="row" style={{width: 'auto'}}>
+            <div className="row" style={{width: 'auto'}}>
             <div className="column column-50 column-offset-25">
             <center><img src={logo} height="100" alt="PushDeploy"/></center><br/>
             <div className="white panel">
@@ -42,6 +43,9 @@ class Login extends React.Component {
                   <input placeholder="support@pushdeploy.io" id="email" type="text" value={this.props.user.email} onChange={(e) => this.props.update({email: e.target.value})}/>
                   <label htmlFor="password">Password</label>
                   <input placeholder="P@55w0rd" id="password" type="password" value={this.props.user.password} onChange={(e) => this.props.update({password: e.target.value})}/>
+                  <div className="float-right">
+                    <Link to="/register">Register here</Link>
+                  </div>
                   <input onClick={this.login} className="button-primary" value="Login" type="submit"/>
                 </fieldset>
               </form>

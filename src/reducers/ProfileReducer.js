@@ -3,7 +3,6 @@ import constants from '../Constants';
 const initialState = {
   currency: 'USD',
   primaryPlan: '',
-  secondaryPlan: ''
 };
  
 const profile = (state = initialState, action) => {
@@ -18,6 +17,14 @@ const profile = (state = initialState, action) => {
         return state;
       case constants.UPDATE_PLAN:
         return {...state, ...action.payload}
+      case constants.REGISTER_USER_SUCCESS:
+        return {...state, ...action.payload.response.body.data};
+      case constants.LOGIN_USER_SUCCESS:
+        return {...state, ...action.payload.response.body.data};
+      case constants.SET_LOGGEDIN_USER:
+         var localUser = sessionStorage.getItem('user');
+        localUser = (localUser ? JSON.parse(localUser) : {});
+        return {...state, ...localUser};
       default:
         return state;
     }

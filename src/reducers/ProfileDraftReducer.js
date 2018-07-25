@@ -5,7 +5,6 @@ import update from 'react-addons-update';
 let initialState = {
   currency: 'USD',
   primaryPlan: '',
-  secondaryPlan: ''
 };
 
 const initialAction = { type: 'initial state'}

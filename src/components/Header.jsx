@@ -27,17 +27,17 @@ class Header extends React.Component {
               <Link to="/">PushDeploy.io</Link>
             </div>
             <div className="left menu">
-              <ul>
+              <ul id="left-menu-list">
                 <li className="dropdown">
                   <Link to="/">Servers</Link>
                   <div className="submenu">
-                    <ul>{serverList}</ul>
+                    <ul id="server-list">{serverList}</ul>
                   </div>
                 </li>
                 <li className="dropdown">
                   <Link to="/">Apps</Link>
                   <div className="submenu">
-                    <ul>{appList}</ul>
+                    <ul id="app-list">{appList}</ul>
                   </div>
                 </li>
                 <li><input type="text" placeholder="Search.." id="search"/></li>

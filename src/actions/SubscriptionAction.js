@@ -29,7 +29,7 @@ let SubscriptionAction = {
     return (dispatch) => dispatch({
       type: Constants.FETCH_SUBSCRIPTION, 
       payload: Object.assign({}, {
-        plan: (plan_type === 'primary' ? (profile.primaryPlan ? profile.primaryPlan : '' ) : (profile.secondaryPlan ? profile.secondaryPlan : '')),
+        plan: (plan_type === 'primary' ? (profile.primaryPlan ? profile.primaryPlan : '' ) : ''),
         plan_type,
       })});
   },
