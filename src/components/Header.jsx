@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 var Link = require('react-router-dom').Link
-import { setActiveApp, setActiveServer } from '../actions/Common';
+import { setActiveApp } from '../actions/Common';
 
 class Header extends React.Component {
     render() {
@@ -10,13 +10,13 @@ class Header extends React.Component {
       var servers = this.props.servers;
       var serverList = [];
       for (var key in servers) {
-        serverList.push(<ServerUL setActiveServer={this.props.setActiveServer} key={key} server={servers[key]} />);
+        serverList.push(<ServerUL key={key} server={servers[key]} />);
       }
       
       var appList = [];
       for (var i = 0; i < servers.length; i++) {
         for (var akey in servers[i].apps) {
-          appList.push(<AppUL setActiveServer={this.props.setActiveServer} setActiveApp={this.props.setActiveApp} key={akey} server={servers[i]} app={servers[i].apps[akey]} />);
+          appList.push(<AppUL setActiveApp={this.props.setActiveApp} key={akey} server={servers[i]} app={servers[i].apps[akey]} />);
         }
       }
       
@@ -77,7 +77,6 @@ const mapStoreToProps = (storeState) => (
 const mapDispatchToProps = (dispatch) => (
       {
         setActiveApp: (app) => dispatch(setActiveApp(app)),
-        setActiveServer: (server) => dispatch(setActiveServer(server)),
       }
     );
 
@@ -88,7 +87,7 @@ class ServerUL extends React.Component {
   
   render() {
     return (
-        <li><Link onClick={ () => this.props.setActiveServer(this.props.server) } to={'/server/' + this.props.server._id}>{this.props.server.server_name.toUpperCase()}</Link></li>  
+        <li><Link to={'/server/' + this.props.server._id}>{this.props.server.server_name.toUpperCase()}</Link></li>  
     );
   }
 }
@@ -96,7 +95,6 @@ class ServerUL extends React.Component {
 class AppUL extends React.Component {
   update(){
     this.props.setActiveApp(this.props.app);
-    this.props.setActiveServer(this.props.server);
   }
   render() {
     return (

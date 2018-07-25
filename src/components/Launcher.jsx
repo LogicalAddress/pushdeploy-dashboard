@@ -13,6 +13,7 @@ import CredentialsAction from '../actions/CredentialsAction';
 import {error, success} from '../utils/toastr';
 import req from '../api/req.js';
 import {isWorking, isDoneWorking, changeRoute } from '../actions/Common';
+import GlobalErrorHandler from './GlobalErrorHandler';
 
 class Launcher extends React.Component {
   
@@ -36,7 +37,7 @@ class Launcher extends React.Component {
           this.props.setLoggedInUser(response.body.data);
           this.props.fetchUserCredentials();
           this.props.fetchServers();
-          this.props.changeRoute('/');
+          // this.props.changeRoute('/');
           return;
       }
       throw new Error("Unexpected response please try again");
@@ -54,9 +55,11 @@ class Launcher extends React.Component {
       return (
         <div>
           { this.props.loading && <Loader /> }
+          <GlobalErrorHandler changeRoute={this.props.changeRoute}>
           { this.state.loggedIn && <Header loggedIn={this.state.loggedIn}/> }
           { this.props.children }
           { this.state.loggedIn && <Footer loggedIn={this.state.loggedIn}/> }
+          </GlobalErrorHandler>
         </div>
       );
   }

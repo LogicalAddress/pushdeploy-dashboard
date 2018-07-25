@@ -8,6 +8,7 @@ import {error, success} from '../utils/toastr';
 import {isWorking, isDoneWorking } from '../actions/Common';
 import req from '../api/req.js';
 import ServerLogs from './ServerLogs';
+import { setActiveServer } from '../actions/Common';
 
 class Server extends React.Component {
     
@@ -22,6 +23,14 @@ class Server extends React.Component {
   
     componentDidMount() {
         this.props.update({server: this.props.match.params.id});
+        // this.componentDidUpdate();
+    }
+    
+    componentDidUpdate(){// eslint-disable-next-line
+        var {server, apps } = this.getDetails();
+        if(server._id){
+            this.props.setActiveServer(server);
+        }
     }
     
     remoteAppValidation(payload, type){
@@ -86,9 +95,8 @@ class Server extends React.Component {
         this.remoteAppValidation(this.props.draft, git_provider);
     }
     
-    render() {
-        var server = {};
-        var apps = [];
+    getDetails(){
+        var server = {}, apps = [];
         var servers = this.props.servers;
         for(var i = 0; i < servers.length; i++){
             if(servers[i]._id === this.props.match.params.id){
@@ -97,6 +105,11 @@ class Server extends React.Component {
                 break;
             }
         }
+        return { server, apps}
+    }
+    
+    render() {
+    var {server, apps } = this.getDetails();
         
       return (
          <div className="container">
@@ -121,7 +134,7 @@ class Server extends React.Component {
                 </div>
                 <div className="column column-80">
                     <div className="white panel">
-                        <h3>Create App</h3>
+                        <h3>Deploy App</h3>
                         <form>
                             <fieldset>
                                 <label htmlFor="nameField">Root Domain</label>
@@ -184,6 +197,7 @@ const mapDispatchToProps = (dispatch) => ({
   update: (draft) => dispatch(AppSetupAction.updateDraft(draft)),
   isWorking: ()=> dispatch(isWorking()),
   isDoneWorking: ()=> dispatch(isDoneWorking()),
+  setActiveServer: (server) => dispatch(setActiveServer(server)),
 
 });
 
