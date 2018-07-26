@@ -78,7 +78,7 @@ class Databases extends React.Component {
                     </div>
                     <div className="column">
                         <div className="white panel">
-                            <h3>Create Mysql Database</h3>
+                            <h3>CREATE MYSQL DATABASE</h3>
                             <p className="lead">For your security, your mysql server listens on localhost and the default user for all your database is root</p>
                             <form>
                                 <fieldset>
@@ -97,7 +97,7 @@ class Databases extends React.Component {
                             </form>
                         </div>
                         <div className="white panel">
-                            <h3>MYSQL</h3>
+                            <h3>MYSQL DATABASES</h3>
                             <MysqlTable mysqlDbs={mysqlDbs}/>
                         </div>
                     </div>
