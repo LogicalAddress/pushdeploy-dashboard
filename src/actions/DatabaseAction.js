@@ -3,18 +3,28 @@ import constants from '../Constants.js';
 import DatabaseAPI from '../api/DatabaseAPI';
 let DatabaseAction = {
   
-  updateMysqlDraft(payload) {
+  updateDatabaseDraft(payload) {
     return (dispatch) => {
-      dispatch({ type: constants.MYSQL_UPDATE_DRAFT, payload});
+      dispatch({ type: constants.DATABASE_UPDATE_DRAFT, payload});
     };
   },
   
-  createMysqlDatabase(payload) {
+  createDatabase(payload) {
     return (dispatch) => {
-      dispatchAsync(DatabaseAPI.createMysqlDatabase, dispatch, {
-        request: constants.MYSQL_CREATE_DATABASE,
-        success: constants.MYSQL_CREATE_DATABASE_SUCCESS,
-        failure: constants.MYSQL_CREATE_DATABASE_ERROR
+      dispatchAsync(DatabaseAPI.createDatabase, dispatch, {
+        request: constants.CREATE_DATABASE,
+        success: constants.CREATE_DATABASE_SUCCESS,
+        failure: constants.CREATE_DATABASE_ERROR
+      }, payload);
+    }
+  },
+  
+  fetchDatbases(payload) {
+    return (dispatch) => {
+      dispatchAsync(DatabaseAPI.fetchDatbases, dispatch, {
+        request: constants.FETCH_DATABASE,
+        success: constants.FETCH_DATABASE_SUCCESS,
+        failure: constants.FETCH_DATABASE_ERROR
       }, payload);
     }
   },

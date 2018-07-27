@@ -53,6 +53,7 @@ export function dispatchAsync(fn, dispatch, types, payload, blocking = true) {
 			}
 		})
 		.catch( (error) => {
+			console.log(error);
 			dispatch({
 				type: failure,
 				success: false,

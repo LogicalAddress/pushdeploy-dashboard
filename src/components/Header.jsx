@@ -64,7 +64,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
   servers: PropTypes.array,
-  loggedIn: PropTypes.boolean,
+  loggedIn: PropTypes.bool,
 }
 
 const mapStoreToProps = (storeState) => (

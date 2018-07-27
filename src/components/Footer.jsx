@@ -6,7 +6,7 @@ class Footer extends React.Component {
           <div>
           <div className="container">
           <div className="footer">
-            <center>PushDeploy by Logical Address Inc.</center>
+            <address><center style={{fontSize: '14px'}}>© 2018 Logical Address Inc.</center></address>
           </div>
           </div>
           </div>

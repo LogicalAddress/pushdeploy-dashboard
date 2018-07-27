@@ -2,9 +2,13 @@ import req from './req.js';
 
 let DatabaseAPI = {
     
-    createMysqlDatabase(payload) {
-        return req.post('/v1/database/mysql/create_database', payload);
+    createDatabase(payload) {
+        return req.post('/v1/database', payload);
     },
+    
+    fetchDatbases(payload) {
+        return req.get('/v1/database/' + payload);
+    }
 };
 
 export default DatabaseAPI;

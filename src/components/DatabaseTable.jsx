@@ -1,8 +1,8 @@
 import React from 'react';
-import MysqlDatabaseRow from './MysqlDatabaseRow.jsx';
+import DatabaseRow from './DatabaseRow.jsx';
 import PropTypes from 'prop-types';
 
-class MysqlTable extends React.Component {
+class DatabaseTable extends React.Component {
     render() {
         return (
           <table className="table">
@@ -10,20 +10,21 @@ class MysqlTable extends React.Component {
               <tr>
                 <th>Database</th>
                 <th>Host</th>
-                <th>User</th>
+                <th>Username</th>
                 <th>Password</th>
+                <th>State</th>
               </tr>
             </thead>
             <tbody>
-              {this.props.mysqlDbs.map((db, i) => <MysqlDatabaseRow key={i} data={db} />)}
+              {this.props.dbs.map((db, i) => <DatabaseRow key={i} data={db} />)}
             </tbody>
           </table>
         );
     }
 }
 
-MysqlTable.propTypes = {
-  mysqlDbs: PropTypes.array,
+DatabaseTable.propTypes = {
+  dbs: PropTypes.array,
 };
 
-export default MysqlTable;
+export default DatabaseTable;

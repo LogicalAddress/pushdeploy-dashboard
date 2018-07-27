@@ -4,7 +4,7 @@ import ReactDom from 'react-dom'; // eslint-disable-next-line
 import { BrowserRouter as Router, Route, hashHistory } from 'react-router-dom';
 import Launcher from './components/Launcher.jsx';
 import Home from './components/Home.jsx';
-import Databases from './components/Databases.jsx';
+import Database from './components/Database.jsx';
 import Server from './components/Server.jsx';
 import App from './components/App.jsx';
 import { reduxStore, history } from './store/Config';
@@ -30,7 +30,7 @@ ReactDom.render((
                 <Route exact={true} path="/plans" component={SelectPlan} />
                 <Route exact={true} path="/login" component={Login} />
                 <Route exact={true} path="/register" component={Register} />
-                <Route exact={true} path="/databases/:id" component={Databases}/>
+                <Route exact={true} path="/databases/:id" component={Database}/>
             </Launcher>
         </ConnectedRouter>
     </Provider>

@@ -15,10 +15,15 @@ export default {
   LOGIN_USER_SUCCESS: 'login user success',
   LOGIN_USER_ERROR: 'login user error',
   
-  MYSQL_UPDATE_DRAFT: 'update the mysql create wizard',
-  MYSQL_CREATE_DATABASE: 'create a mysql database with the default user',
-  MYSQL_CREATE_DATABASE_SUCCESS: 'create mysql database success',
-  MYSQL_CREATE_DATABASE_ERROR: 'create mysql database failed',
+  DATABASE_UPDATE_DRAFT: 'update the mysql create wizard',
+  CREATE_DATABASE: 'create a mysql database with the default user',
+  CREATE_DATABASE_SUCCESS: 'create mysql database success',
+  CREATE_DATABASE_ERROR: 'create mysql database failed',
+  DATABASE_APPEND_DATABASE: 'append database object to database set',
+  FETCH_DATABASE: 'fetch all database existing in a server',
+  FETCH_DATABASE_SUCCESS: 'fetch database existing in a server success',
+  FETCH_DATABASE_ERROR: 'fetch database existing in a server error',
+  
   
   REGISTER_USER: 'register user',
   REGISTER_USER_SUCCESS: 'register user success',

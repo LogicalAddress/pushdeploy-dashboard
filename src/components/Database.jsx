@@ -1,40 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import MysqlTable from './MysqlTable.jsx';
+import DatabaseTable from './DatabaseTable.jsx';
 var Link = require('react-router-dom').Link;
 import DatabaseAction from '../actions/DatabaseAction';
 import {isWorking, isDoneWorking } from '../actions/Common';
-import {error} from '../utils/toastr';
 
-class Databases extends React.Component {
+class Database extends React.Component {
     
     constructor(props) {
         super(props);
         this.state = {
-          databases: [
-              {
-                  db_name: 'techpool',
-                  username: 'root',
-                  password: 'yahweh',
-                  host: '127.0.0.1'
-              },{
-                  db_name: 'pooltech',
-                  username: 'root',
-                  password: 'yahweh',
-                  host: '127.0.0.1'
-              }  
-            ]
+            server: null,
+            db_type: 'mysql'
         };
-        
-        this.createMysqlDatabase = this.createMysqlDatabase.bind(this);
+        this.createDatabase = this.createDatabase.bind(this);
+     }
+     
+    componentDidMount(){
+        this.props.fetchDatbases(this.props.match.params.id);
+        this.setState({server: this.props.match.params.id});
      }
     
-    createMysqlDatabase() {
-        if(!this.props.mysqlDraft.db_name.length){
-          return error('Notification', 'Database name is required');
-        }
-        this.props.createMysqlDatabase(this.props.mysqlDraft);
+    createDatabase() {
+        this.props.createDatabase(this.state);
     }
     
     getDetails(){
@@ -78,27 +67,21 @@ class Databases extends React.Component {
                     <div className="column">
                         <div className="white panel">
                             <h3>CREATE MYSQL DATABASE</h3>
-                            <p className="lead">For your security, your mysql server listens on localhost and the default user for all your database is root</p>
+                            <p className="lead">For your security, your mysql server listens on localhost</p>
                             <form>
                                 <fieldset>
-                                    <label htmlFor="username">Username</label>
-                                    <input disabled={true} value={this.props.mysqlDraft.username} id="username" type="text"/>
-                                    <div className="form-group">
-                                        <label htmlFor="db_name">Database</label>
-                                      <input placeholder="e.g techpool" id="db_name" type="text" value={this.props.mysqlDraft.db_name} onChange={(e) => this.props.updateMysqlDraft({db_name: e.target.value})}/>
-                                    </div>
                                     <div className="row">
                                         <div className="column">
-                                          <a className="button" onClick={this.createMysqlDatabase}>Add Database</a>
+                                          <a className="button" onClick={this.createDatabase}>Add Database</a>
                                         </div>
                                     </div>
                                 </fieldset>
                             </form>
                         </div>
-                        { this.state.databases.length &&
+                        { this.props.database.length !== 0 &&
                         <div className="white panel">
                             <h3>MYSQL DATABASES</h3>
-                            <MysqlTable mysqlDbs={this.state.databases}/>
+                            <DatabaseTable dbs={this.props.database}/>
                         </div>
                         }
                     </div>
@@ -109,8 +92,9 @@ class Databases extends React.Component {
    }
 }
 
-Databases.propTypes = {
+Database.propTypes = {
   servers: PropTypes.array,
+  database: PropTypes.array,
   isWorking: PropTypes.func,
   isDoneWorking: PropTypes.func,
 };
@@ -118,17 +102,18 @@ Databases.propTypes = {
 const mapStoreToProps = (storeState) => (
     {
         servers: storeState.servers,
-        mysqlDraft: storeState.mysqlDraft,
+        database: storeState.database,
         credentials: storeState.credentials,
     }
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  createMysqlDatabase: (draft) => dispatch(DatabaseAction.createMysqlDatabase(draft)),
-  updateMysqlDraft: (draft) => dispatch(DatabaseAction.updateMysqlDraft(draft)),
+  createDatabase: (draft) => dispatch(DatabaseAction.createDatabase(draft)),
+  updateDatabaseDraft: (draft) => dispatch(DatabaseAction.updateDatabaseDraft(draft)),
+  fetchDatbases: (server) => dispatch(DatabaseAction.fetchDatbases(server)),
   isWorking: ()=> dispatch(isWorking()),
   isDoneWorking: ()=> dispatch(isDoneWorking()),
 
 });
 
-export default connect(mapStoreToProps, mapDispatchToProps)(Databases)
+export default connect(mapStoreToProps, mapDispatchToProps)(Database)
