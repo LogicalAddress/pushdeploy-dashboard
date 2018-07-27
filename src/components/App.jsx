@@ -112,7 +112,7 @@ class App extends React.Component {
                                Auto Deploy <button disabled={this.state.isDeploying || !this.canAutoDeploy()} className="button" onClick={()=> this.activateAutoDeploy() }>{ this.props.activeApp.auto_deploy ? 'Yes' : 'No'}</button>
                             </div>
                             <div className="column">
-                                <AppLogs app={this.state}/>
+                                <AppLogs app={this.props.activeApp}/>
                             </div>
                             <div className="clear"></div>
                         </div>

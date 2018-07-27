@@ -12,7 +12,19 @@ class Databases extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          data: ''
+          databases: [
+              {
+                  db_name: 'techpool',
+                  username: 'root',
+                  password: 'yahweh',
+                  host: '127.0.0.1'
+              },{
+                  db_name: 'pooltech',
+                  username: 'root',
+                  password: 'yahweh',
+                  host: '127.0.0.1'
+              }  
+            ]
         };
         
         this.createMysqlDatabase = this.createMysqlDatabase.bind(this);
@@ -39,19 +51,6 @@ class Databases extends React.Component {
     
     render() {
     var server = this.getDetails();
-    var mysqlDbs = [
-      {
-          db_name: 'techpool',
-          username: 'root',
-          password: 'yahweh',
-          host: '127.0.0.1'
-      },{
-          db_name: 'pooltech',
-          username: 'root',
-          password: 'yahweh',
-          host: '127.0.0.1'
-      }  
-    ];
       return (
          <div className="container">
             <div className="float-right">
@@ -96,10 +95,12 @@ class Databases extends React.Component {
                                 </fieldset>
                             </form>
                         </div>
+                        { this.state.databases.length &&
                         <div className="white panel">
                             <h3>MYSQL DATABASES</h3>
-                            <MysqlTable mysqlDbs={mysqlDbs}/>
+                            <MysqlTable mysqlDbs={this.state.databases}/>
                         </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -119,7 +120,6 @@ const mapStoreToProps = (storeState) => (
         servers: storeState.servers,
         mysqlDraft: storeState.mysqlDraft,
         credentials: storeState.credentials,
-        
     }
 );
 
