@@ -42,7 +42,7 @@ deploy_production:
   script:
     - echo "Deploying to production"
     - aws s3 rm "s3://${BUCKET_NAME}/*" --recursive
-    - aws s3 cp build/ "s3://${BUCKET_NAME}/" --recursive
+    - aws s3 cp build "s3://${BUCKET_NAME}/" --recursive
   environment:
     name: production
     url: https://dashboard.pushdeploy.io
