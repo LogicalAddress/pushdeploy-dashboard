@@ -1,7 +1,7 @@
 stages:
   - build
   - deploy_staging
-  - deploy
+  - deploy_production
  
 build:
   image: node:6.11.2
@@ -24,8 +24,9 @@ deploy_staging:
     - pip install -U awscli
   script:
     - echo "Deploying to staging"
-    - aws s3 rm "s3://${BUCKET_NAME}/*" --recursive
-    - aws s3 cp build "s3://${BUCKET_NAME}/" --recursive
+    #- aws s3 rm "s3://${BUCKET_NAME}/*" --recursive
+    #- aws s3 cp build "s3://${BUCKET_NAME}/" --recursive
+    - aws s3 sync --delete --acl public-read build/* "s3://${BUCKET_NAME}/"
   environment:
     name: production
     url: https://stagin.dashboard.pushdeploy.io
@@ -34,7 +35,7 @@ deploy_staging:
   
 deploy_production:
   image: python:3.4.3
-  stage: deploy
+  stage: deploy_production
   variables:
     BUCKET_NAME: "dashboard.pushdeploy.io"
   before_script:
@@ -42,8 +43,9 @@ deploy_production:
     - pip install -U awscli
   script:
     - echo "Deploying to production"
-    - aws s3 rm "s3://${BUCKET_NAME}/*" --recursive
-    - aws s3 cp build "s3://${BUCKET_NAME}/" --recursive
+    #- aws s3 rm "s3://${BUCKET_NAME}/*" --recursive
+    #- aws s3 cp build "s3://${BUCKET_NAME}/" --recursive
+    - aws s3 sync --delete --acl public-read build/* "s3://${BUCKET_NAME}/"
   environment:
     name: production
     url: https://dashboard.pushdeploy.io
