@@ -1,5 +1,6 @@
 stages:
   - build
+  - deploy_staging
   - deploy
  
 build:
@@ -15,7 +16,7 @@ build:
 
 deploy_staging:
   image: python:3.4.3
-  stage: staging
+  stage: deploy_staging
   variables:
     BUCKET_NAME: "staging.dashboard.pushdeploy.io"
   before_script:
