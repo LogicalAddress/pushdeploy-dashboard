@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
  
-build_production:
+build:
   image: node:6.11.2
   stage: build
   script:
@@ -12,7 +12,25 @@ build_production:
   artifacts:
     paths:
      - build/
-    
+
+deploy_staging:
+  image: python:3.4.3
+  stage: staging
+  variables:
+    BUCKET_NAME: "staging.dashboard.pushdeploy.io"
+  before_script:
+    - pip install awscli
+    - pip install -U awscli
+  script:
+    - echo "Deploying to staging"
+    - aws s3 rm "s3://${BUCKET_NAME}/*" --recursive
+    - aws s3 cp build "s3://${BUCKET_NAME}/" --recursive
+  environment:
+    name: production
+    url: https://stagin.dashboard.pushdeploy.io
+  only:
+  - staging
+  
 deploy_production:
   image: python:3.4.3
   stage: deploy
@@ -24,7 +42,7 @@ deploy_production:
   script:
     - echo "Deploying to production"
     - aws s3 rm "s3://${BUCKET_NAME}/*" --recursive
-    - aws s3 cp build/* "s3://${BUCKET_NAME}/" --recursive
+    - aws s3 cp build/ "s3://${BUCKET_NAME}/" --recursive
   environment:
     name: production
     url: https://dashboard.pushdeploy.io
