@@ -14,6 +14,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             isDeploying: false,
+            enablingSSL: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -64,6 +65,26 @@ class App extends React.Component {
     activateAutoDeploy(){
         this.props.updateActiveApp({ auto_deploy: !this.props.activeApp.auto_deploy });
         this.props.toggleAutoDeploy(this.props.activeApp);
+    }
+    
+    enableSSL(){
+        success("Notification", "Activating SSL");
+        this.setState({enablingSSL: true});
+        req.post('/v1/app/toggle_ssl', {app_id: this.props.activeApp._id})
+        .then((response) => {
+          return response.json();
+        }).then((response) => {
+          this.setState({enablingSSL: false});
+          if (response.body.status === "success") {
+              success("Notification", "Enabling SSL Done");
+              return;
+          }
+          error('Notification', "Unable to activate SSL for this app");
+          console.log("DEBUG", response);
+        }).catch((err) => {
+            this.setState({enablingSSL: false});
+            error('Notification', err.message);
+        });
     }
     
       componentDidCatch(error, info) {
@@ -141,6 +162,25 @@ class App extends React.Component {
                                 </div>
                                </form>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div className="white panel">
+                        <div className="row">
+                            <div className="column">
+                               <h3>Let’s Encrypt Certificate</h3>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="lead">
+                                Secure your site with Let’s Encrypt. It is a free, automated, and open Certificate Authority brought to you by the non-profit Internet Security Research Group (ISRG). 
+                            </div>
+                        </div>
+                        <div className="row upspace">
+                            <div className="column">
+                               SSL Activated <button disabled={this.state.enablingSSL || this.props.activeApp.app_name === 'default'} className="button" onClick={()=> this.enableSSL() }>{ this.props.activeApp.ssl_enabled ? 'Yes' : 'No'}</button>
+                            </div>
+                            <div className="clear"></div>
                         </div>
                     </div>
                     

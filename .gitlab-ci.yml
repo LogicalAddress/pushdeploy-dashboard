@@ -1,0 +1,27 @@
+stages:
+  - build
+  - deploy
+ 
+build_production:
+  image: node:6.11.2
+  stage: build
+  script:
+    - echo "building.."
+    - npm run build react
+    
+deploy_production:
+  image: python:3.4.3
+  stage: deploy
+  variables:
+    BUCKET_NAME: "dashboard.pushdeploy.io"
+  before_script:
+    - pip install awscli
+  script:
+    - echo "Deploying to production"
+    - aws s3 rm s3://${BUCKET_NAME}/
+    - aws s3 cp build/* s3://${BUCKET_NAME}/ --recursive
+  environment:
+    name: production
+    url: https://dashboard.pushdeploy.io
+  only:
+  - master

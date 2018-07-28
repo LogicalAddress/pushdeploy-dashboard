@@ -122,7 +122,7 @@ class Server extends React.Component {
             </div>
             <div className="row">
                 <div className="column column-20">
-                    <h3>Server Details</h3>
+                    <h3>Quick Links</h3>
                     <ul>
                         <li><Link to={"/databases/" + server._id}>Database</Link></li>
                     </ul>
