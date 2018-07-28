@@ -9,6 +9,9 @@ build_production:
     - echo "building.."
     - npm install
     - npm run build react
+  artifacts:
+    paths:
+     - build/
     
 deploy_production:
   image: python:3.4.3
@@ -19,7 +22,7 @@ deploy_production:
     - pip install awscli
   script:
     - echo "Deploying to production"
-    - aws s3 rm s3://${BUCKET_NAME}/
+    - aws s3 rm s3://${BUCKET_NAME}/*
     - aws s3 cp build/* s3://${BUCKET_NAME}/ --recursive
   environment:
     name: production
