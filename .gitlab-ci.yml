@@ -24,9 +24,7 @@ deploy_staging:
     - pip install -U awscli
   script:
     - echo "Deploying to staging"
-    #- aws s3 rm "s3://${BUCKET_NAME}/*" --recursive
-    #- aws s3 cp build "s3://${BUCKET_NAME}/" --recursive
-    - aws s3 sync --delete --acl public-read build/* "s3://${BUCKET_NAME}/"
+    - aws s3 sync --delete build "s3://${BUCKET_NAME}/"
   environment:
     name: production
     url: https://stagin.dashboard.pushdeploy.io
@@ -43,9 +41,7 @@ deploy_production:
     - pip install -U awscli
   script:
     - echo "Deploying to production"
-    #- aws s3 rm "s3://${BUCKET_NAME}/*" --recursive
-    #- aws s3 cp build "s3://${BUCKET_NAME}/" --recursive
-    - aws s3 sync --delete --acl public-read build/* "s3://${BUCKET_NAME}/"
+    - aws s3 sync --delete build "s3://${BUCKET_NAME}/"
   environment:
     name: production
     url: https://dashboard.pushdeploy.io
