@@ -23,7 +23,7 @@ deploy_staging:
     - pip install awscli
     - pip install -U awscli
   script:
-    - echo "Deploying to staging"
+    - echo "Deploying to staging.."
     - aws s3 sync --delete build "s3://${BUCKET_NAME}/"
   environment:
     name: production
@@ -40,7 +40,7 @@ deploy_production:
     - pip install awscli
     - pip install -U awscli
   script:
-    - echo "Deploying to production"
+    - echo "Deploying to production.."
     - aws s3 sync --delete build "s3://${BUCKET_NAME}/"
   environment:
     name: production
