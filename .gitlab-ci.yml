@@ -15,7 +15,7 @@ build_staging:
     paths:
      - build/
   only:
-  - master
+  - staging
 
 build_production:
   image: node:6.11.2
@@ -30,7 +30,7 @@ build_production:
     paths:
      - build/
   only:
-  - staging
+  - master
   
 deploy_staging:
   image: python:3.4.3
