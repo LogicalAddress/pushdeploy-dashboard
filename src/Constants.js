@@ -1,8 +1,5 @@
 export default {
-    
-  API_URL: 'https://techpool-dretnan.c9users.io',
-  // API_URL: 'http://pushdeployapi-prod.herokuapp.com',
-  // API_URL: 'https://demo3709686.mockable.io',
+  API_URL: process.env.REACT_APP_API_URL,
   
   FETCH_PROFILE: 'fetch profile',
   FETCH_PROFILE_SUCCESS: 'fetch profile success',
@@ -58,6 +55,11 @@ export default {
   CREATE_CUSTOM_SERVER_RUNNING: "creating custom server is in progress",
   CREATE_CUSTOM_SERVER_ERROR: "error creating custom server",
   UPDATE_CUSTOM_SETUP_DRAFT: "update the custom setup draft",
+  
+  CREATE_PROJECT: "create Function",
+  // CREATE_CUSTOM_SERVER_RUNNING: "creating custom server is in progress",
+  // CREATE_CUSTOM_SERVER_ERROR: "error creating custom server",
+  // UPDATE_CUSTOM_SETUP_DRAFT: "update the custom setup draft",
   
   CONNECT_LINODE_OAUTH: "connect linode oauth",
   

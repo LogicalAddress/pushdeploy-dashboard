@@ -1,6 +1,6 @@
 import React from 'react';
+import logo from '../assets/images/logo.png';
 // var Link = require('react-router-dom').Link;
-import logo from '../../assets/images/logo.png';
 
 /* Adapted from: SRC: https://codepen.io/gaearon/pen/wqvxGa?editors=0010 */
 

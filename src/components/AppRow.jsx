@@ -1,7 +1,7 @@
 import React from 'react';
-var Link = require('react-router-dom').Link
 import { setActiveApp } from '../actions/Common';
 import { connect } from 'react-redux';
+var Link = require('react-router-dom').Link
 
 class AppRow extends React.Component {
     render() {

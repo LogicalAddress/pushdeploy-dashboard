@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import UserAction from '../../actions/UserAction';
 import { error } from '../../utils/toastr';
-import logo from '../../../assets/images/logo.png';
+import logo from '../../assets/images/logo.png';
 var Link = require('react-router-dom').Link;
 
 class Login extends React.Component {

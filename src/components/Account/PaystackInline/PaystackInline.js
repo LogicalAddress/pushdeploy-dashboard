@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types'; // ES6
 
 let scriptLoading = false;
 let scriptLoaded = false;
 let scriptDidError = false;
-import PropTypes from 'prop-types'; // ES6
 
 export default class ReactPaystackInline extends React.Component {
     static defaultProps = {
@@ -315,7 +315,7 @@ export default class ReactPaystackInline extends React.Component {
 
     render() {
         const { ComponentClass } = this.props;
-        if (this.props.lazy && this.props.formId) return ( < div > < /div>);
+        if (this.props.lazy && this.props.formId) return ( <div></div>);
             if (this.props.children) {
                 return (
                 	<ComponentClass {... {

@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-var Link = require('react-router-dom').Link;
 import AppLogs from './AppLogs';
 import req from '../api/req.js';
 import UpdateEnvAction from '../actions/UpdateEnvAction';
 import {error, success} from '../utils/toastr';
 import {updateActiveApp} from '../actions/Common';
 import AppSetupAction from '../actions/AppSetup';
+var Link = require('react-router-dom').Link;
 
 class App extends React.Component {
     constructor(props) {

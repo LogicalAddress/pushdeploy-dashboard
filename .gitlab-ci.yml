@@ -6,6 +6,8 @@ stages:
 build:
   image: node:6.11.2
   stage: build
+  variables:
+   REACT_APP_API_URL: "http://pushdeployapi-prod.herokuapp.com"
   script:
     - echo "building.."
     - npm install
@@ -13,6 +15,8 @@ build:
   artifacts:
     paths:
      - build/
+  only:
+  - master
 
 deploy_staging:
   image: python:3.4.3
@@ -27,7 +31,7 @@ deploy_staging:
     - aws s3 sync --delete build "s3://${BUCKET_NAME}/"
   environment:
     name: production
-    url: https://stagin.dashboard.pushdeploy.io
+    url: https://staging.dashboard.pushdeploy.io
   only:
   - staging
   

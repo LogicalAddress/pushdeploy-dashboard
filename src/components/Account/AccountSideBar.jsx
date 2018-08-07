@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-var Link = require('react-router-dom').Link
 import req from '../../api/req.js';
 import {error, success} from '../../utils/toastr';
 import {isWorking, isDoneWorking, updatePlan } from '../../actions/Common';
+var Link = require('react-router-dom').Link
 
 class AccountSideBar extends React.Component {
     

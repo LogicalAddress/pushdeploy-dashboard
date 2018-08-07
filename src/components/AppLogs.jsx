@@ -1,8 +1,8 @@
 import React from 'react';
 import Popup from "reactjs-popup";
-var Link = require('react-router-dom').Link;
 import req from '../api/req.js';
 import {error} from '../utils/toastr';
+var Link = require('react-router-dom').Link;
 
 class AppLogs extends React.Component {
   

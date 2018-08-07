@@ -5,15 +5,15 @@ import { connect } from 'react-redux';
 class OAuthProviders extends React.Component {
   
     linodeOauth(){
-      /* global location */location.href = "https://login.linode.com/oauth/authorize?client_id=f99ebdd78b0b371d4279&scope=linode:create&response_type=code&allow_signup=false"
+      /* global window */window.location.href = "https://login.linode.com/oauth/authorize?client_id=f99ebdd78b0b371d4279&scope=linode:create&response_type=code&allow_signup=false"
     }
     
     githubOauth(){
-      /* global location */location.href = "https://github.com/login/oauth/authorize?client_id=f99ebdd78b0b371d4279&scope=repo,admin:repo_hook&response_type=code&allow_signup=false";
+      /* global window */window.location.href = "https://github.com/login/oauth/authorize?client_id=f99ebdd78b0b371d4279&scope=repo,admin:repo_hook&response_type=code&allow_signup=false";
     }
     
     bitbucketOauth(){
-      /* global location */location.href = "https://bitbucket.org/site/oauth2/authorize?client_id=79Yb8fD76QtuzAnZKe&response_type=code"
+      /* global window */window.location.href = "https://bitbucket.org/site/oauth2/authorize?client_id=79Yb8fD76QtuzAnZKe&response_type=code"
     }
     
     awsOauth(){

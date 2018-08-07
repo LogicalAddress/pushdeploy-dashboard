@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DatabaseTable from './DatabaseTable.jsx';
-var Link = require('react-router-dom').Link;
 import DatabaseAction from '../actions/DatabaseAction';
 import {isWorking, isDoneWorking } from '../actions/Common';
+var Link = require('react-router-dom').Link;
 
 class Database extends React.Component {
     

@@ -1,6 +1,6 @@
 import React from 'react';
-var Link = require('react-router-dom').Link
 import { connect } from 'react-redux';
+var Link = require('react-router-dom').Link
 
 class ServerRow extends React.Component {
     render() {

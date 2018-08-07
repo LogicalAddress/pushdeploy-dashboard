@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AppTable from './AppTable.jsx';
-var Link = require('react-router-dom').Link;
 import AppSetupAction from '../actions/AppSetup';
 import {error, success} from '../utils/toastr';
 import {isWorking, isDoneWorking } from '../actions/Common';
 import req from '../api/req.js';
 import ServerLogs from './ServerLogs';
 import { setActiveServer } from '../actions/Common';
+var Link = require('react-router-dom').Link;
 
 class Server extends React.Component {
     

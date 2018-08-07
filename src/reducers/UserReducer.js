@@ -20,6 +20,7 @@ const user = (state = initialState, action) => {
         success("Notification", "Login Successful");
         var remoteUser = Object.assign(action.payload.response.body.data, 
         {timestamp: new Date()});
+        console.log("Setting", JSON.stringify(remoteUser));
         sessionStorage.setItem('user', 
         JSON.stringify(remoteUser));
         window.location = "/";
