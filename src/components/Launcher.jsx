@@ -8,6 +8,7 @@ import Loader from '../lib/loader';
 import PropTypes from 'prop-types';
 import UserAction from '../actions/UserAction';
 import ServersAction from '../actions/ServersAction';
+import AppSettingAction from '../actions/AppSetting';
 import CredentialsAction from '../actions/CredentialsAction';
 // import ProfileAction from '../actions/ProfileAction';
 import {error, success} from '../utils/toastr';
@@ -37,6 +38,7 @@ class Launcher extends React.Component {
           this.props.setLoggedInUser(response.body.data);
           this.props.fetchUserCredentials();
           this.props.fetchServers();
+          this.props.fetchClientSettings();
           // this.props.changeRoute('/');
           return;
       }
@@ -70,6 +72,7 @@ Launcher.propTypes = {
   fetchUser: PropTypes.func.isRequired,
   fetchServers: PropTypes.func.isRequired,
   fetchUserCredentials: PropTypes.func.isRequired,
+  fetchClientSettings: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -81,6 +84,7 @@ const mapDispatchToProps = (dispatch) => ({
   isDoneWorking: ()=> dispatch(isDoneWorking()),
   fetchUserCredentials: () => dispatch(CredentialsAction.fetchUserCredentials()),
   // fetchProfile: () => dispatch(ProfileAction.fetchProfile()),
+  fetchClientSettings: () => dispatch(AppSettingAction.fetch()),
 });
 
 export default withRouter(connect(
