@@ -1,10 +1,9 @@
-// import req from './req.js';
+import req from './req.js';
 
 let AppSettingAPI = {
     
     fetchAppSetting() {
-        throw new Error("Not Implemented");
-        // return req.get('/api/appsetting');
+        return req.get('/client_setting');
     },
 };
 
