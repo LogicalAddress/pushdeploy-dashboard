@@ -6,7 +6,7 @@ build_staging:
   image: node:6.11.2
   stage: build
   variables:
-   REACT_APP_API_URL: "https://pushdeployapi-prod.herokuapp.com"
+   REACT_APP_API_URL: "https://pushdeployapi-staging.herokuapp.com"
   script:
     - echo "building.."
     - npm install
@@ -21,7 +21,7 @@ build_production:
   image: node:6.11.2
   stage: build
   variables:
-   REACT_APP_API_URL: "https://pushdeployapi-staging.herokuapp.com"
+   REACT_APP_API_URL: "https://pushdeployapi-prod.herokuapp.com"
   script:
     - echo "building.."
     - npm install
