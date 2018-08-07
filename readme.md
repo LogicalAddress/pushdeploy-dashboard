@@ -1,3 +1,4 @@
 ## On Dev:
 
-Change the API_ENDPOINT here: /src/Constants.js
+See (REACT_APP_API_URL) the API_ENDPOINT here: /src/Constants.js
+Again, see .env.sample
