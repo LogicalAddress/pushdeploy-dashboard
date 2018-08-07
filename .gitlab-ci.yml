@@ -1,7 +1,6 @@
 stages:
   - build
-  - deploy_staging
-  - deploy_production
+  - deploy
  
 build_staging:
   image: node:6.11.2
@@ -35,7 +34,7 @@ build_production:
   
 deploy_staging:
   image: python:3.4.3
-  stage: deploy_staging
+  stage: deploy
   variables:
     BUCKET_NAME: "staging.dashboard.pushdeploy.io"
   before_script:
@@ -45,14 +44,14 @@ deploy_staging:
     - echo "Deploying to staging.."
     - aws s3 sync --delete build "s3://${BUCKET_NAME}/"
   environment:
-    name: production
+    name: staging
     url: https://staging.dashboard.pushdeploy.io
   only:
   - staging
   
 deploy_production:
   image: python:3.4.3
-  stage: deploy_production
+  stage: deploy
   variables:
     BUCKET_NAME: "dashboard.pushdeploy.io"
   before_script:
