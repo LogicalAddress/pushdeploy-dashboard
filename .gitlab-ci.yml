@@ -3,7 +3,7 @@ stages:
   - deploy_staging
   - deploy_production
  
-build:
+build_staging:
   image: node:6.11.2
   stage: build
   variables:
@@ -18,6 +18,21 @@ build:
   only:
   - master
 
+build_production:
+  image: node:6.11.2
+  stage: build
+  variables:
+   REACT_APP_API_URL: "https://pushdeployapi-staging.herokuapp.com"
+  script:
+    - echo "building.."
+    - npm install
+    - npm run build react
+  artifacts:
+    paths:
+     - build/
+  only:
+  - staging
+  
 deploy_staging:
   image: python:3.4.3
   stage: deploy_staging
