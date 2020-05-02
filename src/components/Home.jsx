@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ServerProviders from './ServerProviders.jsx';
 import ServerTable from './ServerTable.jsx';
+import AppTable from './AppTable';
 import OAuthProviders from './OAuthProviders.jsx';
 
 class Home extends React.Component {
@@ -26,6 +27,12 @@ class Home extends React.Component {
                     </div>
                 </div>
             </div>
+            <div className="white panel">
+                <h3>Apps</h3>
+                <div className="row">
+                    <AppTable apps={this.props.apps}/>
+                </div>
+            </div>
         </div>
       )
    }
@@ -33,12 +40,14 @@ class Home extends React.Component {
 
 Home.propTypes = {
   servers: PropTypes.array,
+  apps: PropTypes.array,
   lock: PropTypes.bool,
 }
 
 const mapStoreToProps = (storeState) => (
     {
         servers: storeState.server.servers,
+        apps: storeState.app.apps,
         lock: storeState.server.lock,
     }
 )
