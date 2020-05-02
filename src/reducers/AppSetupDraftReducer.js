@@ -9,6 +9,10 @@ let initialState = {
   app_name: '',
   entry_point: 'index.js',
   server: null,
+  repo_id: '',
+  repo_node_id: '',
+  repo_full_name: '',
+  repo_name: ''
 };
 
 /* For CREATE_APP_RUNNING usecase, see /react/src/reducers/ServersReducer.js */

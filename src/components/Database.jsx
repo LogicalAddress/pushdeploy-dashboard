@@ -65,7 +65,7 @@ class Database extends React.Component {
                         </div>
                     </div>
                     <div className="column">
-                        <div className="white panel">
+                        { !this.props.lock && <div className="white panel">
                             <h3>CREATE MYSQL DATABASE</h3>
                             <p className="lead">For your security, your mysql server listens on localhost</p>
                             <form>
@@ -77,7 +77,7 @@ class Database extends React.Component {
                                     </div>
                                 </fieldset>
                             </form>
-                        </div>
+                        </div> }
                         { this.props.database.length !== 0 &&
                         <div className="white panel">
                             <h3>MYSQL DATABASES</h3>
@@ -97,11 +97,13 @@ Database.propTypes = {
   database: PropTypes.array,
   isWorking: PropTypes.func,
   isDoneWorking: PropTypes.func,
+  lock: PropTypes.bool,
 };
 
 const mapStoreToProps = (storeState) => (
     {
-        servers: storeState.servers,
+        servers: storeState.server.servers,
+        lock: storeState.server.lock,
         database: storeState.database,
         credentials: storeState.credentials,
     }

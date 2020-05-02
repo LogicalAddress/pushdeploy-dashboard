@@ -8,13 +8,12 @@ import OAuthProviders from './OAuthProviders.jsx';
 class Home extends React.Component {
     
     render() {
-        // console.log(this.props.servers)
       return (
         <div>
-            <div className="white panel">
+            { !this.props.lock && <div className="white panel">
                 <h3>Create Server</h3>
                 <ServerProviders />
-            </div>
+            </div>}
             <div className="white panel">
                 <h3>OAuth Providers</h3>
                 <OAuthProviders />
@@ -34,11 +33,13 @@ class Home extends React.Component {
 
 Home.propTypes = {
   servers: PropTypes.array,
+  lock: PropTypes.bool,
 }
 
 const mapStoreToProps = (storeState) => (
     {
-        servers: storeState.servers,
+        servers: storeState.server.servers,
+        lock: storeState.server.lock,
     }
 )
 

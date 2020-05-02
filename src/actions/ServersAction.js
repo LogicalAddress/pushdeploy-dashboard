@@ -24,6 +24,12 @@ let ServersAction = {
     }
   },
   
+  createServerFinished() {
+    return (dispatch) => {
+      dispatch({type: constants.CREATE_SERVER_FINISHED});
+    }
+  },
+
   
 };
 

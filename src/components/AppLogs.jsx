@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Popup from "reactjs-popup";
 import req from '../api/req.js';
 import {error} from '../utils/toastr';
@@ -15,6 +17,10 @@ class AppLogs extends React.Component {
   }
   
   getLogs(app_id){
+    if(this.props.lock){
+      error("Notification", "Server is busy at the moment");
+      return
+    }
     this.setState({loading: true});
     req.post('/v1/app/logs', {app_id})
       .then((response) => {
@@ -88,4 +94,14 @@ class AppLogs extends React.Component {
   }
 }
 
-export default AppLogs;
+AppLogs.propTypes = {
+  lock: PropTypes.bool.isRequired,
+}
+
+const mapStoreToProps = (storeState) => (
+    {
+        lock: storeState.server.lock,
+    }
+)
+
+export default connect(mapStoreToProps, null)(AppLogs)

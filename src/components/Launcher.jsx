@@ -8,6 +8,7 @@ import Loader from '../lib/loader';
 import PropTypes from 'prop-types';
 import UserAction from '../actions/UserAction';
 import ServersAction from '../actions/ServersAction';
+import AppsAction from '../actions/AppsAction';
 import AppSettingAction from '../actions/AppSetting';
 import CredentialsAction from '../actions/CredentialsAction';
 // import ProfileAction from '../actions/ProfileAction';
@@ -15,6 +16,7 @@ import {error, success} from '../utils/toastr';
 import req from '../api/req.js';
 import {isWorking, isDoneWorking, changeRoute } from '../actions/Common';
 import GlobalErrorHandler from './GlobalErrorHandler';
+import Socket from './Socket';
 
 class Launcher extends React.Component {
   
@@ -38,12 +40,14 @@ class Launcher extends React.Component {
           this.props.setLoggedInUser(response.body.data);
           this.props.fetchUserCredentials();
           this.props.fetchServers();
+          this.props.fetchApps();
           this.props.fetchClientSettings();
           // this.props.changeRoute('/');
           return;
       }
       throw new Error("Unexpected response please try again");
     }).catch((err) => {
+      console.log({err});
         this.props.isDoneWorking();
         if(this.props.UrlPathname === '/register'){
           return;
@@ -56,6 +60,7 @@ class Launcher extends React.Component {
   render() {
       return (
         <div>
+          <Socket />
           { this.props.loading && <Loader /> }
           <GlobalErrorHandler changeRoute={this.props.changeRoute}>
           { this.state.loggedIn && <Header loggedIn={this.state.loggedIn}/> }
@@ -71,6 +76,7 @@ Launcher.propTypes = {
   loading: PropTypes.bool,
   fetchUser: PropTypes.func.isRequired,
   fetchServers: PropTypes.func.isRequired,
+  fetchApps: PropTypes.func.isRequired,
   fetchUserCredentials: PropTypes.func.isRequired,
   fetchClientSettings: PropTypes.func.isRequired,
 };
@@ -79,6 +85,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchUser: () => dispatch(UserAction.fetchUser()),
   setLoggedInUser: (payload) => dispatch(UserAction.setLoggedInUser(payload)),
   fetchServers: () => dispatch(ServersAction.fetchServers()),
+  fetchApps: () => dispatch(AppsAction.fetchApps()),
   isWorking: ()=> dispatch(isWorking()),
   changeRoute: (route)=> dispatch(changeRoute(route)),
   isDoneWorking: ()=> dispatch(isDoneWorking()),

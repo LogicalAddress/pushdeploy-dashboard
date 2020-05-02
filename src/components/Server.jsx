@@ -60,6 +60,10 @@ class Server extends React.Component {
                     }
                     success('Notification', 'Still working..');
                     this.props.update({repo_meta_data: repoData});
+                    this.props.update({repo_id: repoData.repo_id});
+                    this.props.update({repo_node_id: repoData.repo_node_id});
+                    this.props.update({repo_full_name: repoData.repo_full_name});
+                    this.props.update({repo_name: repoData.repo_name});
                     this.props.createApp(this.props.draft);
                     return;
                 }
@@ -128,7 +132,7 @@ class Server extends React.Component {
                     </ul>
                 </div>
                 <div className="column column-80">
-                    <div className="white panel">
+                { !this.props.lock && <div className="white panel">
                         <h3>Deploy App</h3>
                         <form>
                             <fieldset>
@@ -152,6 +156,7 @@ class Server extends React.Component {
                                     <label htmlFor="app_repository">Git Repository</label>
                                   <input placeholder="e.g git@github.com:dretnan/droauth.git" id="app_repository" type="text" value={this.props.draft.app_repository} onChange={(e) => this.props.update({app_repository: e.target.value})}/>
                                 </div>
+                                { this.props.credentials.github_username && <p className="lead">Your pushdeploy account is connected to github, feel free to deploy your private repositories.</p>}
                                 <div className="row">
                                     <div className="column">
                                       <a className="button" onClick={this.createApp}>Add App</a>
@@ -163,7 +168,7 @@ class Server extends React.Component {
                                 </div>
                             </fieldset>
                         </form>
-                    </div>
+                    </div>}
                     <div className="white panel">
                         <h3>Active Apps</h3>
                         <AppTable apps={apps}/>
@@ -176,15 +181,23 @@ class Server extends React.Component {
 }
 
 Server.propTypes = {
+  loading: PropTypes.bool,
   servers: PropTypes.array,
+  apps: PropTypes.array,
   credentials: PropTypes.object.isRequired,
   isWorking: PropTypes.func,
   isDoneWorking: PropTypes.func,
+  lock: PropTypes.bool.isRequired,
+  appLock: PropTypes.bool.isRequired,
 };
 
 const mapStoreToProps = (storeState) => (
     {
-        servers: storeState.servers,
+        loading: storeState.loading.loading,
+        servers: storeState.server.servers,
+        apps: storeState.app.apps,
+        appLock: storeState.app.lock,
+        lock: storeState.server.lock,
         draft: storeState.appSetupDraft,
         credentials: storeState.credentials,
         

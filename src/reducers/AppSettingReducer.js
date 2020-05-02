@@ -2,7 +2,9 @@ import constants from '../Constants';
  
 const initialState = {
   stripeKey: "",
-  paystackKey: ""
+  paystackKey: "",
+  githubPublicKey: "",
+  bitbucketPublicKey: "",
 };
  
 const app_setting = (state = initialState, action) => {

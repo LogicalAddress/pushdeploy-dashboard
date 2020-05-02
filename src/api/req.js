@@ -15,6 +15,18 @@ const req = axios.create({
 */
 
 let req = {
+
+    getJwt() {
+        var user = sessionStorage.getItem('user');
+        user = (user ? JSON.parse(user) : null);
+        return user ? user.access_token : '';
+    },
+
+    getUid() {
+        var user = sessionStorage.getItem('user');
+        user = (user ? JSON.parse(user) : null);
+        return user ? user._id : '';
+    },
     
     get(route, baseURL = null) {
         if(!baseURL) baseURL = constants.API_URL;

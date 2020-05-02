@@ -16,7 +16,7 @@ class Header extends React.Component {
       var appList = [];
       for (let i = 0; i < servers.length; i++) {
         for (let akey in servers[i].apps) {
-          appList.push(<AppUL setActiveApp={this.props.setActiveApp} key={akey} server={servers[i]} app={servers[i].apps[akey]} />);
+          appList.push(<AppUL setActiveApp={this.props.setActiveApp} key={i + '-' + akey} server={servers[i]} app={servers[i].apps[akey]} />);
         }
       }
       /*
@@ -84,7 +84,7 @@ Header.propTypes = {
 
 const mapStoreToProps = (storeState) => (
     {
-        servers: storeState.servers,
+        servers: storeState.server.servers,
         user: storeState.user
     }
 )

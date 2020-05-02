@@ -108,8 +108,8 @@ class App extends React.Component {
                     <h3>Quick Links</h3>
                     <ul>
                         <li><Link to={"/server/" + this.props.activeServer._id}>Apps</Link></li>
-                        <li><Link to={"#"}>Env</Link></li>
-                        <li><Link to={"#"}>SSL</Link></li>
+                        <li><Link to={"#env"}>Env</Link></li>
+                        <li><Link to={"#ssl"}>SSL</Link></li>
                     </ul>
                 </div>
                 <div className="column column-80">
@@ -119,7 +119,7 @@ class App extends React.Component {
                                <h3>Deployment</h3>
                             </div>
                             <div className="column">
-                                <button disabled={this.state.isDeploying} className="right button" onClick={ ()=> { this.deploy() }}>{ this.state.isDeploying ? "Deploying" : "Deploy Now" }</button>
+                                <button disabled={(this.state.isDeploying || this.state.enablingSSL || this.props.lock) ? "disabled" : ""} className="right button" onClick={ ()=> { this.deploy() }}>{ this.state.isDeploying ? "Deploying" : "Deploy Now" }</button>
                             </div>
                             <div className="clear"></div>
                         </div>
@@ -130,7 +130,7 @@ class App extends React.Component {
                         </div>
                         <div className="row upspace">
                             <div className="column">
-                               Auto Deploy <button disabled={this.state.isDeploying || !this.canAutoDeploy()} className="button" onClick={()=> this.activateAutoDeploy() }>{ this.props.activeApp.auto_deploy ? 'Yes' : 'No'}</button>
+                               Auto Deploy <button disabled={this.state.isDeploying || this.state.enablingSSL || !this.canAutoDeploy() || this.props.lock} className="button" onClick={()=> this.activateAutoDeploy() }>{ this.props.activeApp.auto_deploy ? 'Yes' : 'No'}</button>
                             </div>
                             <div className="column">
                                 <AppLogs app={this.props.activeApp}/>
@@ -139,7 +139,7 @@ class App extends React.Component {
                         </div>
                     </div>
                     
-                    <div className="white panel">
+                    <div className="white panel" id="env">
                         <div className="row">
                             <div className="column">
                                <h3>Environment Variables</h3>
@@ -157,7 +157,7 @@ class App extends React.Component {
                                <textarea id="app_shell_script" name="app_shell_script" value={ this.props.activeApp.app_shell_script } onChange={this.handleChange}></textarea>
                                 <div className="row">
                                     <div className="column">
-                                        <button disabled={this.state.isDeploying} className="button">Save</button>
+                                        <button disabled={this.state.isDeploying || this.state.enablingSSL || this.props.lock} className="button">Save</button>
                                     </div>
                                 </div>
                                </form>
@@ -165,7 +165,7 @@ class App extends React.Component {
                         </div>
                     </div>
                     
-                    <div className="white panel">
+                    <div className="white panel" id="ssl">
                         <div className="row">
                             <div className="column">
                                <h3>Let’s Encrypt Certificate</h3>
@@ -178,7 +178,7 @@ class App extends React.Component {
                         </div>
                         <div className="row upspace">
                             <div className="column">
-                               SSL Activated <button disabled={this.state.enablingSSL || this.props.activeApp.app_name === 'default'} className="button" onClick={()=> this.enableSSL() }>{ this.props.activeApp.ssl_enabled ? 'Yes' : 'No'}</button>
+                               SSL Activated <button disabled={this.props.activeApp.ssl_enabled || this.state.enablingSSL || this.state.isDeploying  || this.props.activeApp.app_name === 'default' || this.props.lock} className="button" onClick={()=> this.enableSSL() }>{ this.props.activeApp.ssl_enabled ? 'Yes' : 'No'}</button>
                             </div>
                             <div className="clear"></div>
                         </div>
@@ -194,6 +194,7 @@ class App extends React.Component {
 App.propTypes = {
   servers: PropTypes.array,
   credentials: PropTypes.object.isRequired,
+  lock: PropTypes.bool.isRequired,
 }
 
 const mapDispatchToProps = (dispatch) => (
@@ -206,7 +207,8 @@ const mapDispatchToProps = (dispatch) => (
 
 const mapStoreToProps = (storeState) => (
     {
-        servers: storeState.servers,
+        servers: storeState.server.servers,
+        lock: storeState.server.lock,
         credentials: storeState.credentials,
         activeApp: storeState.activeApp,
         activeServer: storeState.activeServer

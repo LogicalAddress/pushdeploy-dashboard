@@ -255,7 +255,7 @@ class CustomServer extends React.Component {
               </div>
           </div>
           <div className="form-group">
-            <small>Append this public key to your `/{this.props.draft.username}/.ssh/authorized_keys`</small>
+            <small>Append this public key to your $HOME/.ssh/authorized_keys e.g `/{this.props.draft.username}/.ssh/authorized_keys`</small>
             <pre><code>
             {this.props.credentials.custom_public_key}
             </code></pre>

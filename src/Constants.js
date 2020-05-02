@@ -67,6 +67,9 @@ export default {
   CREATE_APP_RUNNING: "creating app on the selected server is in progress",
   CREATE_APP_ERROR: "error creating app on selected server",
   UPDATE_APP_SETUP_DRAFT: "update the app setup draft",
+  FETCH_APPS: 'fetch apps',
+  FETCH_APPS_SUCCESS: 'fetch apps success',
+  FETCH_APPS_ERROR: 'fetch apps error',
   
   
   SUBSCRIBE_PLAN: 'subscribe user to the selected plan',
@@ -80,6 +83,7 @@ export default {
   CREATE_SERVER: 'create any server',
   CREATE_SERVER_RUNNING: 'creating server on the selected provider is in progress',
   CREATE_SERVER_ERROR: 'error creating server on selected provider',
+  CREATE_SERVER_FINISHED: 'finished creating server',
   
   FETCH_USER_CREDENTIALS: 'fetch all users oauth2 credentials',
   FETCH_USER_CREDENTIALS_SUCCESS: 'fetch all users oauth2 credentials success',

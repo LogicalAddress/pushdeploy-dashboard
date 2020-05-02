@@ -2,7 +2,8 @@ import { combineReducers } from 'redux';
 import profile from './ProfileReducer';
 import profileDraft from './ProfileDraftReducer';
 import user from './UserReducer';
-import servers from './ServersReducer';
+import server from './ServerReducer';
+import app from './AppReducer';
 import app_setting from './AppSettingReducer';
 import loading from './LoaderReducer';
 import awsSetupDraft from './AwsSetupDraftReducer';
@@ -20,7 +21,8 @@ const reducers = combineReducers({
   profileDraft,
   user,
   app_setting,
-  servers,
+  server,
+  app,
   loading,
   awsSetupDraft,
   linodeSetupDraft,

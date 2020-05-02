@@ -15,6 +15,9 @@ import { Provider } from 'react-redux';
 import Login from './components/Account/Login.jsx';
 import Register from './components/Account/Register.jsx';
 import { ConnectedRouter } from 'connected-react-router';
+import OAuthGithub from './components/OAuthGithub.jsx';
+import OAuthBitbucket from './components/OAuthBitbucket';
+
 import  './lib/toastr.min.css';
 
 ReactDom.render((
@@ -31,6 +34,8 @@ ReactDom.render((
                 <Route exact={true} path="/login" component={Login} />
                 <Route exact={true} path="/register" component={Register} />
                 <Route exact={true} path="/databases/:id" component={Database}/>
+                <Route exact={true} path="/oauth2/github" component={OAuthGithub} />
+                <Route exact={true} path="/oauth2/bitbucket" component={OAuthBitbucket} />
             </Launcher>
         </ConnectedRouter>
     </Provider>

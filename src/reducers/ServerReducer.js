@@ -1,10 +1,13 @@
 import constants from '../Constants';
 import {error, success} from '../utils/toastr.js'
 
-const initialState = [];
+const initialState = {
+  servers: [],
+  lock: false,
+};
 
 const appendApp = (state, payload) => {
-  let servers = state;
+  let servers = state.servers;
     for (var i = 0; i < servers.length; i++) {
       if(servers[i]._id !== payload.server) continue;
       servers[i].apps.push({
@@ -26,12 +29,12 @@ const appendApp = (state, payload) => {
       });
       break;
     }
-    return servers;
+    return Object.assign(state, {servers: servers});
 };
 
 const replaceApp = (state, payload) => {
   console.log("remote data", payload)
-  let servers = state;
+  let servers = state.servers;
     for (var i = 0; i < servers.length; i++) {
       if(servers[i]._id === payload.server._id){
         for(var j = 0; j < servers[i].apps.length; j++){
@@ -43,13 +46,15 @@ const replaceApp = (state, payload) => {
         }
       }
     }
-    return servers;
+    return Object.assign(state, {servers: servers});
 };
  
-const servers = (state = initialState, action) => {
+const server = (state = initialState, action) => {
+  let servers;
     switch (action.type) {
       case constants.FETCH_SERVERS_SUCCESS:
-        return action.payload.response.body.data
+        servers = action.payload.response.body.data;
+        return Object.assign(state, {servers: servers});
       case constants.FETCH_SERVERS_ERROR:
         return state
       case constants.CREATE_APP_RUNNING:
@@ -67,29 +72,32 @@ const servers = (state = initialState, action) => {
         return state
       case constants.CREATE_SERVER_RUNNING:
         console.log("CREATE_SERVER_RUNNING",action.payload.response);
-        var remote = action.payload.response.body.data;
+        var remote = action.payload.response.body;
         success('Relax!', "Your server is being setup");
-        return [...state, {
-            "_id": remote.data._id,
-            "uid": remote.data.uid,
-            "superuser": remote.data.superuser,
-            "server_name": remote.data.server_name,
-            "provider": remote.data.provider,
-            "apps": remote.data.apps,
-            "public_key": remote.data.public_key || null,
-            "private_key": remote.data.private_key || null,
-            "root_passwd": remote.data.root_passwd || null,
-            "instanceId": remote.data.instanceId || null,
-            "meta": remote.data.meta || null,
-            "cargoshell_version": remote.data.cargoshell_version,
-            "enabled": remote.data.enabled,
-            "_app_counter": remote.data._app_counter,
-            "ipv4": remote.data.ipv4 || "LOADING",
-            "state": remote.data.state || "LOADING",
-            "ipv6": null,
-            "created_at": remote.data.created_at,
-            "updated_at": remote.data.updated_at
-          }]
+        servers = [...state.servers, {
+          "_id": remote.data._id,
+          "uid": remote.data.uid,
+          "superuser": remote.data.superuser,
+          "server_name": remote.data.server_name,
+          "provider": remote.data.provider,
+          "apps": remote.data.apps,
+          "public_key": remote.data.public_key || null,
+          "private_key": remote.data.private_key || null,
+          "root_passwd": remote.data.root_passwd || null,
+          "instanceId": remote.data.instanceId || null,
+          "meta": remote.data.meta || null,
+          "cargoshell_version": remote.data.cargoshell_version,
+          "enabled": remote.data.enabled,
+          "_app_counter": remote.data._app_counter,
+          "ipv4": remote.data.ipv4 || "LOADING",
+          "state": remote.data.state || "LOADING",
+          "ipv6": null,
+          "created_at": remote.data.created_at,
+          "updated_at": remote.data.updated_at
+        }]
+        return Object.assign(state, {lock: true, servers: servers});
+        case constants.CREATE_SERVER_FINISHED:
+          return Object.assign(state, {lock: false});
       case constants.CREATE_SERVER_ERROR:
         console.log("CREATE_SERVER_ERROR", action.payload.response);
         error('Oopse!', "Error setting up the server");
@@ -99,4 +107,4 @@ const servers = (state = initialState, action) => {
     }
 };
  
-export default servers;
+export default server;
