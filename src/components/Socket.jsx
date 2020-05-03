@@ -30,27 +30,40 @@ class Socket extends React.Component {
   }
 
   componentDidMount() {
-    let userId = req.getUid();
+
     this.socket.on('connected', (data) => {
         console.log(data);
     });
-    if(userId && userId.length){
-        this.socket.on(req.getUid(), (data) => {
-            console.log({data})
-            if(data.action === 'CREATE_SERVER_SUCCESS'){ //from server.webhooks
-                this.props.fetchServers();
-                this.props.createServerFinished();
-                success("Create Server", "Your server was successfully provisioned");
-                return;
-            }
-            if(data.action === 'CREATE_SERVER_FAILED'){ //where ssh return a non-zero exit status
-                this.props.fetchServers();
-                this.props.createServerFinished();
-                error("Create Server", "Provisioning your server failed");
-                return;
-            }
-        });
-    }
+
+    this.socket.on('CREATE_SERVER_SUCCESS', (data) => {
+      this.props.fetchServers();
+      this.props.createServerFinished();
+      success("Create Server", "Your server was successfully provisioned");
+      return;
+    });
+
+    this.socket.on('CREATE_SERVER_FAILED', (data) => {
+      this.props.fetchServers();
+      this.props.createServerFinished();
+      error("Create Server", "Provisioning your server failed");
+      return;
+    });
+
+    this.socket.on('CREATE_APP_SUCCESS', (data) => {
+      this.props.fetchServers(); //TODO: below
+      // this.props.fetchApps();
+      // this.props.createAppFinished();
+      success("Create App", "Your app was successfully deployed");
+      return;
+    });
+
+    this.socket.on('CREATE_APP_FAILED', (data) => {
+      this.props.fetchServers(); //TODO:
+      // this.props.fetchApps();
+      // this.props.createAppFinished();
+      error("Create App", "Deploying your app failed, please try again");
+      return;
+    });
   }
 
 
