@@ -38,14 +38,19 @@ class Socket extends React.Component {
     this.socket.on('CREATE_SERVER_SUCCESS', (data) => {
       this.props.fetchServers();
       this.props.createServerFinished();
-      success("Create Server", "Your server was successfully provisioned");
+      success('Notification', `Provisioning your server ${data.server_name} was successful`);
+      return;
+    });
+
+    this.socket.on('CREATE_SERVER_READY', (data) => {
+      success("Notification", `Your server ${data.server_name} is ready`);
       return;
     });
 
     this.socket.on('CREATE_SERVER_FAILED', (data) => {
       this.props.fetchServers();
       this.props.createServerFinished();
-      error("Create Server", "Provisioning your server failed");
+      error("Notification", `Provisioning your server ${data.server_name} failed`);
       return;
     });
 
@@ -53,7 +58,13 @@ class Socket extends React.Component {
       this.props.fetchServers(); //TODO: below
       // this.props.fetchApps();
       // this.props.createAppFinished();
-      success("Create App", "Your app was successfully deployed");
+      success('Notification', `Your app ${data.app_name} was successfully deployed`);
+      return;
+    });
+
+    this.socket.on('CREATE_APP_READY', (data) => {
+      if(data.app_name === 'default') return;
+      success("Notification", `${data.app_name} is ready`);
       return;
     });
 
@@ -61,9 +72,25 @@ class Socket extends React.Component {
       this.props.fetchServers(); //TODO:
       // this.props.fetchApps();
       // this.props.createAppFinished();
-      error("Create App", "Deploying your app failed, please try again");
+      error("Create App", `Deploying your app ${data.app_name} failed, please try again`);
       return;
     });
+
+    this.socket.on('CREATE_DATABASE_READY', (data) => {
+      success("Notification", `Your database ${data.db_name} is ready`);
+      return;
+    });
+
+    this.socket.on('TOGGLE_SSL_READY', (data) => {
+      success("Notification", `${data.app_name} is now secure with Letsencrypt`);
+      return;
+    });
+
+    this.socket.on('DEPLOY_APP_READY', (data) => {
+      success("Notification", `Your app is ${data.app_name} up-to-date`);
+      return;
+    });
+
   }
 
 
