@@ -3,6 +3,7 @@ See (REACT_APP_API_URL) the API_ENDPOINT here: /src/Constants.js
 
 ```sh
 cp .env.sample .env
+npm run dev
 ```
 
 ## Work Process

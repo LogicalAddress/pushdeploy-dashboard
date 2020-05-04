@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pushdeploy-dashboard
+  namespace: default
+  labels:
+    app: pushdeploy-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pushdeploy-dashboard
+  template:
+    metadata:
+      labels:
+        app: pushdeploy-dashboard
+    spec:
+      containers:
+        - name: pushdeploy-dashboard
+          image: logicaladdress/pushdeploy-dashboard:$COMMIT_SHA1
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: REACT_APP_API_URL
+              value: $REACT_APP_API_URL

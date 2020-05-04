@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ServerProviders from './ServerProviders.jsx';
 import ServerTable from './ServerTable.jsx';
-import AppTable from './AppTable';
+// import AppTable from './AppTable';
 import OAuthProviders from './OAuthProviders.jsx';
 
 class Home extends React.Component {

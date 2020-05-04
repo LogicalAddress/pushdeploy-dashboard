@@ -1,5 +1,5 @@
 export default {
-  API_URL: process.env.REACT_APP_API_URL,
+  API_URL: window._env_.REACT_APP_API_URL,
   
   FETCH_PROFILE: 'fetch profile',
   FETCH_PROFILE_SUCCESS: 'fetch profile success',

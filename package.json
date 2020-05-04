@@ -1,7 +1,13 @@
 {
-  "name": "PushDeployDashboard",
+  "name": "pushdeploy-dashboard",
   "version": "0.1.0",
   "private": true,
+  "repository": "git@github.com:LogicalAddress/pushdeploy-dashboard.git",
+  "author": "Logical Address Ltd. <hello@logicaladdress.com>",
+  "engines": {
+    "node": ">=8.11.4",
+    "npm": ">=5.6.0"
+  },
   "dependencies": {
     "axios": "^0.16.1",
     "babel-polyfill": "^6.23.0",
@@ -18,14 +24,14 @@
     "reactjs-popup": "^1.1.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^1.7.0"
   },
   "devDependencies": {
     "react-scripts": "^1.1.4",
     "redux-devtools": "^3.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "chmod +x ./bin/env.sh && ./bin/env.sh && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

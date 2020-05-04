@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pushdeploy-dashboard
+  namespace: default
+  labels:
+    app: pushdeploy-dashboard
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+      name: http
+      protocol: TCP
+  selector:
+    app: pushdeploy-dashboard
