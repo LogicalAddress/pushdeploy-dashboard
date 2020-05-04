@@ -5,14 +5,14 @@ rm -rf ./public/env-config.js
 touch ./public/env-config.js
 
 # Add assignment 
-echo "window._env_ = {" >> env-config.js
+echo "window._env_ = {" >> ./env-config.js
 
 if [ ! -d ".env" ]; then
   varname=REACT_APP_API_URL
   value=$REACT_APP_API_URL
   # TODO:
   # Iteratively go through all exported environment vars that have prefixes REACT_APP and inject
-  echo "  $varname: \"$value\"," >> ./public/env-config.js
+  echo "  $varname: \"$value\"," >> ./env-config.js
 else
   # Read each line in .env file
   # Each line represents key=value pairs
