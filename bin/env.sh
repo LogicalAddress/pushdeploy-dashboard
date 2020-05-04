@@ -5,7 +5,7 @@ rm -rf ./public/env-config.js
 touch ./public/env-config.js
 
 # Add assignment 
-echo "window._env_ = {" >> ./public/env-config.js
+echo "window._env_ = {" >> env-config.js
 
 if [ ! -d ".env" ]; then
   varname=REACT_APP_API_URL
@@ -30,7 +30,7 @@ else
     [[ -z $value ]] && value=${varvalue}
     
     # Append configuration property to JS file
-    echo "  $varname: \"$value\"," >> ./public/env-config.js
+    echo "  $varname: \"$value\"," >> ./env-config.js
   done < .env
 fi
-echo "}" >> ./public/env-config.js
+echo "}" >> ./env-config.js
