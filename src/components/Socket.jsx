@@ -36,7 +36,7 @@ class Socket extends React.Component {
     });
 
     this.socket.on('CREATE_SERVER_SUCCESS', (data) => {
-      this.props.fetchServers();
+      this.props.fetchServers(false);
       this.props.createServerFinished();
       success('Notification', `Provisioning your server ${data.server_name} was successful`);
       return;
@@ -48,14 +48,14 @@ class Socket extends React.Component {
     });
 
     this.socket.on('CREATE_SERVER_FAILED', (data) => {
-      this.props.fetchServers();
+      this.props.fetchServers(false);
       this.props.createServerFinished();
       error("Notification", `Provisioning your server ${data.server_name} failed`);
       return;
     });
 
     this.socket.on('CREATE_APP_SUCCESS', (data) => {
-      this.props.fetchServers(); //TODO: below
+      this.props.fetchServers(false); //TODO: below
       // this.props.fetchApps();
       // this.props.createAppFinished();
       success('Notification', `Your app ${data.app_name} was successfully deployed`);
@@ -69,7 +69,7 @@ class Socket extends React.Component {
     });
 
     this.socket.on('CREATE_APP_FAILED', (data) => {
-      this.props.fetchServers(); //TODO:
+      this.props.fetchServers(false); //TODO:
       // this.props.fetchApps();
       // this.props.createAppFinished();
       error("Create App", `Deploying your app ${data.app_name} failed, please try again`);
@@ -87,7 +87,7 @@ class Socket extends React.Component {
     });
 
     this.socket.on('DEPLOY_APP_READY', (data) => {
-      success("Notification", `Your app is ${data.app_name} up-to-date`);
+      success("Notification", `Your app ${data.app_name} is up-to-date`);
       return;
     });
 
@@ -123,7 +123,7 @@ Socket.propTypes = {
   const mapDispatchToProps = (dispatch) => ({
     isWorking: ()=> dispatch(isWorking()),
     isDoneWorking: ()=> dispatch(isDoneWorking()),
-    fetchServers: () => dispatch(ServersAction.fetchServers()),
+    fetchServers: (blocking) => dispatch(ServersAction.fetchServers(blocking)),
     createServerFinished: () => dispatch(ServersAction.createServerFinished()),
     // setActiveServer: (server) => dispatch(setActiveServer(server)),
   });

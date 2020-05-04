@@ -27,12 +27,6 @@ class Home extends React.Component {
                     </div>
                 </div>
             </div>
-            <div className="white panel">
-                <h3>Apps</h3>
-                <div className="row">
-                    <AppTable apps={this.props.apps}/>
-                </div>
-            </div>
         </div>
       )
    }

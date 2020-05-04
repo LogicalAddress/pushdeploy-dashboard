@@ -4,13 +4,13 @@ import AppsAPI from '../api/AppsAPI.js';
 
 let AppsAction = {
     
-  fetchApps() {
+  fetchApps(blocking = true) {
     return (dispatch) => {
       dispatchAsync(AppsAPI.fetchApps, dispatch, {
         request: constants.FETCH_APPS,
         success: constants.FETCH_APPS_SUCCESS,
         failure: constants.FETCH_APPS_ERROR
-      });
+      }, blocking);
     }
   },
   

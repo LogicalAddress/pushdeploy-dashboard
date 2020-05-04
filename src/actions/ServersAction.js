@@ -4,13 +4,13 @@ import ServersAPI from '../api/ServersAPI.js';
 
 let ServersAction = {
     
-  fetchServers() {
+  fetchServers(blocking = true) {
     return (dispatch) => {
       dispatchAsync(ServersAPI.fetchServers, dispatch, {
         request: constants.FETCH_SERVERS,
         success: constants.FETCH_SERVERS_SUCCESS,
         failure: constants.FETCH_SERVERS_ERROR
-      });
+      }, blocking);
     }
   },
 
