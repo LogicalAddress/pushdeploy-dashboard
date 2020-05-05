@@ -14,9 +14,9 @@ class Stripe extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            amount: 499,
-            selectedPlan: Constants.PLAN_BUSINESS_MONTHLY,
-            description: Constants.PLAN_BUSINESS_MONTHLY_DESC,
+            amount: 0,
+            selectedPlan: '',
+            description: '',
         };
         this.handlePlanChange = this.handlePlanChange.bind(this);
     }
@@ -24,6 +24,19 @@ class Stripe extends React.Component {
     componentDidMount(){
         console.log(this.props.app_setting.stripeKey);
         console.log(`${Constants.DASHBOARD_URL}/confirm`);
+
+        if(this.props.profile.primaryPlan != this.props.app_setting.stripePlanB){
+            var selectedPlan = this.props.app_setting.stripePlanB;
+            var description = this.props.app_setting.stripePlanBDesc;
+            var amount = this.props.app_setting.stripePlanBAmount;
+        }else{
+            selectedPlan = this.props.app_setting.stripePlanA;
+            description = this.props.app_setting.stripePlanADesc;
+            amount = this.props.app_setting.stripePlanAAmount;
+        }
+        this.setState({selectedPlan});
+        this.setState({description});
+        this.setState({amount});
     }
     
     onPlanClick = async(evt) => {
@@ -104,11 +117,11 @@ class Stripe extends React.Component {
                     <div className="column">
                        <form className="plan" onSubmit={(evt) => this.onPlanClick(evt)}>
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount="100" data-description={Constants.PLAN_BASIC_MONTHLY_DESC} value={Constants.PLAN_BASIC_MONTHLY} name="plan" checked={this.props.profile.primaryPlan === Constants.PLAN_BASIC_MONTHLY ? this.props.profile.primaryPlan : this.state.selectedPlan===Constants.PLAN_BASIC_MONTHLY}/> <label> {Constants.PLAN_BASIC_MONTHLY_DESC} (Access to provision 1 server, deploy 2 apps, auto deploy)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanAAmount} data-description={this.props.app_setting.stripePlanADesc} value={this.props.app_setting.stripePlanA} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanA ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanA}/> <label> {this.props.app_setting.stripePlanADesc} (Access to provision 1 server, deploy 2 apps, auto deploy)</label>
                            </div>
                         
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount="499" data-description={Constants.PLAN_BUSINESS_MONTHLY_DESC} value={Constants.PLAN_BUSINESS_MONTHLY} name="plan" checked={this.props.profile.primaryPlan === Constants.PLAN_BUSINESS_MONTHLY ? this.props.profile.primaryPlan : this.state.selectedPlan===Constants.PLAN_BUSINESS_MONTHLY}/> <label> {Constants.PLAN_BUSINESS_MONTHLY_DESC} (<em>Recommended</em>)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanBAmount} data-description={this.props.app_setting.stripePlanBDesc} value={this.props.app_setting.stripePlanB} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanB ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanB}/> <label> {this.props.app_setting.stripePlanBDesc} (<em>Recommended</em>)</label>
                            </div>
                            
                             <div className="row">
