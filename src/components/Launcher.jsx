@@ -35,13 +35,18 @@ class Launcher extends React.Component {
     }).then((response) => {
       this.props.isDoneWorking();
       if (response.body && response.body.status === 'success') {
-          success('Notification', 'You are logged in');
           this.setState({loggedIn: true});
           this.props.setLoggedInUser(response.body.data);
           this.props.fetchUserCredentials();
           this.props.fetchServers();
           this.props.fetchApps();
           this.props.fetchClientSettings();
+          if(response.body.data.noSubscription){
+            success('Notification', 'Welcome, please choose a plan to continue...');
+            this.props.changeRoute('/account/plans');
+          }else{
+            success('Notification', 'You are logged in');
+          }
           // this.props.changeRoute('/');
           return;
       }

@@ -44,6 +44,8 @@ class Socket extends React.Component {
 
     this.socket.on('CREATE_SERVER_READY', (data) => {
       success("Notification", `Your server ${data.server_name} is ready`);
+      this.props.fetchServers(false);
+      this.props.createServerFinished();
       return;
     });
 

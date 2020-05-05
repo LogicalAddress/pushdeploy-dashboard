@@ -14,6 +14,9 @@ if [ ! -d ".env" ]; then
   # TODO:
   # Iteratively go through all exported environment vars that have prefixes REACT_APP and inject
   echo "  $varname: \"$value\"," >> ./env-config.js
+  varname=REACT_DASHBOARD_URL
+  value=$REACT_DASHBOARD_URL
+  echo "  $varname: \"$value\"," >> ./env-config.js
   echo "}" >> ./env-config.js
 else
   echo "window._env_ = {" >> ./public/env-config.js

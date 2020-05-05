@@ -22,9 +22,10 @@ const profile = (state = initialState, action) => {
       case constants.LOGIN_USER_SUCCESS:
         return {...state, ...action.payload.response.body.data};
       case constants.SET_LOGGEDIN_USER:
-         var localUser = sessionStorage.getItem('user');
+        var localUser = sessionStorage.getItem('user');
         localUser = (localUser ? JSON.parse(localUser) : {});
-        return {...state, ...localUser};
+        let updatedUser = Object.assign({}, state, localUser, action.payload);
+        return updatedUser;
       default:
         return state;
     }
