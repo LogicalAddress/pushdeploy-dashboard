@@ -1,6 +1,6 @@
 export default {
-  API_URL: window._env_.REACT_APP_API_URL,
-  DASHBOARD_URL: window._env_.REACT_APP_DASHBOARD_URL,
+  API_URL: process.env.REACT_APP_API_URL || "https://api.pushdeploy.io",
+  DASHBOARD_URL: process.env.REACT_APP_DASHBOARD_URL || "https://dashboard.pushdeploy.io",
   // API_URL: process.env.REACT_APP_API_URL || "https://15657d38.ngrok.io",
   // DASHBOARD_URL: process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3000",
   FETCH_PROFILE: 'fetch profile',
