@@ -5,6 +5,13 @@ body{
     font-weight: bold;
 }
 
+/* body {
+    margin: 0;
+    padding: 0;
+    background: url("/images/background.png");
+    font-family: 'Roboto Slab', serif;
+} */
+
 .nav{
     background-color: #9b4dca;
     margin-bottom: 20px;
@@ -209,4 +216,51 @@ https://stackoverflow.com/questions/396145/how-to-vertically-center-a-div-for-al
   margin-right: auto;
   width: 400px;
   /*whatever width you want*/
+}
+
+
+.badge-phoenix {
+
+    color: #fff;
+    background-color: #ff6f61;
+
+}
+.badge {
+
+    font-weight: 600;
+
+}
+.badge {
+    display: inline-block;
+    padding: .25em .4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+.col {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+}
+
+.light-gray {
+    background: #f8f9fa !important;
+}
+.pt-40 {
+    padding-top: 40px !important;
+}
+.text-left {
+
+    text-align: left !important;
+
 }

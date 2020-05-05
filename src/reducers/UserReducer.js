@@ -13,9 +13,12 @@ const user = (state = initialState, action) => {
       case constants.UPDATE_USER_DRAFT:
         return {...state, ...action.payload};
       case constants.SET_LOGGEDIN_USER:
-         var localUser = sessionStorage.getItem('user');
+        var localUser = sessionStorage.getItem('user');
         localUser = (localUser ? JSON.parse(localUser) : {});
-        return {...state, ...localUser};
+        let updatedUser = Object.assign({}, state, localUser, action.payload);
+        // console.log({updatedUser});
+        return updatedUser;
+        // return {...state, ...localUser, {}};
       case constants.LOGIN_USER_SUCCESS:
         success("Notification", "Login Successful");
         var remoteUser = Object.assign(action.payload.response.body.data, 

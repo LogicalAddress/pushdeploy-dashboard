@@ -1,6 +1,9 @@
 export default {
-  API_URL: window._env_.REACT_APP_API_URL,
-  
+  // API_URL: window._env_.REACT_APP_API_URL,
+  // DASHBOARD_URL: window._env_.REACT_DASHBOARD_URL,
+  API_URL: process.env.REACT_APP_API_URL || "https://15657d38.ngrok.io",
+  DASHBOARD_URL: process.env.REACT_DASHBOARD_URL || "http://localhost:3000",
+
   FETCH_PROFILE: 'fetch profile',
   FETCH_PROFILE_SUCCESS: 'fetch profile success',
   FETCH_PROFILE_ERROR: 'fetch profile error',
@@ -95,10 +98,11 @@ export default {
   
   UPDATE_PLAN: 'update plan on the ui',
   
-  PLAN_BASIC_MONTHLY: 'prod_DHExUIxABjNDdI',
-  PLAN_BASIC_MONTHLY_DESC: 'Deploy Basic $4.99/Month',
-  PLAN_BUSINESS_MONTHLY: 'launcher-business-monthly',
-  PLAN_BUSINESS_MONTHLY_DESC: 'Launcher Business $39/Month',
+  PLAN_BASIC_MONTHLY: 'pushdeploy-test',
+  PLAN_BASIC_MONTHLY_DESC: 'Deploy test $1/Month',
+  PLAN_BUSINESS_MONTHLY: 'plan_HDd9VVjQJAYNmu',
+  PLAN_BUSINESS_MONTHLY_DESC: 'Deploy Pro $4.99/Month',
+
   PLAN_BASIC_YEARLY: "prod_DHF2OpFIF1ry49",
   PLAN_BASIC_YEARLY_DESC: 'Deploy Basic $49.99/Year',
   PLAN_BUSINESS_YEARLY: "Launcher-business-yearly",

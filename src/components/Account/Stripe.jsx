@@ -1,39 +1,68 @@
 import React from 'react';
-import StripeCheckout from 'react-stripe-checkout';
+// import StripeCheckout from 'react-stripe-checkout';
+import { loadStripe } from '@stripe/stripe-js';
 import req from '../../api/req.js';
 import {error, success} from '../../utils/toastr';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {isWorking, isDoneWorking, updatePlan, changeRoute } from '../../actions/Common';
+import {isWorking, isDoneWorking, changeRoute } from '../../actions/Common';
 import Constants from '../../Constants';
+import UserAction from '../../actions/UserAction';
 
 class Stripe extends React.Component {
     
     constructor(props){
         super(props);
         this.state = {
-            amount: 4999,
-            selectedPlan: Constants.PLAN_BASIC_MONTHLY,
-            description: Constants.PLAN_BASIC_MONTHLY_DESC,
+            amount: 499,
+            selectedPlan: Constants.PLAN_BUSINESS_MONTHLY,
+            description: Constants.PLAN_BUSINESS_MONTHLY_DESC,
         };
         this.handlePlanChange = this.handlePlanChange.bind(this);
     }
+
+    componentDidMount(){
+        console.log(this.props.app_setting.stripeKey);
+        console.log(`${Constants.DASHBOARD_URL}/confirm`);
+    }
     
-    onToken = (stripeToken) => {
+    onPlanClick = async(evt) => {
+        evt.preventDefault();
         this.props.isWorking();
-        let payload = { ...stripeToken, ...this.state };
-        req.post('/v1/subscribe', payload)
+        const stripePromise = loadStripe(this.props.app_setting.stripeKey);
+        const stripe = await stripePromise;
+        const { error } = await stripe.redirectToCheckout({
+            items: [
+                {plan: this.state.selectedPlan, quantity: 1}
+            ],
+            successUrl: `${Constants.DASHBOARD_URL}/confirm`,
+            cancelUrl: `${Constants.DASHBOARD_URL}/account/plans`,
+            clientReferenceId: this.props.user.uid,
+            customerEmail: this.props.user.email,
+        });
+        this.props.isDoneWorking();
+        if(error){
+            error('Notification', error.message);
+        }else{
+            success('Notification', 'You can start launching your apps now');
+        }
+        
+    }
+
+    onCancelPlanClick = async(evt) =>{
+        evt.preventDefault();
+        let response = window.confirm("Are you sure you want to cancel your subscription? You will not be able to carry out actions on pushdeploy until you subscribe again.");
+        if (response === true) {
+            this.props.isWorking();
+            req.post('/v1/cancelSubscription', {plan: this.props.profile.primaryPlan})
             .then((response) => {
-                console.log("DEBUG", response);
                 return response.json();
             }).then((response) => {
                 this.props.isDoneWorking();
                 if (response.body && response.body.status === 'success') {
-                    this.props.updatePlan({
-                        primaryPlan: this.state.selectedPlan
-                    });
-                    success('Notification', 'You can start launching your apps now');
-                    this.props.changeRoute('/');
+                    this.props.setLoggedInUser(response.body.data);
+                    success('Notification', 'Your subscription has been cancelled');
+                    this.props.changeRoute('/subscriptionCancelled');
                     return;
                 }
                 throw new Error("Unexpected response please try again");
@@ -42,6 +71,7 @@ class Stripe extends React.Component {
                 this.props.isDoneWorking();
                 error('Notification', err.message);
             });
+        }
     }
     
     handlePlanChange (evt) {
@@ -54,9 +84,6 @@ class Stripe extends React.Component {
     }
     
     render() {
-        var user = this.props.user;
-        var stripeKey = this.props.app_setting.stripeKey;
-        // console.log(this.props.profile)
       return (
         <div>
             <div className="white panel">
@@ -66,25 +93,27 @@ class Stripe extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="lead">
-                    When changing plans, the time remaining on the current billing period will be prorated. 
-                    </div>
+                    { this.props.profile.primaryPlan.length < 1&& <div className="lead">
+                    Please select a plan to continue. New users who simply want to test the platform start with <em>Deploy Test</em> then upgrade later to <em>Deploy Pro</em>. Your subscription counts from the begining and you can cancel your plan anytime.
+                    </div>}
+                    { this.props.profile.primaryPlan.length > 1 && <div className="lead">
+                    Your subscription is active! you are currently on <em>{this.props.profile.primaryPlan === "pushdeploy-test" ? "Deploy test" : "Deploy Pro"}</em> When changing plans, the previous plan is cancelled and the new plan takes effect immediately.
+                    </div>}
                 </div>
                 <div className="row upspace">
                     <div className="column">
-                       <form className="plan" onSubmit={(evt) => evt.preventDefault()}>
+                       <form className="plan" onSubmit={(evt) => this.onPlanClick(evt)}>
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount="499" data-description={Constants.PLAN_BASIC_MONTHLY_DESC} value={Constants.PLAN_BASIC_MONTHLY} name="plan" checked={this.props.profile.primaryPlan === Constants.PLAN_BASIC_MONTHLY ? this.props.profile.primaryPlan : this.state.selectedPlan===Constants.PLAN_BASIC_MONTHLY}/> <label>{Constants.PLAN_BASIC_MONTHLY_DESC}</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount="100" data-description={Constants.PLAN_BASIC_MONTHLY_DESC} value={Constants.PLAN_BASIC_MONTHLY} name="plan" checked={this.props.profile.primaryPlan === Constants.PLAN_BASIC_MONTHLY ? this.props.profile.primaryPlan : this.state.selectedPlan===Constants.PLAN_BASIC_MONTHLY}/> <label> {Constants.PLAN_BASIC_MONTHLY_DESC} (Access to provision 1 server, deploy 2 apps, auto deploy)</label>
                            </div>
                         
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount="4999" data-description={Constants.PLAN_BASIC_YEARLY_DESC} value={Constants.PLAN_BASIC_YEARLY} name="plan" checked={this.props.profile.primaryPlan === Constants.PLAN_BASIC_YEARLY ? this.props.profile.primaryPlan : this.state.selectedPlan===Constants.PLAN_BASIC_YEARLY}/> <label>Deploy Basic (<em>$49.99 / Year - Save $10.01 Per Year!</em>)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount="499" data-description={Constants.PLAN_BUSINESS_MONTHLY_DESC} value={Constants.PLAN_BUSINESS_MONTHLY} name="plan" checked={this.props.profile.primaryPlan === Constants.PLAN_BUSINESS_MONTHLY ? this.props.profile.primaryPlan : this.state.selectedPlan===Constants.PLAN_BUSINESS_MONTHLY}/> <label> {Constants.PLAN_BUSINESS_MONTHLY_DESC} (<em>Recommended</em>)</label>
                            </div>
                            
                             <div className="row">
-                                <StripeCheckout name="PushDeploy" amount={this.state.amount} description={this.state.description} email={user.email} currency="USD" locale="en" token={this.onToken} stripeKey={stripeKey}>
-                                    <button className="button">{ this.props.profile.primaryPlan !== '' ? 'Change Plan' : 'Subscribe'}</button>
-                                </StripeCheckout>
+                                <button className="button">{ this.props.profile.primaryPlan !== '' ? 'Change Plan' : 'Subscribe'}</button> 
+                                { this.props.profile.primaryPlan !== '' && <a href="/" onClick={(evt) => this.onCancelPlanClick(evt)} className="button button-clear">Cancel your subscription</a>}
                             </div>
                        </form>
                     </div>
@@ -110,8 +139,8 @@ const mapDispatchToProps = (dispatch) => (
       {
         isWorking: ()=> dispatch(isWorking()),
         isDoneWorking: ()=> dispatch(isDoneWorking()),
-        updatePlan: (plan) => dispatch(updatePlan(plan)),
         changeRoute: (route)=> dispatch(changeRoute(route)),
+        setLoggedInUser: (payload) => dispatch(UserAction.setLoggedInUser(payload)),
       }
     );
 
