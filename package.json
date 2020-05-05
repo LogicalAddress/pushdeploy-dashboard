@@ -32,7 +32,7 @@
     "redux-devtools": "^3.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "chmod +x ./bin/env.sh && ./bin/env.sh && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
