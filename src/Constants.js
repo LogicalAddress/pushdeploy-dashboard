@@ -1,8 +1,8 @@
 export default {
-  // API_URL: window._env_.REACT_APP_API_URL,
-  // DASHBOARD_URL: window._env_.REACT_DASHBOARD_URL,
-  API_URL: process.env.REACT_APP_API_URL || "https://15657d38.ngrok.io",
-  DASHBOARD_URL: process.env.REACT_DASHBOARD_URL || "http://localhost:3000",
+  API_URL: window._env_.REACT_APP_API_URL,
+  DASHBOARD_URL: window._env_.REACT_DASHBOARD_URL,
+  // API_URL: process.env.REACT_APP_API_URL || "https://15657d38.ngrok.io",
+  // DASHBOARD_URL: process.env.REACT_DASHBOARD_URL || "http://localhost:3000",
 
   FETCH_PROFILE: 'fetch profile',
   FETCH_PROFILE_SUCCESS: 'fetch profile success',
