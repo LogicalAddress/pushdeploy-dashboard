@@ -17,6 +17,7 @@ class Stripe extends React.Component {
             amount: 0,
             selectedPlan: '',
             description: '',
+            selected: false,
         };
         this.handlePlanChange = this.handlePlanChange.bind(this);
     }
@@ -93,6 +94,7 @@ class Stripe extends React.Component {
           selectedPlan: evt.currentTarget.value,
           amount: parseInt(data.amount, 10),
           description: data.description,
+          selected: true,
         });
     }
     
@@ -125,7 +127,7 @@ class Stripe extends React.Component {
                            </div>
                            
                             <div className="row">
-                                <button className="button">{ this.props.profile.primaryPlan !== '' ? 'Change Plan' : 'Subscribe'}</button> 
+                                <button disabled={!this.state.selected} className="button">{ this.props.profile.primaryPlan !== '' ? 'Change Plan' : 'Subscribe'}</button> 
                                 { this.props.profile.primaryPlan !== '' && <a href="/" onClick={(evt) => this.onCancelPlanClick(evt)} className="button button-clear">Cancel your subscription</a>}
                             </div>
                        </form>
