@@ -14,7 +14,7 @@ class Register extends React.Component {
       name: '',
       email: '',
       password: '',
-      isRobot: true,
+      recaptcha: null,
     };
     this.register = this.register.bind(this);
   }
@@ -63,12 +63,12 @@ class Register extends React.Component {
                   <input placeholder="P@55w0rd" id="password" type="password" value={this.state.password} onChange={(e) => this.setState({password: e.target.value})}/>
                   <ReCAPTCHA
                     sitekey="6LdWefMUAAAAADeh0hCJLmm6Ga96rRgG0F7cmvZ5"
-                    onChange={(e) => this.setState({isRobot: false})}
+                    onChange={(val) => this.setState({recaptcha: val})}
                   /><br/>
                   <div className="float-right">
                     <a href="/login">Login here</a>
                   </div>
-                  <input disabled={this.state.isRobot} onClick={this.register} className="button-primary" value="Register" type="submit"/>
+                  <input disabled={this.state.recaptcha === null} onClick={this.register} className="button-primary" value="Register" type="submit"/>
                 </fieldset>
               </form>
            </div>
