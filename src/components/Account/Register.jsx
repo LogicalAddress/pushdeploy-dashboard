@@ -3,30 +3,45 @@ import { connect } from 'react-redux';
 import UserAction from '../../actions/UserAction';
 import { error } from '../../utils/toastr';
 import logo from '../../assets/images/logo.png';
-var Link = require('react-router-dom').Link;
+import req from '../../api/req.js';
+// var Link = require('react-router-dom').Link;
 
 class Register extends React.Component {
   
   constructor(props) {
     super(props);
     this.state = {
-      data: ''
+      name: '',
+      email: '',
+      password: '',
+      mobileNumber: '',
     };
     this.register = this.register.bind(this);
+  }
+
+  componentDidMount(){
+    req.get('/v1/user')
+    .then((response) => {
+        return response.json();
+    }).then((response) => {
+      if (response.body && response.body.status === 'success') {
+        this.props.changeRoute('/');
+      }
+    });
   }
   
   register(evt) {
     evt.preventDefault();
-    if(this.props.user.name == null || !this.props.user.name.length){
+    if(this.state.name == null || !this.state.name.length){
       return error('Requirements', 'Name is required');
     }
-    if(this.props.user.email == null || !this.props.user.email.length){
+    if(this.state.email == null || !this.state.email.length){
       return error('Requirements', 'Email is required');
     }
-    if(this.props.user.password == null || !this.props.user.password.length){
+    if(this.state.password == null || !this.state.password.length){
       return error('Requirements', 'Password is required');
     }
-    this.props.register(this.props.user);
+    this.props.register(this.state);
   }
   
   render() {
@@ -41,13 +56,13 @@ class Register extends React.Component {
               <form>
                 <fieldset>
                   <label htmlFor="name">Name</label>
-                  <input placeholder="Kator Bryan" id="name" type="text" value={this.props.user.name} onChange={(e) => this.props.update({name: e.target.value})}/>
+                  <input placeholder="Kator Bryan" id="name" type="text" value={this.state.name} onChange={(e) => this.props.update({name: e.target.value})}/>
                   <label htmlFor="email">Email</label>
-                  <input placeholder="support@pushdeploy.io" id="email" type="text" value={this.props.user.email} onChange={(e) => this.props.update({email: e.target.value, mobileNumber: e.target.value})}/>
+                  <input placeholder="support@pushdeploy.io" id="email" type="text" value={this.state.email} onChange={(e) => this.props.update({email: e.target.value, mobileNumber: e.target.value})}/>
                   <label htmlFor="password">Password</label>
-                  <input placeholder="P@55w0rd" id="password" type="password" value={this.props.user.password} onChange={(e) => this.props.update({password: e.target.value})}/>
+                  <input placeholder="P@55w0rd" id="password" type="password" value={this.state.password} onChange={(e) => this.props.update({password: e.target.value})}/>
                   <div className="float-right">
-                    <Link to="/login">Login here</Link>
+                    <a href="/login">Login here</a>
                   </div>
                   <input onClick={this.register} className="button-primary" value="Register" type="submit"/>
                 </fieldset>

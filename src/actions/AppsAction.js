@@ -10,16 +10,25 @@ let AppsAction = {
         request: constants.FETCH_APPS,
         success: constants.FETCH_APPS_SUCCESS,
         failure: constants.FETCH_APPS_ERROR
-      }, blocking);
-    }
-  },
-  
-  createAppFinished() {
-    return (dispatch) => {
-      dispatch({type: constants.CREATE_APP_FINISHED});
+      }, null, blocking);
     }
   },
 
+  updateAppField(params) {
+    return (dispatch) => {
+      dispatch({type: constants.UPDATE_APP_FIELD, payload: params});
+    }
+  },
+
+  getApp(params, blocking = true) {
+    return (dispatch) => {
+      dispatchAsync(AppsAPI.fetchApp, dispatch, {
+        request: constants.FETCH_APP,
+        success: constants.FETCH_APP_SUCCESS,
+        failure: constants.FETCH_APP_ERROR
+      }, params, blocking);
+    }
+  },
   
 };
 

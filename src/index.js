@@ -6,7 +6,9 @@ import Launcher from './components/Launcher.jsx';
 import Home from './components/Home.jsx';
 import Database from './components/Database.jsx';
 import Server from './components/Server.jsx';
+import Servers from './components/Servers.jsx';
 import App from './components/App.jsx';
+import Apps from './components/Apps.jsx';
 import { reduxStore, history } from './store/Config';
 import Account from './components/Account.jsx';
 import SelectPlan from './components/Account/SelectPlan.jsx';
@@ -29,7 +31,9 @@ ReactDom.render((
             <Launcher>
                 <Route exact={true} path="/" component={Home} />
                 <Route exact={true} path="/server/:id" component={Server} />
-                <Route exact={true} path="/server/:server_id/app/:id" component={App} />
+                <Route exact={true} path="/servers" component={Servers} />
+                <Route exact={true} path="/apps" component={Apps} />
+                <Route exact={true} path="/apps/:id" component={App} />
                 <Route exact={true} path="/account" component={Account} />
                 <Route exact={true} path="/account/plans" component={ChangePlan} />
                 <Route exact={true} path="/plans" component={SelectPlan} />
