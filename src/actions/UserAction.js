@@ -3,12 +3,6 @@ import constants from '../Constants.js';
 import UserAPI from '../api/UserAPI.js';
 let UserAction = {
   
-  updateDraft(payload) {
-    return (dispatch) => {
-      dispatch({ type: constants.UPDATE_USER_DRAFT, payload});
-    };
-  },
-  
   setLoggedInUser(payload) {
     return (dispatch) => {
       dispatch({ type: constants.SET_LOGGEDIN_USER, payload});
