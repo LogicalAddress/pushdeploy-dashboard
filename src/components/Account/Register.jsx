@@ -14,7 +14,6 @@ class Register extends React.Component {
       name: '',
       email: '',
       password: '',
-      mobileNumber: '',
     };
     this.register = this.register.bind(this);
   }
@@ -56,11 +55,11 @@ class Register extends React.Component {
               <form>
                 <fieldset>
                   <label htmlFor="name">Name</label>
-                  <input placeholder="Kator Bryan" id="name" type="text" value={this.state.name} onChange={(e) => this.props.update({name: e.target.value})}/>
+                  <input placeholder="Kator Bryan" id="name" type="text" value={this.state.name} onChange={(e) => this.setState({name: e.target.value})}/>
                   <label htmlFor="email">Email</label>
-                  <input placeholder="support@pushdeploy.io" id="email" type="text" value={this.state.email} onChange={(e) => this.props.update({email: e.target.value, mobileNumber: e.target.value})}/>
+                  <input placeholder="support@pushdeploy.io" id="email" type="text" value={this.state.email} onChange={(e) => this.setState({email: e.target.value, mobileNumber: e.target.value})}/>
                   <label htmlFor="password">Password</label>
-                  <input placeholder="P@55w0rd" id="password" type="password" value={this.state.password} onChange={(e) => this.props.update({password: e.target.value})}/>
+                  <input placeholder="P@55w0rd" id="password" type="password" value={this.state.password} onChange={(e) => this.setState({password: e.target.value})}/>
                   <div className="float-right">
                     <a href="/login">Login here</a>
                   </div>
@@ -89,7 +88,6 @@ const mapStoreToProps = (storeState) => (
     
 const mapDispatchToProps = (dispatch) => (
       {
-        update: (payload) => dispatch(UserAction.updateDraft(payload)),
         register: (payload) => dispatch(UserAction.register(payload)),
       }
     );

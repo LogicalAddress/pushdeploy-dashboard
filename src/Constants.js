@@ -6,7 +6,6 @@ export default {
   FETCH_PROFILE_SUCCESS: 'fetch profile success',
   FETCH_PROFILE_ERROR: 'fetch profile error',
   
-  UPDATE_USER_DRAFT: 'update user draft',
   SET_LOGGEDIN_USER: 'set logged in user',
   
   LOGIN_USER: 'login user',

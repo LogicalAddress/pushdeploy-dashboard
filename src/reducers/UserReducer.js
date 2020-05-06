@@ -10,8 +10,6 @@ const initialState = {
  
 const user = (state = initialState, action) => {
     switch (action.type) {
-      case constants.UPDATE_USER_DRAFT:
-        return {...state, ...action.payload};
       case constants.SET_LOGGEDIN_USER:
         var localUser = sessionStorage.getItem('user');
         localUser = (localUser ? JSON.parse(localUser) : {});
