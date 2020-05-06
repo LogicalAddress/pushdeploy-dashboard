@@ -4,7 +4,7 @@ import UserAction from '../../actions/UserAction';
 import { error } from '../../utils/toastr';
 import logo from '../../assets/images/logo.png';
 import req from '../../api/req.js';
-// var Link = require('react-router-dom').Link;
+import ReCAPTCHA from "react-google-recaptcha";
 
 class Register extends React.Component {
   
@@ -14,6 +14,7 @@ class Register extends React.Component {
       name: '',
       email: '',
       password: '',
+      recaptcha: null,
     };
     this.register = this.register.bind(this);
   }
@@ -60,10 +61,14 @@ class Register extends React.Component {
                   <input placeholder="support@pushdeploy.io" id="email" type="text" value={this.state.email} onChange={(e) => this.setState({email: e.target.value, mobileNumber: e.target.value})}/>
                   <label htmlFor="password">Password</label>
                   <input placeholder="P@55w0rd" id="password" type="password" value={this.state.password} onChange={(e) => this.setState({password: e.target.value})}/>
+                  <ReCAPTCHA
+                    sitekey="6LdWefMUAAAAADeh0hCJLmm6Ga96rRgG0F7cmvZ5"
+                    onChange={(val) => this.setState({recaptcha: val})}
+                  /><br/>
                   <div className="float-right">
                     <a href="/login">Login here</a>
                   </div>
-                  <input onClick={this.register} className="button-primary" value="Register" type="submit"/>
+                  <input disabled={this.state.recaptcha === null} onClick={this.register} className="button-primary" value="Register" type="submit"/>
                 </fieldset>
               </form>
            </div>
