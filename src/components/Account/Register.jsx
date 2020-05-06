@@ -51,7 +51,7 @@ class Register extends React.Component {
           <div className="middle">
             <div className="row" style={{width: 'auto'}}>
             <div className="column column-50 column-offset-25">
-            <center><img src={logo} height="100" alt="PushDeploy"/></center><br/>
+            <center><img src={logo} height="100" alt="pushdeploy.io"/></center><br/>
             <div className="white panel">
               <h1>Register</h1>
               <form>
