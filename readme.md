@@ -1,5 +1,6 @@
 ## On Dev:
 See (REACT_APP_API_URL) the API_ENDPOINT here: /src/Constants.js
+See (REACT_APP_DASHBOARD_URL) the API_ENDPOINT here: /src/Constants.js
 
 ```sh
 cp .env.sample .env

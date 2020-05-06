@@ -19,13 +19,13 @@ let DatabaseAction = {
     }
   },
   
-  fetchDatbases(payload) {
+  fetchDatbases(payload, blocking = true) {
     return (dispatch) => {
       dispatchAsync(DatabaseAPI.fetchDatbases, dispatch, {
         request: constants.FETCH_DATABASE,
         success: constants.FETCH_DATABASE_SUCCESS,
         failure: constants.FETCH_DATABASE_ERROR
-      }, payload);
+      }, payload, blocking);
     }
   },
 

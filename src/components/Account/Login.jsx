@@ -1,30 +1,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import UserAction from '../../actions/UserAction';
+import { changeRoute } from '../../actions/Common';
 import { error } from '../../utils/toastr';
 import logo from '../../assets/images/logo.png';
-var Link = require('react-router-dom').Link;
+import req from '../../api/req.js';
+// var Link = require('react-router-dom').Link;
 
 class Login extends React.Component {
   
   constructor(props) {
     super(props);
     this.state = {
-      data: ''
+      email: '',
+      password: '',
     };
     this.login = this.login.bind(this);
+  }
+
+  componentDidMount(){
+    req.get('/v1/user')
+    .then((response) => {
+        return response.json();
+    }).then((response) => {
+      if (response.body && response.body.status === 'success') {
+        this.props.changeRoute('/');
+      }
+    });
   }
   
   login(evt) {
     evt.preventDefault();
-    if(this.props.user.email == null || !this.props.user.email.length){
+    if(this.state.email == null || !this.state.email.length){
       return error('Requirements', 'Email is required');
     }
-    if(this.props.user.password == null || !this.props.user.password.length){
+    if(this.state.password == null || !this.state.password.length){
       return error('Requirements', 'Password is required');
     }
-    console.log("postValidate", this.props.user);
-    this.props.authenticate(this.props.user);
+    this.props.authenticate(this.state); 
   }
   
   
@@ -40,11 +53,11 @@ class Login extends React.Component {
               <form>
                 <fieldset>
                   <label htmlFor="email">Email</label>
-                  <input placeholder="support@pushdeploy.io" id="email" type="text" value={this.props.user.email} onChange={(e) => this.props.update({email: e.target.value})}/>
+                  <input placeholder="support@pushdeploy.io" id="email" type="text" value={this.state.email} onChange={(e) => this.setState({email: e.target.value})}/>
                   <label htmlFor="password">Password</label>
-                  <input placeholder="P@55w0rd" id="password" type="password" value={this.props.user.password} onChange={(e) => this.props.update({password: e.target.value})}/>
+                  <input placeholder="P@55w0rd" id="password" type="password" value={this.state.password} onChange={(e) => this.setState({password: e.target.value})}/>
                   <div className="float-right">
-                    <Link to="/register">Register here</Link>
+                    <a href="/register">Register here</a>
                   </div>
                   <input onClick={this.login} className="button-primary" value="Login" type="submit"/>
                 </fieldset>
@@ -59,21 +72,13 @@ class Login extends React.Component {
   }
 }
 
-Login.propTypes = {
-    
-};
-
-const mapStoreToProps = (storeState) => (
-    {
-        user: storeState.user,
-    }
-)
     
 const mapDispatchToProps = (dispatch) => (
       {
         update: (payload) => dispatch(UserAction.updateDraft(payload)),
         authenticate: (payload) => dispatch(UserAction.login(payload)),
+        changeRoute: (route)=> dispatch(changeRoute(route)),
       }
     );
 
-export default connect(mapStoreToProps, mapDispatchToProps)(Login)
+export default connect(null, mapDispatchToProps)(Login)

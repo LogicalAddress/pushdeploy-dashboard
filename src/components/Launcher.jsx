@@ -15,7 +15,6 @@ import CredentialsAction from '../actions/CredentialsAction';
 import {error, success} from '../utils/toastr';
 import req from '../api/req.js';
 import {isWorking, isDoneWorking, changeRoute } from '../actions/Common';
-import GlobalErrorHandler from './GlobalErrorHandler';
 import Socket from './Socket';
 
 class Launcher extends React.Component {
@@ -67,11 +66,9 @@ class Launcher extends React.Component {
         <div>
           <Socket />
           { this.props.loading && <Loader /> }
-          <GlobalErrorHandler changeRoute={this.props.changeRoute}>
           { this.state.loggedIn && <Header loggedIn={this.state.loggedIn}/> }
           { this.props.children }
           { this.state.loggedIn && <Footer loggedIn={this.state.loggedIn}/> }
-          </GlobalErrorHandler>
         </div>
       );
   }

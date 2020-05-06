@@ -2,27 +2,30 @@ import constants from '../Constants';
 import {error, success} from '../utils/toastr.js'
 
 const initialState = {
-  apps: [],
-  lock: false,
-};
+  server: {},
+  app_repository: ''
+}
  
 const app = (state = initialState, action) => {
-  let apps;
     switch (action.type) {
-      case constants.FETCH_APPS_SUCCESS:
-        apps = action.payload.response.body.data;
-        return Object.assign({}, state, {apps: apps});
-      case constants.FETCH_APPS_ERROR:
+      case constants.FETCH_APP_SUCCESS:
+        return action.payload.response.body.data;
+      case constants.FETCH_APP_ERROR:
+        error('Notification', "Error getting app");
+        return state;
+      case constants.UPDATE_APP_FIELD:
+          return {...state, ...action.payload};
+      case constants.TOGGLE_AUTO_DEPLOY_SUCCESS:
+          return action.payload.response.body.data;
+      case constants.TOGGLE_AUTO_DEPLOY_ERROR:
+        error('Oopse!', "Unable to toggle auto deploy");
+        return state;
+      case constants.UPDATE_ENV_ERROR:
+        error('Notification', "Error updating the app's environment");
         return state
-      case constants.CREATE_APP_RUNNING:
-        success('Relax!', "Your app is being setup");
-        apps = [...state.apps, action.payload.response.data];
-        return Object.assign(state, {lock: true, apps: apps});
-      case constants.CREATE_APP_FINISHED:
-          return Object.assign(state, {lock: false});
-      case constants.CREATE_APP_ERROR:
-        error('Oopse!', "Error creating your app");
-        return state
+      case constants.UPDATE_ENV_SUCCESS:
+          success('Notification', "Your app has been updated, deploy");
+          return action.payload.response.body.data;
       default:
         return state;
     }

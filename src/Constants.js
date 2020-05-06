@@ -1,8 +1,7 @@
 export default {
   API_URL: process.env.REACT_APP_API_URL || "https://api.pushdeploy.io",
   DASHBOARD_URL: process.env.REACT_APP_DASHBOARD_URL || "https://dashboard.pushdeploy.io",
-  // API_URL: process.env.REACT_APP_API_URL || "https://15657d38.ngrok.io",
-  // DASHBOARD_URL: process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3000",
+
   FETCH_PROFILE: 'fetch profile',
   FETCH_PROFILE_SUCCESS: 'fetch profile success',
   FETCH_PROFILE_ERROR: 'fetch profile error',
@@ -31,7 +30,11 @@ export default {
   FETCH_SERVERS: 'fetch servers',
   FETCH_SERVERS_SUCCESS: 'fetch servers success',
   FETCH_SERVERS_ERROR: 'fetch servers error',
-  
+
+  FETCH_SERVER: 'fetch server',
+  FETCH_SERVER_SUCCESS: 'fetch server success',
+  FETCH_SERVER_ERROR: 'fetch server error',
+
   FETCH_APP_SETTING: 'fetch app setting',
   FETCH_APP_SETTING_SUCCESS: 'fetch app setting success',
   FETCH_APP_SETTING_ERROR: 'fetch app setting error',
@@ -69,10 +72,15 @@ export default {
   CREATE_APP_RUNNING: "creating app on the selected server is in progress",
   CREATE_APP_ERROR: "error creating app on selected server",
   UPDATE_APP_SETUP_DRAFT: "update the app setup draft",
+
   FETCH_APPS: 'fetch apps',
   FETCH_APPS_SUCCESS: 'fetch apps success',
   FETCH_APPS_ERROR: 'fetch apps error',
   
+
+  FETCH_APP: 'fetch app',
+  FETCH_APP_SUCCESS: 'fetch app success',
+  FETCH_APP_ERROR: 'fetch app error',
   
   SUBSCRIBE_PLAN: 'subscribe user to the selected plan',
   SUBSCRIBE_PLAN_SUCCESS: 'subscribe user to plan success',
@@ -97,24 +105,11 @@ export default {
   
   UPDATE_PLAN: 'update plan on the ui',
   
-  PLAN_BASIC_MONTHLY: 'pushdeploy-test',
-  PLAN_BASIC_MONTHLY_DESC: 'Deploy test $1/Month',
-  PLAN_BUSINESS_MONTHLY: 'plan_HDd9VVjQJAYNmu',
-  PLAN_BUSINESS_MONTHLY_DESC: 'Deploy Pro $4.99/Month',
-
-  PLAN_BASIC_YEARLY: "prod_DHF2OpFIF1ry49",
-  PLAN_BASIC_YEARLY_DESC: 'Deploy Basic $49.99/Year',
-  PLAN_BUSINESS_YEARLY: "Launcher-business-yearly",
-  PLAN_BUSINESS_YEARLY_DESC: 'Launcher Business $399/Year',
-  
   UPDATE_ENV: 'update app\'s environment variables',
   UPDATE_ENV_SUCCESS: 'update env successful',
   UPDATE_ENV_ERROR: 'updating env failed',
   
-  SET_ACTIVE_APP: 'the app that should be in view, usually selected from app list component',
-  UPDATE_ACTIVE_APP: 'update the active app object',
-  SET_ACTIVE_SERVER: 'the server that should be in view, usually selected from server list component',
-  UPDATE_ACTIVE_SERVER: 'update the active server object',
+  UPDATE_APP_FIELD: "update a field in app",
   
   TOGGLE_AUTO_DEPLOY: 'to toggle auto deploy for authenticated accounts',
   TOGGLE_AUTO_DEPLOY_SUCCESS: 'toggling auto deploy succeed',

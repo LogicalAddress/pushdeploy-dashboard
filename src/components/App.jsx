@@ -5,8 +5,8 @@ import AppLogs from './AppLogs';
 import req from '../api/req.js';
 import UpdateEnvAction from '../actions/UpdateEnvAction';
 import {error, success} from '../utils/toastr';
-import {updateActiveApp} from '../actions/Common';
 import AppSetupAction from '../actions/AppSetup';
+import AppsAction from '../actions/AppsAction';
 var Link = require('react-router-dom').Link;
 
 class App extends React.Component {
@@ -20,14 +20,18 @@ class App extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleAppShellSubmit = this.handleAppShellSubmit.bind(this);
     }
+
+    componentDidMount(){
+        this.props.getApp(this.props.match.params.id);
+    }
     
     handleChange(event) {
-        this.props.updateActiveApp({ app_shell_script: event.target.value });
+        this.props.updateAppField({ app_shell_script: event.target.value });
     }
     
     deploy(){
         this.setState({isDeploying: true});
-        req.post('/v1/app/deploy', {app_id: this.props.activeApp._id})
+        req.post('/v1/app/deploy', {app_id: this.props.app._id})
         .then((response) => {
           return response.json();
         }).then((response) => {
@@ -46,11 +50,11 @@ class App extends React.Component {
     
     handleAppShellSubmit(event) {
         event.preventDefault();
-        this.props.updateEnv( {app_id: this.props.activeApp._id, app_shell_script: this.props.activeApp.app_shell_script});
+        this.props.updateEnv( {app_id: this.props.app._id, app_shell_script: this.props.app.app_shell_script});
     }
     
     canAutoDeploy(){
-        var git_provider = this.props.activeApp.app_repository.indexOf("github.com") >-1 ? 'github' : 'bitbucket';
+        var git_provider = this.props.app.app_repository.indexOf("github.com") >-1 ? 'github' : 'bitbucket';
         if(git_provider === "github" && this.props.credentials.github_username){
             console.log("it's a github app, canAutoDeploy Yes");
             return true;
@@ -63,14 +67,13 @@ class App extends React.Component {
     }
     
     activateAutoDeploy(){
-        this.props.updateActiveApp({ auto_deploy: !this.props.activeApp.auto_deploy });
-        this.props.toggleAutoDeploy(this.props.activeApp);
+        this.props.toggleAutoDeploy(this.props.app);
     }
     
     enableSSL(){
         success("Notification", "Activating SSL");
         this.setState({enablingSSL: true});
-        req.post('/v1/app/toggle_ssl', {app_id: this.props.activeApp._id})
+        req.post('/v1/app/toggle_ssl', {app_id: this.props.app._id})
         .then((response) => {
           return response.json();
         }).then((response) => {
@@ -87,27 +90,27 @@ class App extends React.Component {
         });
     }
     
-      componentDidCatch(error, info) {
-          window.location = "/dashboard";
-      }
+    componentDidCatch(error, info) {
+        window.location = "/dashboard";
+    }
 
     render() {
       return (
          <div className="container">
             <div className="float-right">
                 <div className="server-summary">
-                    <span className="horizontal-space">{this.props.activeServer.server_name}</span>
-                    <span className="horizontal-space">{this.props.activeServer.state}</span>
-                    <span className="horizontal-space">{this.props.activeServer.ipv4}</span>
-                    <span className="horizontal-space">{this.props.activeApp.app_name}</span>
-                    <span className="horizontal-space">{this.props.activeApp.state}</span>
+                    <span className="horizontal-space">{this.props.app.server.server_name}</span>
+                    <span className="horizontal-space">{this.props.app.server.state}</span>
+                    <span className="horizontal-space">{this.props.app.server.ipv4}</span>
+                    <span className="horizontal-space">{this.props.app.app_name}</span>
+                    <span className="horizontal-space">{this.props.app.state}</span>
                 </div>
             </div>
             <div className="row">
                 <div className="column column-20">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><Link to={"/server/" + this.props.activeServer._id}>Apps</Link></li>
+                        <li><Link to={"/server/" + this.props.app.server._id}>Apps</Link></li>
                         <li><Link to={"#env"}>Env</Link></li>
                         <li><Link to={"#ssl"}>SSL</Link></li>
                     </ul>
@@ -119,7 +122,7 @@ class App extends React.Component {
                                <h3>Deployment</h3>
                             </div>
                             <div className="column">
-                                <button disabled={(this.state.isDeploying || this.state.enablingSSL || this.props.lock) ? "disabled" : ""} className="right button" onClick={ ()=> { this.deploy() }}>{ this.state.isDeploying ? "Deploying" : "Deploy Now" }</button>
+                                <button disabled={(this.state.isDeploying || this.state.enablingSSL || this.props.app.lock) ? "disabled" : ""} className="right button" onClick={ ()=> { this.deploy() }}>{ this.state.isDeploying ? "Deploying" : "Deploy Now" }</button>
                             </div>
                             <div className="clear"></div>
                         </div>
@@ -130,10 +133,10 @@ class App extends React.Component {
                         </div>
                         <div className="row upspace">
                             <div className="column">
-                               Auto Deploy <button disabled={this.state.isDeploying || this.state.enablingSSL || !this.canAutoDeploy() || this.props.lock} className="button" onClick={()=> this.activateAutoDeploy() }>{ this.props.activeApp.auto_deploy ? 'Yes' : 'No'}</button>
+                               Auto Deploy <button disabled={this.state.isDeploying || this.state.enablingSSL || !this.canAutoDeploy() || this.props.app.lock} className="button" onClick={()=> this.activateAutoDeploy() }>{ this.props.app.auto_deploy ? 'Yes' : 'No'}</button>
                             </div>
                             <div className="column">
-                                <AppLogs app={this.props.activeApp}/>
+                                <AppLogs app={this.props.app}/>
                             </div>
                             <div className="clear"></div>
                         </div>
@@ -154,10 +157,10 @@ class App extends React.Component {
                             <div className="column">
                                <form onSubmit={this.handleAppShellSubmit}>
                                <label htmlFor="app_shell_script">Export:</label>
-                               <textarea id="app_shell_script" name="app_shell_script" value={ this.props.activeApp.app_shell_script } onChange={this.handleChange}></textarea>
+                               <textarea id="app_shell_script" name="app_shell_script" value={ this.props.app.app_shell_script } onChange={this.handleChange}></textarea>
                                 <div className="row">
                                     <div className="column">
-                                        <button disabled={this.state.isDeploying || this.state.enablingSSL || this.props.lock} className="button">Save</button>
+                                        <button disabled={this.state.isDeploying || this.state.enablingSSL || this.props.app.lock} className="button">Save</button>
                                     </div>
                                 </div>
                                </form>
@@ -178,7 +181,7 @@ class App extends React.Component {
                         </div>
                         <div className="row upspace">
                             <div className="column">
-                               SSL Activated <button disabled={this.props.activeApp.ssl_enabled || this.state.enablingSSL || this.state.isDeploying  || this.props.activeApp.app_name === 'default' || this.props.lock} className="button" onClick={()=> this.enableSSL() }>{ this.props.activeApp.ssl_enabled ? 'Yes' : 'No'}</button>
+                               SSL Activated <button disabled={this.props.app.ssl_enabled || this.state.enablingSSL || this.state.isDeploying  || this.props.app.app_name === 'default' || this.props.app.lock} className="button" onClick={()=> this.enableSSL() }>{ this.props.app.ssl_enabled ? 'Yes' : 'No'}</button>
                             </div>
                             <div className="clear"></div>
                         </div>
@@ -192,26 +195,23 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  servers: PropTypes.array,
+  app: PropTypes.object,
   credentials: PropTypes.object.isRequired,
-  lock: PropTypes.bool.isRequired,
 }
 
 const mapDispatchToProps = (dispatch) => (
       {
         updateEnv: (app) => dispatch(UpdateEnvAction.updateEnv(app)),
-        updateActiveApp: (app) => dispatch(updateActiveApp(app)),
-        toggleAutoDeploy: (app) => dispatch(AppSetupAction.toggleAutoDeploy(app))
+        getApp: (params) => dispatch(AppsAction.getApp(params)),
+        toggleAutoDeploy: (app) => dispatch(AppSetupAction.toggleAutoDeploy(app)),
+        updateAppField: (params) => dispatch(AppsAction.updateAppField(params)),
       }
     );
 
 const mapStoreToProps = (storeState) => (
     {
-        servers: storeState.server.servers,
-        lock: storeState.server.lock,
         credentials: storeState.credentials,
-        activeApp: storeState.activeApp,
-        activeServer: storeState.activeServer
+        app: storeState.app,
     }
 )
 

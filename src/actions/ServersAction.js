@@ -10,7 +10,17 @@ let ServersAction = {
         request: constants.FETCH_SERVERS,
         success: constants.FETCH_SERVERS_SUCCESS,
         failure: constants.FETCH_SERVERS_ERROR
-      }, blocking);
+      }, null, blocking);
+    }
+  },
+
+  fetchServer(params, blocking = true) {
+    return (dispatch) => {
+      dispatchAsync(ServersAPI.fetchServer, dispatch, {
+        request: constants.FETCH_SERVER,
+        success: constants.FETCH_SERVER_SUCCESS,
+        failure: constants.FETCH_SERVER_ERROR
+      }, params, blocking);
     }
   },
 
@@ -21,12 +31,6 @@ let ServersAction = {
         success: constants.CREATE_SERVER_RUNNING,
         failure: constants.CREATE_SERVER_ERROR
       }, params);
-    }
-  },
-  
-  createServerFinished() {
-    return (dispatch) => {
-      dispatch({type: constants.CREATE_SERVER_FINISHED});
     }
   },
 

@@ -11,7 +11,7 @@ class Home extends React.Component {
     render() {
       return (
         <div>
-            {/* <div className="white panel">
+            {/*<div className="white panel">
                 <div className="row">
                     <div className="column">
                         <div className="card o-hidden text-left">
@@ -26,7 +26,7 @@ class Home extends React.Component {
 
                                 <div className="row">
                                     <div className="column">
-                                        <iframe title="youtube" className="col" height="315" src="https://www.youtube.com/embed/MZvmYaFkNJI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                        <iframe title="youtube" className="col" height="315" src="https://www.youtube.com/embed/MZvmYaFkNJI" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                                     </div>
                                     <div className="column mt-4 pt-2">
                                         <p className="font-weight-bold">Try it now:</p>
@@ -48,12 +48,12 @@ class Home extends React.Component {
                         </div>
                     </div>
                 </div>
-            </div>*/} 
-            
-            { !this.props.lock && <div className="white panel">
+            </div>
+      */}
+           <div className="white panel">
                 <h3>Create Server</h3>
                 <ServerProviders />
-            </div>}
+            </div>
             <div className="white panel">
                 <h3>OAuth Providers</h3>
                 <OAuthProviders />
@@ -74,14 +74,12 @@ class Home extends React.Component {
 Home.propTypes = {
   servers: PropTypes.array,
   apps: PropTypes.array,
-  lock: PropTypes.bool,
 }
 
 const mapStoreToProps = (storeState) => (
     {
-        servers: storeState.server.servers,
-        apps: storeState.app.apps,
-        lock: storeState.server.lock,
+        servers: storeState.servers,
+        apps: storeState.apps,
     }
 )
 

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import DatabaseTable from './DatabaseTable.jsx';
 import DatabaseAction from '../actions/DatabaseAction';
 import {isWorking, isDoneWorking } from '../actions/Common';
+import ServersAction from '../actions/ServersAction'
 var Link = require('react-router-dom').Link;
 
 class Database extends React.Component {
@@ -19,6 +20,7 @@ class Database extends React.Component {
      
     componentDidMount(){
         this.props.fetchDatbases(this.props.match.params.id);
+        this.props.fetchServer(this.props.match.params.id);
         this.setState({server: this.props.match.params.id});
      }
     
@@ -26,34 +28,22 @@ class Database extends React.Component {
         this.props.createDatabase(this.state);
     }
     
-    getDetails(){
-        var server = {};
-        var servers = this.props.servers;
-        for(var i = 0; i < servers.length; i++){
-            if(servers[i]._id === this.props.match.params.id){
-                server = servers[i];
-                break;
-            }
-        }
-        return server;
-    }
-    
     render() {
-    var server = this.getDetails();
+
       return (
          <div className="container">
             <div className="float-right">
                 <div className="server-summary">
-                    <span className="horizontal-space">{server.server_name}</span>
-                    <span className="horizontal-space">{server.state}</span>
-                    <span className="horizontal-space">{server.ipv4}</span>
+                    <span className="horizontal-space">{this.props.server.server_name}</span>
+                    <span className="horizontal-space">{this.props.server.state}</span>
+                    <span className="horizontal-space">{this.props.server.ipv4}</span>
                 </div>
             </div>
             <div className="row">
                 <div className="column column-20">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><Link to={"/server/" + server._id}>{server.server_name ? server.server_name : ''}</Link></li>
+                        <li><Link to={"/server/" + this.props.server._id}>{this.props.server.server_name ? this.props.server.server_name : ''}</Link></li>
                     </ul>
                 </div>
                 <div className="column column-80">
@@ -65,7 +55,7 @@ class Database extends React.Component {
                         </div>
                     </div>
                     <div className="column">
-                        { !this.props.lock && <div className="white panel">
+                        { !this.props.server.lock && <div className="white panel">
                             <h3>CREATE MYSQL DATABASE</h3>
                             <p className="lead">For your security, your mysql server listens on localhost</p>
                             <form>
@@ -93,19 +83,17 @@ class Database extends React.Component {
 }
 
 Database.propTypes = {
-  servers: PropTypes.array,
+  server: PropTypes.object,
   database: PropTypes.array,
   isWorking: PropTypes.func,
   isDoneWorking: PropTypes.func,
-  lock: PropTypes.bool,
 };
 
 const mapStoreToProps = (storeState) => (
     {
-        servers: storeState.server.servers,
-        lock: storeState.server.lock,
         database: storeState.database,
         credentials: storeState.credentials,
+        server: storeState.server,
     }
 );
 
@@ -113,9 +101,9 @@ const mapDispatchToProps = (dispatch) => ({
   createDatabase: (draft) => dispatch(DatabaseAction.createDatabase(draft)),
   updateDatabaseDraft: (draft) => dispatch(DatabaseAction.updateDatabaseDraft(draft)),
   fetchDatbases: (server) => dispatch(DatabaseAction.fetchDatbases(server)),
+  fetchServer: (params) => dispatch(ServersAction.fetchServer(params)),
   isWorking: ()=> dispatch(isWorking()),
   isDoneWorking: ()=> dispatch(isDoneWorking()),
-
 });
 
 export default connect(mapStoreToProps, mapDispatchToProps)(Database)
