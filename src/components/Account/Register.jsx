@@ -53,6 +53,7 @@ class Register extends React.Component {
             <div className="column column-50 column-offset-25">
             <center><img src={logo} height="100" alt="PushDeploy"/></center><br/>
             <div className="white panel">
+              <h1>Register</h1>
               <form>
                 <fieldset>
                   <label htmlFor="name">Name</label>
