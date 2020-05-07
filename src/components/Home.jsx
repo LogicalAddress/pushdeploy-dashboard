@@ -32,7 +32,8 @@ class Home extends React.Component {
                                         <p className="font-weight-bold">The highlights:</p>
                                         <ul className="ml-4 pl-2">
                                             <li>Amazon Compute Cloud (EC2)</li>
-                                            <li>Deploying on any custom server</li>
+                                            <li>Setup any custom server</li>
+                                            <li>Get support at <a href="mailto:support@pushdeploy.io">support@pushdeploy.io</a></li>
                                             <li><a href="https://twitter.com/pushdeploy">Tweet at @pushdeploy for questions, info and updates</a></li>
                                             <li><a href="https://www.youtube.com/channel/UCZuW4Ne3l7PSJsfBBeb9x0A">Watch more videos on our youtube channel</a></li>
                                         </ul>
