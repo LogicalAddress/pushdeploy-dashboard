@@ -142,7 +142,7 @@ class Server extends React.Component {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="app_repository">Git Repository</label>
-                                  <input placeholder="e.g git@github.com:dretnan/droauth.git" id="app_repository" type="text" value={this.state.app_repository} onChange={(e) => this.setState({app_repository: e.target.value})}/>
+                                  <input placeholder="e.g git@github.com:LogicalAddress/pushdeploy-nodejs-example.git" id="app_repository" type="text" value={this.state.app_repository} onChange={(e) => this.setState({app_repository: e.target.value})}/>
                                 </div>
                                 { this.props.credentials.github_username && <p className="lead">Your pushdeploy account is connected to github, feel free to deploy your private repositories.</p>}
                                 <div className="row">

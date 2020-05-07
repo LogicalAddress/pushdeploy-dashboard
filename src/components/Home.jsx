@@ -11,35 +11,31 @@ class Home extends React.Component {
     render() {
       return (
         <div>
-            {/*<div className="white panel">
+            <div className="white panel">
                 <div className="row">
                     <div className="column">
                         <div className="card o-hidden text-left">
                             <div className="card-body">
                                 <div className="row">
                                     <div className="column">
-                                        <h3 className="font-weight-bold mb-2">What's New <span className="badge badge-phoenix">new</span>
+                                        <h3 className="font-weight-bold mb-2">Getting Started <span className="badge badge-phoenix">highlights</span>
                                 </h3>
-                                        <h4 className="mb-4">The most fun you'll ever have building interactive web applications. We guarantee it.</h4>
+                                        <h4 className="mb-4">The most cost effective and easiest way to deploy node.js web applications. We guarantee it.</h4>
                                     </div>
                                 </div>
 
                                 <div className="row">
                                     <div className="column">
-                                        <iframe title="youtube" className="col" height="315" src="https://www.youtube.com/embed/MZvmYaFkNJI" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                                        <iframe title="youtube" className="col" width="100%" height="315" src="https://www.youtube.com/embed/YouqYGdfBeQ" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                                     </div>
                                     <div className="column mt-4 pt-2">
-                                        <p className="font-weight-bold">Try it now:</p>
+                                        <p className="font-weight-bold">The highlights:</p>
                                         <ul className="ml-4 pl-2">
-                                            <li><a href="https://elixir-lang.org/install.html">Install Elixir</a></li>
-                                            <li>Install the Phoenix project generator and create your project
-                                                <pre className="p-3 my-3 mr-3 text-white bg-dark">
-                                                    <code>$ mix archive.install hex phx_new
-        $ mix phx.new demo --live</code></pre>
-                                            </li>
-                                            <li>
-                                                <a href="https://hexdocs.pm/phoenix/installation.html#content">See complete installation instructions</a>
-                                            </li>
+                                            <li>Amazon Compute Cloud (EC2)</li>
+                                            <li>Setup any custom server</li>
+                                            <li>Get support at <a href="mailto:support@pushdeploy.io">support@pushdeploy.io</a></li>
+                                            <li><a href="https://twitter.com/pushdeploy">Tweet at @pushdeploy for questions, info and updates</a></li>
+                                            <li><a href="https://www.youtube.com/channel/UCZuW4Ne3l7PSJsfBBeb9x0A">Watch more videos on our youtube channel</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -49,13 +45,15 @@ class Home extends React.Component {
                     </div>
                 </div>
             </div>
-      */}
+      
            <div className="white panel">
                 <h3>Create Server</h3>
+                <p className="lead">Access keys are needed to setup aws ec2 and to setup a custom server, a fresh installation of Ubuntu 16.04 x64 is needed with a super user</p>
                 <ServerProviders />
             </div>
             <div className="white panel">
                 <h3>OAuth Providers</h3>
+                <p className="lead">Connecting your pushdeploy account to your git providers is neccessary for pushdeploy to deploy from private repositories.</p>
                 <OAuthProviders />
             </div>
             <div className="white panel">
