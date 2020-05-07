@@ -12,7 +12,8 @@ class ServerProviders extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: ''
+      data: '',
+      isCreating: false,
     }
     
     this.displayLinode = this.displayLinode.bind(this);
@@ -117,7 +118,8 @@ class AWSServer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: ''
+      data: '',
+      isCreating: false,
     };
     
     this.createAWS = this.createAWS.bind(this);
@@ -138,7 +140,7 @@ class AWSServer extends React.Component {
     if(!this.props.draft.secretAccessKey.length){
       return error('Gosh', 'Your AWS Secret Key is required');
     }
-    
+    this.setState({isCreating: true});
     this.props.createServer(this.props.draft);
   }
   
@@ -191,7 +193,7 @@ class AWSServer extends React.Component {
           </div>
           <div className="row">
             <div className="column">
-              <a className="button" onClick={this.createAWS}>Add AWS</a> <a className="button button-clear" onClick={this.cancelAWS}>Cancel</a>
+              <a className="button" disabled={this.state.isCreating} onClick={this.createAWS}>Add AWS</a> <a className="button button-clear" onClick={this.cancelAWS}>Cancel</a>
             </div>
           </div>
         </form>
@@ -207,7 +209,8 @@ class CustomServer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: ''
+      data: '',
+      isCreating: false,
     }
     
     this.createCustom = this.createCustom.bind(this);
@@ -231,6 +234,7 @@ class CustomServer extends React.Component {
     if(this.props.draft.username.length === 0){
       return error('Gosh', 'A super user repo is required');
     }
+    this.setState({isCreating: true});
     this.props.createServer(this.props.draft);
   }
   render() {
@@ -267,7 +271,7 @@ class CustomServer extends React.Component {
           </div>
           <div className="row">
             <div className="column">
-              <a className="button" onClick={this.createCustom}>Add Server</a> <a className="button button-clear" onClick={this.cancelCustom}>Cancel</a>
+              <a className="button" disabled={this.state.isCreating} onClick={this.createCustom}>Add Server</a> <a className="button button-clear" onClick={this.cancelCustom}>Cancel</a>
             </div>
           </div>
         </form>
