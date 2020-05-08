@@ -26,7 +26,9 @@ class Login extends React.Component {
       if (response.body && response.body.status === 'success') {
         this.props.changeRoute('/');
       }
-    });
+    }).catch((err)=>{
+      //be silent
+    });;
   }
   
   login(evt) {
