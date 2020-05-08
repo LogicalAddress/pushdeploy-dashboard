@@ -5,6 +5,7 @@ import { error } from '../../utils/toastr';
 import logo from '../../assets/images/logo.png';
 import req from '../../api/req.js';
 import ReCAPTCHA from "react-google-recaptcha";
+import { changeRoute } from '../../actions/Common';
 
 class Register extends React.Component {
   
@@ -80,7 +81,7 @@ class Register extends React.Component {
         </div>
       );
   }
-}
+} 
 
 Register.propTypes = {
     
@@ -95,6 +96,7 @@ const mapStoreToProps = (storeState) => (
 const mapDispatchToProps = (dispatch) => (
       {
         register: (payload) => dispatch(UserAction.register(payload)),
+        changeRoute: (route)=> dispatch(changeRoute(route)),
       }
     );
 
