@@ -6,7 +6,7 @@ import req from '../api/req.js';
 import {error} from '../utils/toastr';
 var Link = require('react-router-dom').Link;
 
-class AppLogs extends React.Component {
+class DeployLogs extends React.Component {
   
   constructor(props){
     super(props);
@@ -22,7 +22,7 @@ class AppLogs extends React.Component {
       return
     }
     this.setState({loading: true});
-    req.post('/v1/app/logs', {app_id})
+    req.post('/v1/app/deployLogs', {app_id})
       .then((response) => {
           return response.json();
       }).then((response) => {
@@ -54,13 +54,13 @@ class AppLogs extends React.Component {
 
   render() {
     return (
-      <Popup onOpen={() => this.getLogs(this.props.app._id)} trigger={<h5><Link to="#" onClick={(e) => {e.preventDefault()}}>View App Log</Link></h5>} modal>
+      <Popup onOpen={() => this.getLogs(this.props.app._id)} trigger={<h5><Link to="#" onClick={(e) => {e.preventDefault()}}>View Last Deployment Log</Link></h5>} modal>
       {close => (
           <div className="modal">
             <a className="close" onClick={close}>
               &times;
             </a>
-            <div className="header"> App Logs </div>
+            <div className="header"> Deploy Logs </div>
             {this.state.loading ? 
             <h1>Loading...</h1> :
   
@@ -94,4 +94,4 @@ class AppLogs extends React.Component {
   }
 }
 
-export default AppLogs
+export default DeployLogs

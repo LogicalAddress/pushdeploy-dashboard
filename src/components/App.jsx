@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AppLogs from './AppLogs';
+import DeployLogs from './DeployLogs';
 import req from '../api/req.js';
 import UpdateEnvAction from '../actions/UpdateEnvAction';
 import {error, success} from '../utils/toastr';
@@ -135,8 +136,15 @@ class App extends React.Component {
                             <div className="column">
                                Auto Deploy <button disabled={this.state.isDeploying || this.state.enablingSSL || !this.canAutoDeploy() || this.props.app.lock} className="button" onClick={()=> this.activateAutoDeploy() }>{ this.props.app.auto_deploy ? 'Yes' : 'No'}</button>
                             </div>
-                            <div className="column">
-                                <AppLogs app={this.props.app}/>
+                            <div className="column column-60">
+                                <div className="row">
+                                    <div className="column">
+                                        <DeployLogs app={this.props.app}/>
+                                    </div>
+                                    <div className="column">
+                                        <AppLogs app={this.props.app}/>
+                                    </div>
+                                </div>
                             </div>
                             <div className="clear"></div>
                         </div>
