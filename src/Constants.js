@@ -45,19 +45,8 @@ export default {
   ISWORKING: "A blocking request is in progress",
   ISDONEWORKING: "A blocking request did finish",
   
-  CREATE_AWS_SERVER: "create AWS VPS Server",
-  CREATE_AWS_SERVER_RUNNING: "creating aws server is in progress",
-  CREATE_AWS_SERVER_ERROR: "error creating aws server",
   UPDATE_AWS_SETUP_DRAFT: "update the aws setup draft",
-  
-  CREATE_LINODE_SERVER: "create Linode VPS Server",
-  CREATE_LINODE_SERVER_RUNNING: "creating linode server is in progress",
-  CREATE_LINODE_SERVER_ERROR: "error creating linode server",
   UPDATE_LINODE_SETUP_DRAFT: "update the linode setup draft",
-  
-  CREATE_CUSTOM_SERVER: "create Custom VPS Server",
-  CREATE_CUSTOM_SERVER_RUNNING: "creating custom server is in progress",
-  CREATE_CUSTOM_SERVER_ERROR: "error creating custom server",
   UPDATE_CUSTOM_SETUP_DRAFT: "update the custom setup draft",
   
   CREATE_PROJECT: "create Function",

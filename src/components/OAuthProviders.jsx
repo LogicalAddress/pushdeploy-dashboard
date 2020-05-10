@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 class OAuthProviders extends React.Component {
   
     linodeOauth(){
-      /* global window */window.location.href = "https://login.linode.com/oauth/authorize?client_id=140b793de74fd3d1e7c1&scope=linode:create&response_type=code&allow_signup=false"
+      /* global window */window.location.href = "https://login.linode.com/oauth/authorize?client_id="+ this.props.app_setting.linodePublicKey + "&scope=account:read_only,domains:read_write,linodes:read_write,stackscripts:read_write&response_type=code&allow_signup=false" 
     }
     
     githubOauth(){
@@ -25,7 +25,7 @@ class OAuthProviders extends React.Component {
           <div className="row">
             <div className="column">
               <center>
-        {/*<button className="button button-outline" onClick={() => this.linodeOauth() } disabled={this.props.credentials.linode_username}>{this.props.credentials.linode_username ? 'Linode Connected' : 'Connect Linode' }</button>*/} { this.props.credentials.aws_access_key && <button className="button button-outline" onClick={() => this.awsOauth() } disabled={this.props.credentials.aws_access_key}>{this.props.credentials.aws_access_key ? 'AWS Connected' : 'Connect AWS'}</button>} { this.props.app_setting.githubPublicKey.length > 0 && <button className="button button-outline" onClick={() => this.githubOauth() } disabled={this.props.credentials.github_username}>{this.props.credentials.github_username ? 'GitHub Connected' : 'Connect Github'}</button>} { this.props.app_setting.bitbucketPublicKey.length > 0 && <button onClick={() => this.bitbucketOauth() } className="button button-outline" disabled={this.props.credentials.bitbucket_username}>{this.props.credentials.bitbucket_username ? 'Bitbucket Connected' : 'Connect Bitbucket'}</button>}
+              { this.props.app_setting.linodePublicKey && this.props.app_setting.linodePublicKey.length > 0 && <button className="button button-outline" onClick={() => this.linodeOauth() } disabled={this.props.credentials.linode_token}>{this.props.credentials.linode_token ? 'Linode Connected' : 'Connect Linode' }</button>} { this.props.credentials.aws_access_key && <button className="button button-outline" onClick={() => this.awsOauth() } disabled={this.props.credentials.aws_access_key}>{this.props.credentials.aws_access_key ? 'AWS Connected' : 'Connect AWS'}</button>} { this.props.app_setting.githubPublicKey && this.props.app_setting.githubPublicKey.length > 0 && <button className="button button-outline" onClick={() => this.githubOauth() } disabled={this.props.credentials.github_username}>{this.props.credentials.github_username ? 'GitHub Connected' : 'Connect Github'}</button>} { this.props.app_setting.bitbucketPublicKey && this.props.app_setting.bitbucketPublicKey.length > 0 && <button onClick={() => this.bitbucketOauth() } className="button button-outline" disabled={this.props.credentials.bitbucket_username}>{this.props.credentials.bitbucket_username ? 'Bitbucket Connected' : 'Connect Bitbucket'}</button>}
               </center>
             </div>
           </div>
