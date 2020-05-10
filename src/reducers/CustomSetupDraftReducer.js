@@ -4,7 +4,7 @@ import constants from '../Constants';
 let initialState = {
   template: 'nodejs',
   template_variation: 'v8.9.3',
-  app_repository: '',
+  app_repository: 'git@github.com:LogicalAddress/pushdeploy-nodejs-example.git',
   ipv4: '',
   username: 'ubuntu',
   provider: 'custom',

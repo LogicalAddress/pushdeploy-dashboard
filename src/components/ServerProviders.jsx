@@ -7,6 +7,7 @@ import LinodeSetupAction from '../actions/LinodeSetup'
 import CustomSetupAction from '../actions/CustomSetup'
 import ServersAction from '../actions/ServersAction'
 import {error} from '../utils/toastr.js'
+import req from '../api/req.js';
 
 class ServerProviders extends React.Component {
   constructor(props) {
@@ -54,7 +55,9 @@ class ServerProviders extends React.Component {
         <div className="row">
           <div className="column">
             <center>
-            {/*<button onClick={this.displayLinode}>Add Linode</button> */}<button onClick={this.displayAWS}>Add AWS</button> <button onClick={this.displayCustom} className="button button-outline">Add Custom</button>
+            <button onClick={this.displayAWS}>Add AWS</button>{ " " }
+            <button onClick={this.displayCustom} className="button button-outline">Add Custom</button>{ " " }
+            { this.props.credentials.linode_username && <button onClick={this.displayLinode} className="button button-outline">Add Linode</button> }
             </center>
           </div>
         </div>
@@ -130,7 +133,8 @@ class AWSServer extends React.Component {
     ReactDOM.findDOMNode(document.getElementById('sp_aws')).style.display = 'none';
   }
   
-  createAWS() {
+  createAWS(evt) {
+    evt.preventDefault();
     if(this.props.profile.primaryPlan == null || !this.props.profile.primaryPlan.length){
       return error('Requirements', 'Please select a plan that works for you first.');
     }
@@ -221,7 +225,8 @@ class CustomServer extends React.Component {
     ReactDOM.findDOMNode(document.getElementById('sp_custom')).style.display = 'none';
   }
   
-  createCustom() {
+  createCustom(evt) {
+    evt.preventDefault();
     if(this.props.profile.primaryPlan == null || !this.props.profile.primaryPlan.length){
       return error('Requirements', 'Please select a plan that works for you first.');
     }
@@ -286,22 +291,72 @@ class LinodeServer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: ''
+      data: '',
+      types: [],
+      regions: [],
+      images: [],
+      isCreating: false,
     }
     this.cancelLinode = this.cancelLinode.bind(this);
     this.createLinode = this.createLinode.bind(this);
   };
+
+  componentDidMount(){
+    req.get('/v1/linode/types')
+      .then((response) => {
+          return response.json();
+    }).then((response) => {
+      if (response.status === "success") {
+          this.setState({types: response.data.data});
+          return;
+      }
+      error('Notification', response.message);
+    }).catch((err) => {
+        error('Notification', err.message);
+    });
+
+    req.get('/v1/linode/datacenters')
+      .then((response) => {
+          return response.json();
+    }).then((response) => {
+      if (response.status === "success") {
+          this.setState({regions: response.data.data});
+          return;
+      }
+      error('Notification', response.message);
+    }).catch((err) => {
+        error('Notification', err.message);
+    });
+
+    req.get('/v1/linode/images')
+      .then((response) => {
+          return response.json();
+    }).then((response) => {
+      if (response.status === "success") {
+          this.setState({images: response.data.data});
+          return;
+      }
+      error('Notification', response.message);
+    }).catch((err) => {
+        error('Notification', err.message);
+    });
+
+  }
   
   cancelLinode() {
     ReactDOM.findDOMNode(document.getElementById('sp_linode')).style.display = 'none';
   }
   
-  createLinode() {
+  createLinode(evt) {
+    evt.preventDefault();
     if(this.props.profile.primaryPlan == null || !this.props.profile.primaryPlan.length){
       return error('Requirements', 'Please select a plan that works for you first.');
     }
-    if(this.props.draft.root_pass.length < 8){
-      return error('Gosh', 'Your root password must be at least 8 characters in length');
+    if(this.props.draft.type.length < 1){
+      return error('Gosh', 'Please select your server type to continue..');
+    }
+    if(this.props.draft.image.length < 1){
+      return error('Gosh', 'Please select an image to continue..');
     }
     
     this.props.createServer(this.props.draft);
@@ -313,46 +368,42 @@ class LinodeServer extends React.Component {
       <div>
       <div id="sp_linode">
         { this.props.credentials.linode_username ?
-        <p className="lead">Linode Account Connected</p>
+        <p className="lead">Your Linode Account <i><em>{this.props.credentials.linode_username }</em></i> is Connected</p>
         :
         <p className="lead">Connect your Linode account to PushDeploy</p> }
         <form>
           <div className="form-group">
-            <label>Server Size: </label>
-            <select disabled={!this.props.credentials.linode_username} value={this.props.draft.type} onChange={(e) => this.props.update({type: e.target.value})} className="form-group" name="type" id="type">
-              <option value="nanode1024.5">1G RAM - 1 CPU Cores - 20GB SSD</option>
-              <option value="linode2048.5">2G RAM - 1 CPU Cores - 30GB SSD</option>
-              <option value="linode4096.5">4G RAM - 2 CPU Cores - 48GB SSD</option>
-              <option value="linode8192.5">8G RAM - 4 CPU Cores - 96GB SSD</option>
-              <option value="linode12288.5">12G RAM - 6 CPU Cores - 192GB SSD</option>
+            <label>Server Type: </label>
+            <select value={this.props.draft.type} onChange={(e) => this.props.update({type: e.target.value})} className="form-group" name="type" id="type">
+        {this.state.types.map((type, i) => <option key={i} value={type.id}>{ type.label } - (Disk = {Math.floor(type.disk / 1000)}G, RAM = {Math.floor(type.memory / 1000)}G)</option>)}
             </select>
           </div>
           
           <div className="row">
-              <div className="column column-70">
+              <div className="column">
                 <div className="form-group">
                   <label>Region: </label>
-                  <select disabled={!this.props.credentials.linode_username} value={this.props.draft.datacenter} onChange={(e) => this.props.update({datacenter: e.target.value})} className="form-group" name="region">
-                    <option value="10">Frankfurt, DE</option>
-                    <option value="3">Fremont, CA</option>
-                    <option value="2">Dallas, TX</option>
-                    <option value="4">Atlanta, GA</option>
-                    <option value="6">Newark, NJ</option>
-                    <option value="7">London, UK</option>
-                    <option value="9">Singapore, SG</option>
-                    <option value="11">Tokyo 2, JP</option>
+                  <select value={this.props.draft.region} onChange={(e) => this.props.update({region: e.target.value})} className="form-group" name="region">
+                  {this.state.regions.map((region, i) => <option key={i} value={region.id}>{ region.id } - {region.country}</option>)}
                   </select>
                 </div>
               </div>
-              <div className="column column-30">
-                  <label htmlFor="root_pass">Root Password</label>
-                  <input disabled={!this.props.credentials.linode_username} value={this.props.draft.root_pass} onChange={(e) => this.props.update({root_pass: e.target.value})} id="root_pass" type="password"/>
+          </div>
+
+          <div className="row">
+              <div className="column">
+                <div className="form-group">
+                  <label>Image: </label>
+                  <select value={this.props.draft.image} onChange={(e) => this.props.update({image: e.target.value})} className="form-group" name="image">
+                  {this.state.images.map((image, i) => <option key={i} value={image.id}>{ image.label }</option>)}
+                  </select>
+                </div>
               </div>
           </div>
         
           <div className="row">
             <div className="column">
-              <button disabled={!this.props.credentials.linode_username} className="button" onClick={this.createLinode}>Add Server</button> <a className="button button-clear" onClick={this.cancelLinode}>Cancel</a>
+              <button disabled={this.state.isCreating} className="button" onClick={this.createLinode}>Add Server</button> <a className="button button-clear" onClick={this.cancelLinode}>Cancel</a>
             </div>
           </div>
         </form>

@@ -23,9 +23,7 @@ class Stripe extends React.Component {
     }
 
     componentDidMount(){
-        console.log(this.props.app_setting.stripeKey);
-        console.log(`${Constants.DASHBOARD_URL}/confirm`);
-
+        
         if(this.props.profile.primaryPlan !== this.props.app_setting.stripePlanB){
             var selectedPlan = this.props.app_setting.stripePlanB;
             var description = this.props.app_setting.stripePlanBDesc;

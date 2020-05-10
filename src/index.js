@@ -19,6 +19,7 @@ import Register from './components/Account/Register.jsx';
 import { ConnectedRouter } from 'connected-react-router';
 import OAuthGithub from './components/OAuthGithub.jsx';
 import OAuthBitbucket from './components/OAuthBitbucket';
+import OAuthLinode from './components/OAuthLinode.jsx';
 import SubscriptionSuccess from './components/SubscriptionSuccess';
 import SubscriptionCancelled from './components/SubscriptionCancelled';
 
@@ -42,6 +43,7 @@ ReactDom.render((
                 <Route exact={true} path="/databases/:id" component={Database}/>
                 <Route exact={true} path="/oauth2/github" component={OAuthGithub} />
                 <Route exact={true} path="/oauth2/bitbucket" component={OAuthBitbucket} />
+                <Route exact={true} path="/oauth2/linode" component={OAuthLinode} />
                 <Route exact={true} path="/confirm" component={SubscriptionSuccess} />
                 <Route exact={true} path="/subscriptionCancelled" component={SubscriptionCancelled} />
             </Launcher>
