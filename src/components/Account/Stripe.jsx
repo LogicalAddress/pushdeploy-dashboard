@@ -117,7 +117,7 @@ class Stripe extends React.Component {
                     <div className="column">
                        <form className="plan" onSubmit={(evt) => this.onPlanClick(evt)}>
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanAAmount} data-description={this.props.app_setting.stripePlanADesc} value={this.props.app_setting.stripePlanA} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanA ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanA}/> <label> {this.props.app_setting.stripePlanADesc} (Access to provision 1 server, deploy 2 apps, auto deploy)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanAAmount} data-description={this.props.app_setting.stripePlanADesc} value={this.props.app_setting.stripePlanA} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanA ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanA}/> <label> {this.props.app_setting.stripePlanADesc} (Access to provision limited servers, limited apps, auto deploy)</label>
                            </div>
                         
                            <div className="row">
