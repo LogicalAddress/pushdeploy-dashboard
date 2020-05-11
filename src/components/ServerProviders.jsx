@@ -358,7 +358,7 @@ class LinodeServer extends React.Component {
     if(this.props.draft.image.length < 1){
       return error('Gosh', 'Please select an image to continue..');
     }
-    
+    this.setState({isCreating: true});
     this.props.createServer(this.props.draft);
   }
   
@@ -367,7 +367,7 @@ class LinodeServer extends React.Component {
     return (
       <div>
       <div id="sp_linode">
-        { this.props.credentials.linode_username ?
+        { this.props.credentials.linode_username && ((new Date()).toLocaleString() < (new Date(this.props.credentials.linode_token_expiry_date)).toLocaleString()) ?
         <p className="lead">Your Linode Account <i><em>{this.props.credentials.linode_username }</em></i> is Connected</p>
         :
         <p className="lead">Connect your Linode account to PushDeploy</p> }
@@ -403,7 +403,7 @@ class LinodeServer extends React.Component {
         
           <div className="row">
             <div className="column">
-              <button disabled={this.state.isCreating} className="button" onClick={this.createLinode}>Add Server</button> <a className="button button-clear" onClick={this.cancelLinode}>Cancel</a>
+              <button disabled={this.state.isCreating || ((new Date()).toLocaleString() < (new Date(this.props.credentials.linode_token_expiry_date)).toLocaleString())} className="button" onClick={this.createLinode}>Add Server</button> <a className="button button-clear" onClick={this.cancelLinode}>Cancel</a>
             </div>
           </div>
         </form>
