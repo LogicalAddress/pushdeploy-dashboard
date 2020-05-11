@@ -403,7 +403,7 @@ class LinodeServer extends React.Component {
         
           <div className="row">
             <div className="column">
-              <button disabled={this.state.isCreating || ((new Date()).toLocaleString() < (new Date(this.props.credentials.linode_token_expiry_date)).toLocaleString())} className="button" onClick={this.createLinode}>Add Server</button> <a className="button button-clear" onClick={this.cancelLinode}>Cancel</a>
+              <button disabled={this.state.isCreating || ((new Date()).toLocaleString() > (new Date(this.props.credentials.linode_token_expiry_date)).toLocaleString())} className="button" onClick={this.createLinode}>Add Server</button> <a className="button button-clear" onClick={this.cancelLinode}>Cancel</a>
             </div>
           </div>
         </form>
