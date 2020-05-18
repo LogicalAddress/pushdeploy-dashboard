@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import AppTable from './AppTable.jsx';
 import AppSetupAction from '../actions/AppSetup';
 import {error, success} from '../utils/toastr';
-import {isWorking, isDoneWorking } from '../actions/Common';
+import {isWorking, isDoneWorking, changeRoute } from '../actions/Common';
 import req from '../api/req.js';
 import ServerLogs from './ServerLogs';
 import ServersAction from '../actions/ServersAction';
@@ -60,6 +60,13 @@ class Server extends React.Component {
                     if(!repoData.hasRead){
                         error('Gosh', 'You don\'t have the read permission to this repo');
                         return;
+                    }
+                    if(!repoData.isPublic && (this.props.profile.primaryPlan === null || this.props.profile.primaryPlan.length === 0)){
+                        if(this.props.profile.tryFree){
+                          error('Requirements', 'Please select a paid plan to continue');
+                          this.props.changeRoute('/account/plans');
+                          return;
+                        }
                     }
                     success('Notification', 'Still working..');
                     this.setState({repo_meta_data: repoData});
@@ -176,15 +183,17 @@ Server.propTypes = {
   credentials: PropTypes.object.isRequired,
   isWorking: PropTypes.func,
   isDoneWorking: PropTypes.func,
+  profile: PropTypes.object.isRequired,
 };
 
 const mapStoreToProps = (storeState) => (
     {
         loading: storeState.loading.loading,
-        servers: storeState.servers,
+        servers: storeState.servers, 
         server: storeState.server,
         apps: storeState.apps,
         credentials: storeState.credentials,
+        profile: storeState.profile,
     }
 );
 
@@ -193,6 +202,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchServer: (params) => dispatch(ServersAction.fetchServer(params)),
   isWorking: ()=> dispatch(isWorking()),
   isDoneWorking: ()=> dispatch(isDoneWorking()),
+  changeRoute: (route)=> dispatch(changeRoute(route)),
 });
 
 export default connect(mapStoreToProps, mapDispatchToProps)(Server)

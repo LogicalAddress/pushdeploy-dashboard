@@ -41,24 +41,44 @@ class Stripe extends React.Component {
     onPlanClick = async(evt) => {
         evt.preventDefault();
         this.props.isWorking();
-        const stripePromise = loadStripe(this.props.app_setting.stripeKey);
-        const stripe = await stripePromise;
-        const { error } = await stripe.redirectToCheckout({
-            items: [
-                {plan: this.state.selectedPlan, quantity: 1}
-            ],
-            successUrl: `${Constants.DASHBOARD_URL}/confirm`,
-            cancelUrl: `${Constants.DASHBOARD_URL}/account/plans`,
-            clientReferenceId: this.props.user.uid,
-            customerEmail: this.props.user.email,
-        });
-        this.props.isDoneWorking();
-        if(error){
-            error('Notification', error.message);
+        if(this.state.selectedPlan === "open source"){
+            this.props.isWorking();
+            req.post('/v1/tryFree', {plan: 'open source'})
+            .then((response) => {
+                return response.json();
+            }).then((response) => {
+                this.props.isDoneWorking();
+                if (response.body && response.body.status === 'success') {
+                    this.props.setLoggedInUser(response.body.data);
+                    success('Notification', 'Your open source subscription is active');
+                    this.props.changeRoute('/');
+                    return;
+                }
+                throw new Error("Unexpected response please try again");
+            }).catch((err) => {
+                // this.props.stopProgress();
+                this.props.isDoneWorking();
+                error('Notification', err.message);
+            });
         }else{
-            success('Notification', 'You can start launching your apps now');
+            const stripePromise = loadStripe(this.props.app_setting.stripeKey);
+            const stripe = await stripePromise;
+            const { error } = await stripe.redirectToCheckout({
+                items: [
+                    {plan: this.state.selectedPlan, quantity: 1}
+                ],
+                successUrl: `${Constants.DASHBOARD_URL}/confirm`,
+                cancelUrl: `${Constants.DASHBOARD_URL}/account/plans`,
+                clientReferenceId: this.props.user.uid,
+                customerEmail: this.props.user.email,
+            });
+            this.props.isDoneWorking();
+            if(error){
+                error('Notification', error.message);
+            }else{
+                success('Notification', 'You can start launching your apps now');
+            }
         }
-        
     }
 
     onCancelPlanClick = async(evt) =>{
@@ -122,6 +142,10 @@ class Stripe extends React.Component {
                         
                            <div className="row">
                                <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanBAmount} data-description={this.props.app_setting.stripePlanBDesc} value={this.props.app_setting.stripePlanB} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanB ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanB}/> <label> {this.props.app_setting.stripePlanBDesc} (<em>Recommended</em>)</label>
+                           </div>
+
+                           <div className="row">
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={0} data-description={"Free for Open Source Projects"}  value={"open source"} name="plan" checked={this.props.profile.tryFree && this.props.profile.primaryPlan.length === 0 ? true : this.state.selectedPlan === "open source" }/> <label> Free for Open Source Projects (<em>Public Repositories</em>)</label>
                            </div>
                            
                             <div className="row">
