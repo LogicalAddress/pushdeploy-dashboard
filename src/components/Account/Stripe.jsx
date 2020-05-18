@@ -145,7 +145,7 @@ class Stripe extends React.Component {
                            </div>
 
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount={0} data-description={"Free for Open Source Projects"}  value={"open source"} name="plan" checked={this.props.profile.tryFree && this.props.profile.primaryPlan.length === 0 ? true : this.state.selectedPlan === "open source" }/> <label> Free for Open Source Projects (<em>Public Repositories</em>)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={0} data-description={"Free for Open Source Projects"}  value={"open source"} name="plan" checked={this.props.profile.tryFree && this.props.profile.primaryPlan.length === 0 ? true : this.state.selectedPlan === "open source" }/> <label> Free for Open Source Projects (<em>No credit card required</em>)</label>
                            </div>
                            
                             <div className="row">
