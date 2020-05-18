@@ -40,7 +40,7 @@ class Launcher extends React.Component {
           this.props.fetchServers();
           this.props.fetchApps();
           this.props.fetchClientSettings();
-          if(response.body.data.noSubscription){
+          if(response.body.data.noSubscription && !response.body.data.tryFree ){
             success('Notification', 'Welcome, please choose a plan to continue...');
             this.props.changeRoute('/account/plans');
           }else{

@@ -8,6 +8,7 @@ import CustomSetupAction from '../actions/CustomSetup'
 import ServersAction from '../actions/ServersAction'
 import {error} from '../utils/toastr.js'
 import req from '../api/req.js';
+import { changeRoute } from '../actions/Common';
 
 class ServerProviders extends React.Component {
   constructor(props) {
@@ -63,9 +64,9 @@ class ServerProviders extends React.Component {
         </div>
         <div className="row">
           <div className="column column-50 column-offset-25">
-            <CustomServer profile={this.props.profile} thisDiv={this.clearServerProviders} credentials={this.props.credentials} draft={this.props.customSetupDraft} update={ (draft) => this.props.updateCustomDraft(draft)} createServer={ (draft) => this.props.createCustomServer(draft)} />
-            <LinodeServer profile={this.props.profile} thisDiv={this.clearServerProviders} credentials={this.props.credentials} draft={this.props.linodeSetupDraft} update={ (draft) => this.props.updateLinodeDraft(draft)} createServer={ (draft) => this.props.createLinodeServer(draft)} />
-            <AWSServer profile={this.props.profile} thisDiv={this.clearServerProviders} credentials={this.props.credentials} draft={this.props.awsSetupDraft} update={ (draft) => this.props.updateAwsDraft(draft)} createServer={ (draft) => this.props.createAwsServer(draft)} />
+            <CustomServer profile={this.props.profile} thisDiv={this.clearServerProviders} credentials={this.props.credentials} draft={this.props.customSetupDraft} update={ (draft) => this.props.updateCustomDraft(draft)} createServer={ (draft) => this.props.createCustomServer(draft)} changeRoute={ (route) => this.props.changeRoute(route)} />
+            <LinodeServer profile={this.props.profile} thisDiv={this.clearServerProviders} credentials={this.props.credentials} draft={this.props.linodeSetupDraft} update={ (draft) => this.props.updateLinodeDraft(draft)} createServer={ (draft) => this.props.createLinodeServer(draft)} changeRoute={ (route) => this.props.changeRoute(route)} />
+            <AWSServer profile={this.props.profile} thisDiv={this.clearServerProviders} credentials={this.props.credentials} draft={this.props.awsSetupDraft} update={ (draft) => this.props.updateAwsDraft(draft)} createServer={ (draft) => this.props.createAwsServer(draft)} changeRoute={ (route) => this.props.changeRoute(route)} />
           </div>
         </div>
       </div>
@@ -111,6 +112,8 @@ const mapDispatchToProps = (dispatch) => ({
   
   createCustomServer: (draft) => dispatch(ServersAction.createServer(draft)/*CustomSetupAction.createServer(draft)*/),
   updateCustomDraft: (draft) => dispatch(CustomSetupAction.updateDraft(draft)),
+
+  changeRoute: (route)=> dispatch(changeRoute(route)),
 });
 
 
@@ -136,7 +139,11 @@ class AWSServer extends React.Component {
   createAWS(evt) {
     evt.preventDefault();
     if(this.props.profile.primaryPlan == null || !this.props.profile.primaryPlan.length){
-      return error('Requirements', 'Please select a plan that works for you first.');
+      if(!this.props.profile.tryFree){
+        error('Requirements', 'Please select a plan that works for you first.');
+        this.props.changeRoute('/account/plans');
+        return;
+      }
     }
     if(!this.props.draft.accessKeyId.length){
       return error('Gosh', 'Your AWS Access Key is required');
@@ -228,7 +235,11 @@ class CustomServer extends React.Component {
   createCustom(evt) {
     evt.preventDefault();
     if(this.props.profile.primaryPlan == null || !this.props.profile.primaryPlan.length){
-      return error('Requirements', 'Please select a plan that works for you first.');
+      if(!this.props.profile.tryFree){
+        error('Requirements', 'Please select a plan that works for you first.');
+        this.props.changeRoute('/account/plans');
+        return;
+      }
     }
     if(!this.props.draft.volumeSize.length){
       return error('Gosh', 'Please specify your server\'s RAM size in gigabyte');
@@ -350,7 +361,11 @@ class LinodeServer extends React.Component {
   createLinode(evt) {
     evt.preventDefault();
     if(this.props.profile.primaryPlan == null || !this.props.profile.primaryPlan.length){
-      return error('Requirements', 'Please select a plan that works for you first.');
+      if(!this.props.profile.tryFree){
+        error('Requirements', 'Please select a plan that works for you first.');
+        this.props.changeRoute('/account/plans');
+        return;
+      }
     }
     if(this.props.draft.type.length < 1){
       return error('Gosh', 'Please select your server type to continue..');
