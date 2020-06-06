@@ -55,6 +55,21 @@ let req = {
                 'X-Access-Token': access_token
             }),
         });
+    },
+
+    del(route, baseURL = null) {
+        if(!baseURL) baseURL = constants.API_URL;
+        var user = sessionStorage.getItem('user');
+        user = (user ? JSON.parse(user) : null);
+        var access_token = user ? user.access_token : '';
+        return fetch(baseURL + route, {
+            method: 'DELETE',
+            body: null,
+            headers: new Headers({ /*global Headers*/
+                "Content-Type": "application/json",
+                'X-Access-Token': access_token
+            }),
+        });
     }
 }
 

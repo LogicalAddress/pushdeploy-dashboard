@@ -124,6 +124,7 @@ class Server extends React.Component {
                     <h3>Quick Links</h3>
                     <ul>
                         <li><Link to={"/databases/" + this.props.server._id}>Database</Link></li>
+                        <li><Link to={"/settings/" + this.props.server._id}>Settings</Link></li>
                     </ul>
                 </div>
                 <div className="column column-80">

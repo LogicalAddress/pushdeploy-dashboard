@@ -34,6 +34,16 @@ let ServersAction = {
     }
   },
 
+  deleteServer(params) {
+    return (dispatch) => {
+      dispatchAsync(ServersAPI.deleteServer, dispatch, {
+        request: constants.DELETE_SERVER,
+        success: constants.DELETE_SERVER_SUCCESS,
+        failure: constants.DELETE_SERVER_ERROR
+      }, params);
+    }
+  },
+
   
 };
 

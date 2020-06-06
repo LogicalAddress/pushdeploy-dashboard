@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, hashHistory } from 'react-router-dom';
 import Launcher from './components/Launcher.jsx';
 import Home from './components/Home.jsx';
 import Database from './components/Database.jsx';
+import Settings from './components/Settings.jsx';
 import Server from './components/Server.jsx';
 import Servers from './components/Servers.jsx';
 import App from './components/App.jsx';
@@ -41,6 +42,7 @@ ReactDom.render((
                 <Route exact={true} path="/login" component={Login} />
                 <Route exact={true} path="/register" component={Register} />
                 <Route exact={true} path="/databases/:id" component={Database}/>
+                <Route exact={true} path="/settings/:id" component={Settings}/>
                 <Route exact={true} path="/oauth2/github" component={OAuthGithub} />
                 <Route exact={true} path="/oauth2/bitbucket" component={OAuthBitbucket} />
                 <Route exact={true} path="/oauth2/linode" component={OAuthLinode} />

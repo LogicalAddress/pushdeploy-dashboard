@@ -12,6 +12,10 @@ let ServersAPI = {
     
     createServer(payload){
         return req.post('/v1/' + payload.provider + '/instances', payload);
+    },
+
+    deleteServer(payload){
+        return req.del('/v1/servers/' + payload);
     }
 };
 

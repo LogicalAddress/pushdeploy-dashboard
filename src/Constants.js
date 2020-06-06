@@ -101,5 +101,10 @@ export default {
   
   TOGGLE_AUTO_DEPLOY: 'to toggle auto deploy for authenticated accounts',
   TOGGLE_AUTO_DEPLOY_SUCCESS: 'toggling auto deploy succeed',
-  TOGGLE_AUTO_DEPLOY_ERROR: 'toggling auto deploy failed'
+  TOGGLE_AUTO_DEPLOY_ERROR: 'toggling auto deploy failed',
+
+  DELETE_SERVER: 'delete server',
+  DELETE_SERVER_SUCCESS: 'delete server success',
+  DELETE_SERVER_ERROR: 'delete server failed',
+  
 };
