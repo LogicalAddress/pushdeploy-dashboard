@@ -47,7 +47,7 @@ class Settings extends React.Component {
                 </div>
                 <div className="column column-80">
                     <div className="column">
-                        { !this.props.server.lock && <div className="white panel">
+                        <div className="white panel">
                             <h3>DELETE SERVER</h3>
                             <p className="lead">Not quite dangerous! This will only dis-associate your physical servers and resources with pushdeploy. To fully delete the server, you will need to do that manually from your cloud provider.</p>
                             <form>
@@ -59,7 +59,7 @@ class Settings extends React.Component {
                                     </div>
                                 </fieldset>
                             </form>
-                        </div> }
+                        </div>
                     </div>
                 </div>
             </div>
