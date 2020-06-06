@@ -21,6 +21,14 @@ const server = (state = initialState, action) => {
       case constants.CREATE_APP_ERROR:
         error('Notification', "Error creating your app");
        return state;
+      case constants.DELETE_SERVER_SUCCESS:
+        success('Notification', "Your server and its resources have been deleted");
+        window.location = "/";
+       return state;
+      case constants.DELETE_SERVER_ERROR:
+        console.log('DELETE_SERVER_ERROR',{action});
+        error('Notification', "Error deleting your server");
+       return state;
       default:
         return state;
     }
