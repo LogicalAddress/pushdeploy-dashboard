@@ -16,7 +16,7 @@ class Server extends React.Component {
         super(props);
         this.state = {
             template: 'nodejs',
-            template_variation: '8.9.3',
+            template_variation: '',
             app_repository: '',
             repo_meta_data: '',
             app_name: '',
@@ -25,15 +25,100 @@ class Server extends React.Component {
             repo_id: '',
             repo_node_id: '',
             repo_full_name: '',
-            repo_name: ''
+            repo_name: '',
+            currentVariations: [
+                {
+                    name: 'Select…',
+                    value: null,
+                }
+            ],
         };
         
         this.createApp = this.createApp.bind(this);
+        this.selectTemplate = this.selectTemplate.bind(this);
+     }
+
+     selectTemplate = (e) => {
+        this.setState({template: e.target.value, template_variation: ''});
+        this.setState({currentVariations: this.getVariation(e.target.value)});
+    }
+
+     getVariation(key){
+         let laravel = [
+            {
+                name: 'Select…',
+                value: '',
+            },
+            {
+                name: 'PHP 5.6',
+                value: 'php5.6',
+            },
+            {
+                name: 'PHP 7.0',
+                value: 'php7.0',
+            },
+            {
+                name: 'PHP 7.1',
+                value: 'php7.1',
+            },
+            {
+                name: 'PHP 7.2',
+                value: 'php7.2',
+            },
+            {
+                name: 'PHP 7.3',
+                value: 'php7.3',
+            },
+            {
+                name: 'PHP 7.4',
+                value: 'php7.4',
+            },
+          ];
+          let nodejs = [
+            {
+                name: 'Select…',
+                value: null,
+            },
+            {
+                name: 'v8.17.0',
+                value: '8.17.0',
+            },
+            {
+                name: 'v9.11.2',
+                value: '9.11.2',
+            },
+            {
+                name: 'v10.21.0',
+                value: '10.21.0',
+            },
+            {
+                name: 'v11.15.0',
+                value: '11.15.0',
+            },
+            {
+                name: 'v12.18.0',
+                value: '12.18.0',
+            },
+            {
+                name: 'v13.14.0',
+                value: '13.14.0',
+            },
+            {
+                name: 'v14.4.0',
+                value: '14.4.0',
+            },
+          ];
+          let templates = {
+              laravel: laravel,
+              nodejs: nodejs,
+          }
+          return templates[key];
      }
   
     componentDidMount() {
         this.props.fetchServer(this.props.match.params.id);
         this.setState({server: this.props.match.params.id});
+        this.setState({currentVariations: this.getVariation('nodejs')});
     }
     
     remoteAppValidation(payload, type){
@@ -74,6 +159,7 @@ class Server extends React.Component {
                     this.setState({repo_node_id: repoData.repo_node_id});
                     this.setState({repo_full_name: repoData.repo_full_name});
                     this.setState({repo_name: repoData.repo_name});
+                    this.setState({clone_url: repoData.clone_url});
                     this.props.createApp(this.state);
                     return;
                 }
@@ -86,7 +172,8 @@ class Server extends React.Component {
             });
     }
     
-    createApp() {
+    createApp(e) {
+        e.preventDefault();
         
         if(!this.state.app_name.length){
           return error('Gosh', 'Your domain is required');
@@ -137,14 +224,17 @@ class Server extends React.Component {
                                 <div className="row">
                                   <div className="column column-50">
                                       <label htmlFor="template">Template</label>
-                                      <select id="template" name="template" value={this.state.template} onChange={(e) => this.setState({template: e.target.value})}>
+                                      <select id="template" name="template" value={this.state.template} onChange={this.selectTemplate}>
                                           <option value="nodejs">NodeJS</option>
+                                          <option value="laravel">Laravel</option>
                                       </select>
                                   </div>
                                   <div className="column column-50">
                                       <label htmlFor="template_variation">Template Variation</label>
                                       <select id="template_variation" name="template_variation" value={this.state.template_variation} onChange={(e) => this.setState({template_variation: e.target.value})}>
-                                          <option value="v8.9.3">v8.9.3</option>
+                                            {this.state.currentVariations.map(item => (
+                                                <option key={item.value} value={item.value}>{item.name}</option>
+                                            ))}
                                       </select>
                                   </div>
                                 </div>
@@ -155,7 +245,7 @@ class Server extends React.Component {
                                 { this.props.credentials.github_username && <p className="lead">Your pushdeploy account is connected to github, feel free to deploy your private repositories.</p>}
                                 <div className="row">
                                     <div className="column">
-                                      <a className="button" onClick={this.createApp}>Add App</a>
+                                      <input type="submit" className="button" disabled={this.state.template_variation === '' || this.state.app_repository.trim().length === 0 || this.state.app_name.trim().length === 0} onClick={this.createApp} value="Add App"/>
                                     </div>
                                     <div className="column">
                                         <ServerLogs server={this.props.server}/>

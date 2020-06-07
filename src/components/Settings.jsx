@@ -49,7 +49,7 @@ class Settings extends React.Component {
                     <div className="column">
                         <div className="white panel">
                             <h3>DELETE SERVER</h3>
-                            <p className="lead">Not quite dangerous! This will only dis-associate your physical servers and resources with pushdeploy. To fully delete the server, you will need to do that manually from your cloud provider.</p>
+                            <p className="lead">Not quite dangerous! This will only dis-associate your physical servers and resources from pushdeploy. To fully delete the server, you will need to do that manually from your cloud provider.</p>
                             <form>
                                 <fieldset>
                                     <div className="row">
