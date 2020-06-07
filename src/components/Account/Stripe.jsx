@@ -139,9 +139,17 @@ class Stripe extends React.Component {
                            <div className="row">
                                <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanAAmount} data-description={this.props.app_setting.stripePlanADesc} value={this.props.app_setting.stripePlanA} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanA ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanA}/> <label> {this.props.app_setting.stripePlanADesc} (Access to provision limited servers, limited apps, auto deploy)</label>
                            </div>
+
+                           <div className="row">
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanAAAmount} data-description={this.props.app_setting.stripePlanAADesc} value={this.props.app_setting.stripePlanAA} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanAA ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanAA}/> <label> {this.props.app_setting.stripePlanAADesc} (Access to provision limited servers, limited apps, auto deploy)</label>
+                           </div>
                         
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanBAmount} data-description={this.props.app_setting.stripePlanBDesc} value={this.props.app_setting.stripePlanB} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanB ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanB}/> <label> {this.props.app_setting.stripePlanBDesc} (<em>Recommended</em>)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanBAmount} data-description={this.props.app_setting.stripePlanBDesc} value={this.props.app_setting.stripePlanB} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanB ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanB}/> <label> {this.props.app_setting.stripePlanBDesc}</label>
+                           </div>
+
+                           <div className="row">
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanBBAmount} data-description={this.props.app_setting.stripePlanBBDesc} value={this.props.app_setting.stripePlanBB} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanBB ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanBB}/> <label> {this.props.app_setting.stripePlanBBDesc} (<em>Recommended</em>)</label>
                            </div>
 
                            <div className="row">
