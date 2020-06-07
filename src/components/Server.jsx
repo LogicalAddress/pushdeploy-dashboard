@@ -15,7 +15,7 @@ class Server extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            template: 'nodejs',
+            template: 'empty',
             template_variation: '',
             app_repository: '',
             repo_meta_data: '',
@@ -111,6 +111,7 @@ class Server extends React.Component {
           let templates = {
               laravel: laravel,
               nodejs: nodejs,
+              empty: [],
           }
           return templates[key];
      }
@@ -223,14 +224,15 @@ class Server extends React.Component {
                                 <input value={this.state.app_name} onChange={(e) => this.setState({app_name: e.target.value})} placeholder="e.g domain.com" id="nameField" type="text"/>
                                 <div className="row">
                                   <div className="column column-50">
-                                      <label htmlFor="template">Template</label>
+                                      <label htmlFor="template">Framework</label>
                                       <select id="template" name="template" value={this.state.template} onChange={this.selectTemplate}>
+                                          <option value="empty">Select…</option>
                                           <option value="nodejs">NodeJS</option>
                                           <option value="laravel">Laravel</option>
                                       </select>
                                   </div>
                                   <div className="column column-50">
-                                      <label htmlFor="template_variation">Template Variation</label>
+                                      <label htmlFor="template_variation">Version</label>
                                       <select id="template_variation" name="template_variation" value={this.state.template_variation} onChange={(e) => this.setState({template_variation: e.target.value})}>
                                             {this.state.currentVariations.map(item => (
                                                 <option key={item.value} value={item.value}>{item.name}</option>

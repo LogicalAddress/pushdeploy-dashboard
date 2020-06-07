@@ -8,7 +8,7 @@ class AppTable extends React.Component {
             <thead>
               <tr>
                 <th>Domain</th>
-                <th>Template</th>
+                <th>Framework</th>
                 <th>Repository</th>
                 <th>State</th>
               </tr>
