@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^1.5.0",
+    "autosize": "^4.0.2",
     "axios": "^0.16.1",
     "babel-polyfill": "^6.23.0",
     "connected-react-router": "^4.3.0",
