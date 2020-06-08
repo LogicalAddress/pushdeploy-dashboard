@@ -8,6 +8,9 @@ import UpdateEnvAction from '../actions/UpdateEnvAction';
 import {error, success} from '../utils/toastr';
 import AppSetupAction from '../actions/AppSetup';
 import AppsAction from '../actions/AppsAction';
+import io from "socket.io-client";
+import constants from '../Constants';
+import autosize from "autosize";
 var Link = require('react-router-dom').Link;
 
 class App extends React.Component {
@@ -15,15 +18,34 @@ class App extends React.Component {
         super(props);
         this.state = {
             isDeploying: false,
-            enablingSSL: false
+            enablingSSL: false,
+            runningArtisanCommand: false,
+            artisanCommand: 'php artisan migrate && php artisan db:seed',
+            app_env_file: '',
+            updatingEnvFile: false,
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleAppShellSubmit = this.handleAppShellSubmit.bind(this);
+        this.runArtisanCommand = this.runArtisanCommand.bind(this);
+        this.updateLaravelEnvFile = this.updateLaravelEnvFile.bind(this);
+        this.socket = io.connect(constants.API_URL, {
+            query: {
+              token: req.getJwt(),
+              uid: req.getUid(),
+            }
+        });
     }
 
     componentDidMount(){
         this.props.getApp(this.props.match.params.id);
+        this.getDotEnv(this.props.match.params.id);
+        this.socket.on('APP_DOT_ENV', (data) => {
+            console.log({data});
+            this.setState({app_env_file: data});
+            autosize(document.querySelectorAll('textarea'));
+        });
+        autosize(document.querySelectorAll('textarea'));
     }
     
     handleChange(event) {
@@ -90,6 +112,66 @@ class App extends React.Component {
             error('Notification', err.message);
         });
     }
+
+    runArtisanCommand(e){
+        e.preventDefault();
+        success("Notification", "Running Arisan Commands");
+        this.setState({runningArtisanCommand: true});
+        req.post('/v1/app/artisan', {app_id: this.props.app._id, command: this.state.artisanCommand})
+        .then((response) => {
+          return response.json();
+        }).then((response) => {
+          this.setState({runningArtisanCommand: false});
+          if (response.body.status === "success") {
+              success("Notification", "Running Artisan Command Done! See Deployment logs for details");
+              this.getDotEnv(this.props.app._id);
+              return;
+          }
+          error('Notification', "Unable to run artisan commands for this app");
+          console.log("DEBUG", response);
+        }).catch((err) => {
+            this.setState({runningArtisanCommand: false});
+            error('Notification', err.message);
+        });
+    }
+
+    getDotEnv(appId){
+        this.setState({updatingEnvFile: true});
+        req.get(`/v1/dotEnv/${appId}`)
+        .then((response) => {
+          return response.json();
+        }).then((response) => {
+          this.setState({updatingEnvFile: false});
+          if (response.body.status === "success") {
+              return;
+          }
+          console.log("getDotEnv", response);
+        }).catch((err) => {
+            this.setState({updatingEnvFile: false});
+            console.log("getDotEnv", err.message);
+        });
+    }
+
+    updateLaravelEnvFile(e){
+        e.preventDefault();
+        success("Notification", "Updating dot Env");
+        this.setState({updatingEnvFile: true});
+        req.post('/v1/app/dotEnv', {app_id: this.props.app._id, env: this.state.app_env_file})
+        .then((response) => {
+          return response.json();
+        }).then((response) => {
+          this.setState({updatingEnvFile: false});
+          if (response.body.status === "success") {
+              success("Notification", "Updating dot ENV File Done");
+              return;
+          }
+          error('Notification', "Unable to update dot ENV file for this app");
+          console.log("DEBUG", response);
+        }).catch((err) => {
+            this.setState({updatingEnvFile: false});
+            error('Notification', err.message);
+        });
+    }
     
     componentDidCatch(error, info) {
         window.location = "/dashboard";
@@ -150,6 +232,7 @@ class App extends React.Component {
                         </div>
                     </div>
                     
+                    {this.props.app.template !== 'laravel' &&
                     <div className="white panel" id="env">
                         <div className="row">
                             <div className="column">
@@ -174,7 +257,60 @@ class App extends React.Component {
                                </form>
                             </div>
                         </div>
-                    </div>
+                    </div>}
+
+                    {this.props.app.template === 'laravel' &&
+                    <div className="white panel" id="env">
+                        <div className="row">
+                            <div className="column">
+                               <h3>Environment Variables</h3>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="lead">
+                            ENVIRONMENT_VARIABLE=VALUE notation each per line. The environment variables typed in here will be exported to your running program.
+                            </div>
+                        </div>
+                        <div className="row upspace">
+                            <div className="column">
+                               <form onSubmit={this.updateLaravelEnvFile}>
+                               <label htmlFor="app_env_file">Export:</label>
+                               <textarea disabled={this.state.updatingEnvFile} id="app_env_file" name="app_env_file" value={ this.state.app_env_file } onChange={(e) => this.setState({app_env_file: e.target.value})}></textarea>
+                                <div className="row">
+                                    <div className="column">
+                                        <button disabled={this.state.isDeploying || this.state.enablingSSL || this.props.app.lock || this.state.runningArtisanCommand || this.state.updatingEnvFile} className="button">Save</button>
+                                    </div>
+                                </div>
+                               </form>
+                            </div>
+                        </div>
+                    </div>}
+
+                    {this.props.app.template === 'laravel' && <div className="white panel" id="laravel">
+                        <div className="row">
+                            <div className="column">
+                               <h3>Laravel PHP Artisan</h3>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="lead">
+                            Run <code>php artisan ..</code> Note: <code>php artisan migrate</code> is run everytime your app is deployed.
+                            </div>
+                        </div>
+                        <div className="row upspace">
+                            <div className="column">
+                               <form onSubmit={this.runArtisanCommand}>
+                               <label htmlFor="artisanCommand">Command:</label>
+                               <input type="text" id="artisanCommand" name="artisanCommand" value={ this.state.artisanCommand } onChange={(e) => this.setState({artisanCommand: e.target.value})}/>
+                                <div className="row">
+                                    <div className="column">
+                                        <button disabled={this.state.isDeploying || this.state.enablingSSL || this.props.app.lock || this.state.runningArtisanCommand } className="button">Run</button>
+                                    </div>
+                                </div>
+                               </form>
+                            </div>
+                        </div>
+                    </div>}
                     
                     <div className="white panel" id="ssl">
                         <div className="row">
