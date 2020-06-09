@@ -23,6 +23,7 @@ import OAuthBitbucket from './components/OAuthBitbucket';
 import OAuthLinode from './components/OAuthLinode.jsx';
 import SubscriptionSuccess from './components/SubscriptionSuccess';
 import SubscriptionCancelled from './components/SubscriptionCancelled';
+import ConfirmAccount from './components/ConfirmAccount';
 
 import  './lib/toastr.min.css';
 
@@ -48,6 +49,7 @@ ReactDom.render((
                 <Route exact={true} path="/oauth2/linode" component={OAuthLinode} />
                 <Route exact={true} path="/confirm" component={SubscriptionSuccess} />
                 <Route exact={true} path="/subscriptionCancelled" component={SubscriptionCancelled} />
+                <Route exact={true} path="/confirmAccount/:code" component={ConfirmAccount}/>
             </Launcher>
         </ConnectedRouter>
     </Provider>
