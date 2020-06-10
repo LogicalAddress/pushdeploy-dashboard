@@ -147,7 +147,7 @@ class Stripe extends React.Component {
     render() {
       return (
         <div>
-            {this.props.user.primaryPlan && 
+            {this.props.user && 
             <div className="white panel">
                 <div className="row">
                     <div className="column">
@@ -182,7 +182,7 @@ class Stripe extends React.Component {
                            </div>
 
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount={0} data-description={"Free for Open Source Projects"}  value={"open source"} name="plan" checked={ (this.props.user.tryFree && this.props.usere.primaryPlan.length === 0) || this.state.selectedPlan === "open source" }/> <label> Free for Open Source Projects (<em>No credit card required</em>)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={0} data-description={"Free for Open Source Projects"}  value={"open source"} name="plan" checked={ (this.props.user.tryFree && this.props.user.primaryPlan.length === 0) || this.state.selectedPlan === "open source" }/> <label> Free for Open Source Projects (<em>No credit card required</em>)</label>
                            </div>
                            
                             <div className="row">
