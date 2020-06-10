@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './Header';
-// import Login from './Account/Login';
+import SubHeader from './SubHeader';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import Footer from './Footer.jsx';
@@ -51,9 +51,9 @@ class Launcher extends React.Component {
       }
       throw new Error("Unexpected response please try again");
     }).catch((err) => {
-      console.log({err});
+        console.log({err});
         this.props.isDoneWorking();
-        if(this.props.UrlPathname === '/register'){
+        if(this.props.UrlPathname === '/register' || this.props.UrlPathname === '/password-recovery' || this.props.UrlPathname.indexOf('/reset-password') === 0) {
           return;
         }
         error("Notification!", "Please login to continue");
@@ -67,6 +67,7 @@ class Launcher extends React.Component {
           <Socket />
           { this.props.loading && <Loader /> }
           { this.state.loggedIn && <Header loggedIn={this.state.loggedIn}/> }
+          { this.state.loggedIn && <SubHeader loggedIn={this.state.loggedIn}/> }
           { this.props.children }
           { this.state.loggedIn && <Footer loggedIn={this.state.loggedIn}/> }
         </div>

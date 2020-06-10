@@ -60,10 +60,11 @@ class Login extends React.Component {
                   <label htmlFor="password">Password</label>
                   <input placeholder="P@55w0rd" id="password" type="password" value={this.state.password} onChange={(e) => this.setState({password: e.target.value})}/>
                   <div className="float-right">
-                    <a href="/register">Register here</a>
+                  <a href="/register">Register here</a>
                   </div>
                   <input onClick={this.login} className="button-primary" value="Login" type="submit"/>
                 </fieldset>
+                <p><a href="/password-recovery">Forgot password</a></p>
               </form>
             </div>
             </div>

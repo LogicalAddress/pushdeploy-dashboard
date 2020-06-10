@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {error, success} from '../utils/toastr';
-import req from '../api/req.js';
-import {isWorking, isDoneWorking } from '../actions/Common';
-import CredentialsAction from '../actions/CredentialsAction';
+import {error, success} from '../../utils/toastr';
+import req from '../../api/req.js';
+import {isWorking, isDoneWorking } from '../../actions/Common';
+import CredentialsAction from '../../actions/CredentialsAction';
 
 class ConfirmAccount extends React.Component {
     constructor(props) {
@@ -16,7 +16,6 @@ class ConfirmAccount extends React.Component {
         };
     }
     componentDidMount() {
-        const { location: { search } } = this.props;
         this.props.isWorking();
         req.post('/v1/user/confirmAccount', {code: this.props.match.params.code})
         .then((response) => {
