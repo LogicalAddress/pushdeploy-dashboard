@@ -6,6 +6,7 @@ const initialState = {
   email: '',
   password: '',
   mobileNumber: '',
+  primaryPlan: '',
 };
  
 const user = (state = initialState, action) => {
