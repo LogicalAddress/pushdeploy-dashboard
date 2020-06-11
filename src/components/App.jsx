@@ -196,6 +196,7 @@ class App extends React.Component {
                         <li><Link to={"/server/" + this.props.app.server._id}>Apps</Link></li>
                         <li><Link to={"#env"}>Env</Link></li>
                         <li><Link to={"#ssl"}>SSL</Link></li>
+                        <li><Link to={`/appSettings/${this.props.app._id}`}>Settings</Link></li>
                     </ul>
                 </div>
                 <div className="column column-80">

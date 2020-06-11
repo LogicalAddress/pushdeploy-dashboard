@@ -26,7 +26,6 @@ const server = (state = initialState, action) => {
         window.location = "/";
        return state;
       case constants.DELETE_SERVER_ERROR:
-        console.log('DELETE_SERVER_ERROR',{action});
         error('Notification', "Error deleting your server");
        return state;
       default:

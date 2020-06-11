@@ -29,6 +29,16 @@ let AppsAction = {
       }, params, blocking);
     }
   },
+
+  deleteApp(params) {
+    return (dispatch) => {
+      dispatchAsync(AppsAPI.deleteApp, dispatch, {
+        request: constants.DELETE_APP,
+        success: constants.DELETE_APP_SUCCESS,
+        failure: constants.DELETE_APP_ERROR
+      }, params);
+    }
+  },
   
 };
 

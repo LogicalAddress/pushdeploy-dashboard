@@ -106,5 +106,9 @@ export default {
   DELETE_SERVER: 'delete server',
   DELETE_SERVER_SUCCESS: 'delete server success',
   DELETE_SERVER_ERROR: 'delete server failed',
+
+  DELETE_APP: 'delete app',
+  DELETE_APP_SUCCESS: 'delete app success',
+  DELETE_APP_ERROR: 'delete app failed',
   
 };
