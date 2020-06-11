@@ -3,7 +3,8 @@ import {error, success} from '../utils/toastr.js'
 
 const initialState = {
   server: {},
-  app_repository: ''
+  app_repository: '',
+  app_name: '',
 }
  
 const app = (state = initialState, action) => {
@@ -26,6 +27,13 @@ const app = (state = initialState, action) => {
       case constants.UPDATE_ENV_SUCCESS:
           success('Notification', "Your app has been updated, deploy");
           return action.payload.response.body.data;
+      case constants.DELETE_APP_SUCCESS:
+        success('Notification', "Your app has been deleted");
+        window.location = `/server/${state.server._id}`;
+        return state;
+      case constants.DELETE_APP_ERROR:
+        error('Notification', "Error deleting your app");
+        return state;
       default:
         return state;
     }

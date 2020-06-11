@@ -7,6 +7,10 @@ let AppsAPI = {
 
     fetchApp(param){
         return req.get('/v1/apps/' + param)
+    },
+
+    deleteApp(payload){
+        return req.del('/v1/apps/' + payload);
     }
 };
 
