@@ -10,6 +10,8 @@ import Constants from '../../Constants';
 import UserAction from '../../actions/UserAction';
 
 class Stripe extends React.Component {
+
+    // _isMounted = false;
     
     constructor(props){
         super(props);
@@ -17,26 +19,53 @@ class Stripe extends React.Component {
             amount: 0,
             selectedPlan: '',
             description: '',
-            selected: false,
         };
         this.handlePlanChange = this.handlePlanChange.bind(this);
     }
 
-    componentDidMount(){
-        
-        if(this.props.profile.primaryPlan !== this.props.app_setting.stripePlanB){
-            var selectedPlan = this.props.app_setting.stripePlanB;
-            var description = this.props.app_setting.stripePlanBDesc;
-            var amount = this.props.app_setting.stripePlanBAmount;
-        }else{
-            selectedPlan = this.props.app_setting.stripePlanA;
-            description = this.props.app_setting.stripePlanADesc;
-            amount = this.props.app_setting.stripePlanAAmount;
-        }
-        this.setState({selectedPlan});
-        this.setState({description});
-        this.setState({amount});
-    }
+    componentDidMount() {
+        this.props.isWorking();
+        let user;
+        req.get('/v1/user')
+        .then((response) => {
+            return response.json();
+        }).then((response) => {
+            user = response.body.data;
+            return req.get('/client_setting');
+        }).then((response)=>{
+            return response.json();
+        }).then((response) =>{
+            this.props.isDoneWorking();
+            if (user && response.body.data) {
+                let app_setting = response.body.data;
+                if(user.primaryPlan === app_setting.stripePlanB){
+                    var selectedPlan = app_setting.stripePlanB;
+                    var description = app_setting.stripePlanBDesc;
+                    var amount = app_setting.stripePlanBAmount;
+                }else if(user.primaryPlan === app_setting.stripePlanA){
+                    selectedPlan = app_setting.stripePlanA;
+                    description = app_setting.stripePlanADesc;
+                    amount = app_setting.stripePlanAAmount;
+                }else if(user.primaryPlan === app_setting.stripePlanAA){
+                    selectedPlan = app_setting.stripePlanAA;
+                    description = app_setting.stripePlanAADesc;
+                    amount = app_setting.stripePlanAAAmount;
+                }else{
+                    selectedPlan = app_setting.stripePlanBB;
+                    description = app_setting.stripePlanBBDesc;
+                    amount = app_setting.stripePlanBBAmount;
+                }
+                this.setState({selectedPlan, description, amount});
+                return;
+          }
+          throw new Error("Unexpected response please try again");
+        }).catch((err) => {
+            console.log({err});
+            this.props.isDoneWorking();
+            error("Notification!", "Please login to continue");
+            this.props.changeRoute('/login');
+        });
+      }
     
     onPlanClick = async(evt) => {
         evt.preventDefault();
@@ -112,13 +141,13 @@ class Stripe extends React.Component {
           selectedPlan: evt.currentTarget.value,
           amount: parseInt(data.amount, 10),
           description: data.description,
-          selected: true,
         });
     }
     
     render() {
       return (
         <div>
+            {this.props.user && 
             <div className="white panel">
                 <div className="row">
                     <div className="column">
@@ -126,44 +155,44 @@ class Stripe extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    { this.props.profile.primaryPlan.length < 1&& <div className="lead">
+                    { this.props.user.primaryPlan.length < 1&& <div className="lead">
                     Please select a plan to continue. New users who simply want to test the platform start with <em>Deploy Test</em> then upgrade later to <em>Deploy Pro</em>. Your subscription counts from the begining and you can cancel your plan anytime.
                     </div>}
-                    { this.props.profile.primaryPlan.length > 1 && <div className="lead">
-                    Your subscription is active! you are currently on <em>{this.props.profile.primaryPlan === "pushdeploy-test" ? "Deploy test" : "Deploy Pro"}</em> When changing plans, the previous plan is cancelled and the new plan takes effect immediately.
+                    { this.props.user.primaryPlan.length > 1 && <div className="lead">
+                    Your subscription is active!{/*you are currently on <em>{this.props.user.primaryPlan === this.props.app_setting.stripePlanA ? this.props.app_setting.stripePlanADesc : (this.props.user.primaryPlan === this.props.app_setting.stripePlanB ? this.props.app_setting.stripePlanBDesc : ( this.props.user.primaryPlan === this.props.app_setting.stripePlanAA ? this.props.app_setting.stripePlanAADesc : ( this.props.user.primaryPlan === this.props.app_setting.stripePlanBB ? this.props.app_setting.stripePlanBDesc : "Open Source") )) }</em> */} When changing plans, the previous plan is cancelled and the new plan takes effect immediately.
                     </div>}
                 </div>
                 <div className="row upspace">
                     <div className="column">
                        <form className="plan" onSubmit={(evt) => this.onPlanClick(evt)}>
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanAAmount} data-description={this.props.app_setting.stripePlanADesc} value={this.props.app_setting.stripePlanA} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanA ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanA}/> <label> {this.props.app_setting.stripePlanADesc} (Access to provision limited servers, limited apps, auto deploy)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanAAmount} data-description={this.props.app_setting.stripePlanADesc} value={this.props.app_setting.stripePlanA} name="plan" checked={this.state.selectedPlan===this.props.app_setting.stripePlanA}/> <label> {this.props.app_setting.stripePlanADesc} (Access to provision limited servers, limited apps, auto deploy)</label>
                            </div>
 
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanAAAmount} data-description={this.props.app_setting.stripePlanAADesc} value={this.props.app_setting.stripePlanAA} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanAA ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanAA}/> <label> {this.props.app_setting.stripePlanAADesc} (Access to provision limited servers, limited apps, auto deploy)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanAAAmount} data-description={this.props.app_setting.stripePlanAADesc} value={this.props.app_setting.stripePlanAA} name="plan" checked={this.state.selectedPlan===this.props.app_setting.stripePlanAA}/> <label> {this.props.app_setting.stripePlanAADesc} (Access to provision limited servers, limited apps, auto deploy)</label>
                            </div>
                         
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanBAmount} data-description={this.props.app_setting.stripePlanBDesc} value={this.props.app_setting.stripePlanB} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanB ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanB}/> <label> {this.props.app_setting.stripePlanBDesc}</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanBAmount} data-description={this.props.app_setting.stripePlanBDesc} value={this.props.app_setting.stripePlanB} name="plan" checked={this.state.selectedPlan===this.props.app_setting.stripePlanB}/> <label> {this.props.app_setting.stripePlanBDesc}</label>
                            </div>
 
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanBBAmount} data-description={this.props.app_setting.stripePlanBBDesc} value={this.props.app_setting.stripePlanBB} name="plan" checked={this.props.profile.primaryPlan === this.props.app_setting.stripePlanBB ? this.props.profile.primaryPlan : this.state.selectedPlan===this.props.app_setting.stripePlanBB}/> <label> {this.props.app_setting.stripePlanBBDesc} (<em>Recommended</em>)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={this.props.app_setting.stripePlanBBAmount} data-description={this.props.app_setting.stripePlanBBDesc} value={this.props.app_setting.stripePlanBB} name="plan" checked={this.state.selectedPlan===this.props.app_setting.stripePlanBB}/> <label> {this.props.app_setting.stripePlanBBDesc} (<em>Recommended</em>)</label>
                            </div>
 
                            <div className="row">
-                               <input type="radio" onChange={this.handlePlanChange} data-amount={0} data-description={"Free for Open Source Projects"}  value={"open source"} name="plan" checked={this.props.profile.tryFree && this.props.profile.primaryPlan.length === 0 ? true : this.state.selectedPlan === "open source" }/> <label> Free for Open Source Projects (<em>No credit card required</em>)</label>
+                               <input type="radio" onChange={this.handlePlanChange} data-amount={0} data-description={"Free for Open Source Projects"}  value={"open source"} name="plan" checked={ (this.props.user.tryFree && this.props.user.primaryPlan.length === 0) || this.state.selectedPlan === "open source" }/> <label> Free for Open Source Projects (<em>No credit card required</em>)</label>
                            </div>
                            
                             <div className="row">
-                                <button disabled={!this.state.selected} className="button">{ this.props.profile.primaryPlan !== '' ? 'Change Plan' : 'Subscribe'}</button> 
-                                { this.props.profile.primaryPlan !== '' && <a href="/" onClick={(evt) => this.onCancelPlanClick(evt)} className="button button-clear">Cancel your subscription</a>}
+                                <button className="button">{ this.props.user.primaryPlan !== '' ? 'Update Plan' : 'Subscribe'}</button>
+                                { this.props.user.primaryPlan !== '' && <a href="/" onClick={(evt) => this.onCancelPlanClick(evt)} className="button button-clear">Cancel your subscription</a>}
                             </div>
                        </form>
                     </div>
                 </div>
-            </div>
+            </div>}
         </div>
       )
    }
