@@ -241,7 +241,7 @@ class App extends React.Component {
                         </div>
                         <div className="row">
                             <div className="lead">
-                            ENVIRONMENT_VARIABLE=VALUE notation each per line. The environment variables typed in here will be exported to your running program.
+                            export ENVIRONMENT_VARIABLE=VALUE notation each per line. The environment variables typed in here will be exported to your running program.
                             </div>
                         </div>
                         <div className="row upspace">
