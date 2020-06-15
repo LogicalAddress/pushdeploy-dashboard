@@ -155,11 +155,14 @@ class Stripe extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    { this.props.user.primaryPlan.length < 1&& <div className="lead">
+                    { this.props.user.primaryPlan.length < 1 && this.props.user.tryFree === false && <div className="lead">
                     Please select a plan to continue. New users who simply want to test the platform start with <em>Deploy Test</em> then upgrade later to <em>Deploy Pro</em>. Your subscription counts from the begining and you can cancel your plan anytime.
                     </div>}
                     { this.props.user.primaryPlan.length > 1 && <div className="lead">
                     Your subscription is active!{/*you are currently on <em>{this.props.user.primaryPlan === this.props.app_setting.stripePlanA ? this.props.app_setting.stripePlanADesc : (this.props.user.primaryPlan === this.props.app_setting.stripePlanB ? this.props.app_setting.stripePlanBDesc : ( this.props.user.primaryPlan === this.props.app_setting.stripePlanAA ? this.props.app_setting.stripePlanAADesc : ( this.props.user.primaryPlan === this.props.app_setting.stripePlanBB ? this.props.app_setting.stripePlanBDesc : "Open Source") )) }</em> */} When changing plans, the previous plan is cancelled and the new plan takes effect immediately.
+                    </div>}
+                    { this.props.user.primaryPlan.length < 1 && this.props.user.tryFree === true && <div className="lead">
+                    Your Open Source subscription is active! When changing plans, the previous plan is cancelled and the new plan takes effect immediately.
                     </div>}
                 </div>
                 <div className="row upspace">
