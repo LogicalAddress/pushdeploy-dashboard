@@ -8,6 +8,7 @@ import UpdateEnvAction from '../actions/UpdateEnvAction';
 import {error, success} from '../utils/toastr';
 import AppSetupAction from '../actions/AppSetup';
 import AppsAction from '../actions/AppsAction';
+import DNSAction from '../actions/DNSAction';
 import io from "socket.io-client";
 import constants from '../Constants';
 import autosize from "autosize";
@@ -29,6 +30,7 @@ class App extends React.Component {
         this.handleAppShellSubmit = this.handleAppShellSubmit.bind(this);
         this.runArtisanCommand = this.runArtisanCommand.bind(this);
         this.updateLaravelEnvFile = this.updateLaravelEnvFile.bind(this);
+        this.assignCustomDomain = this.assignCustomDomain.bind(this);
         this.socket = io.connect(constants.API_URL, {
             query: {
               token: req.getJwt(),
@@ -132,6 +134,19 @@ class App extends React.Component {
         }).catch((err) => {
             this.setState({runningArtisanCommand: false});
             error('Notification', err.message);
+        });
+    }
+
+    assignCustomDomain(e){
+        e.preventDefault();
+        this.props.createZoneAndARecord({
+            app: this.props.app._id,
+            name: this.props.app.app_name,
+            label: this.props.app.app_name,
+            ttl: '3600',
+            class: 'IN',
+            type: 'A',
+            rdata: this.props.app.server.ipv4,
         });
     }
 
@@ -241,7 +256,7 @@ class App extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="lead">
+                            <div className="lead" style={{width: '100%'}}>
                             export ENVIRONMENT_VARIABLE=VALUE notation each per line. The environment variables typed in here will be exported to your running program.
                             </div>
                         </div>
@@ -268,7 +283,7 @@ class App extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="lead">
+                            <div className="lead" style={{width: '100%'}}>
                             ENVIRONMENT_VARIABLE=VALUE notation each per line. The environment variables typed in here will be exported to your running program.
                             </div>
                         </div>
@@ -294,7 +309,7 @@ class App extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="lead">
+                            <div className="lead" style={{width: '100%'}}>
                             Run <code>php artisan ..</code> Note: <code>php artisan migrate</code> is run everytime your app is deployed.
                             </div>
                         </div>
@@ -306,6 +321,30 @@ class App extends React.Component {
                                 <div className="row">
                                     <div className="column">
                                         <button disabled={this.state.isDeploying || this.state.enablingSSL || this.props.app.lock || this.state.runningArtisanCommand } className="button">Run</button>
+                                    </div>
+                                </div>
+                               </form>
+                            </div>
+                        </div>
+                    </div>}
+
+                    {true && this.props.app.app_name !== 'default' && <div className="white panel" id="custom_domain">
+                        <div className="row">
+                            <div className="column">
+                               <h3>DNS</h3>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="lead" style={{width: '100%'}}>
+                            DNS lets your app be accessible from anywhere around the world e.g. <code>https://{this.props.app.app_name}</code>
+                            </div>
+                        </div>
+                        <div className="row upspace">
+                            <div className="column">
+                               <form onSubmit={this.assignCustomDomain}>
+                                <div className="row">
+                                    <div className="column">
+      <button disabled={this.state.isDeploying || this.state.enablingSSL || this.props.app.lock } className="button">Create DNS for {this.props.app.app_name}</button>
                                     </div>
                                 </div>
                                </form>
@@ -350,6 +389,7 @@ const mapDispatchToProps = (dispatch) => (
         getApp: (params) => dispatch(AppsAction.getApp(params)),
         toggleAutoDeploy: (app) => dispatch(AppSetupAction.toggleAutoDeploy(app)),
         updateAppField: (params) => dispatch(AppsAction.updateAppField(params)),
+        createZoneAndARecord: (params) => dispatch(DNSAction.createZoneAndARecord(params)),
       }
     );
 

@@ -14,6 +14,8 @@ import customSetupDraft from './CustomSetupDraftReducer';
 import subscription from './SubscriptionReducer';
 import credentials from './CredentialsReducer';
 import database from './DatabaseReducer';
+import dnszones from './DNSZonesReducer';
+import dnsrecords from './DNSRecordsReducer';
 
 const reducers = combineReducers({
   profile,
@@ -31,6 +33,8 @@ const reducers = combineReducers({
   subscription,
   credentials,
   database,
+  dnszones,
+  dnsrecords,
 });
 
 export default reducers;
