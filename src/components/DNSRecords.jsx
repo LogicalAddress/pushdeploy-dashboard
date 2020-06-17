@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import DNSRecordsTable from './DNSRecordsTable.jsx';
 import DNSAction from '../actions/DNSAction';
 import {isWorking, isDoneWorking } from '../actions/Common';
+import DNSRecordForm from './DNSRecordForm';
 // var Link = require('react-router-dom').Link;
 
 class DNSRecords extends React.Component {
@@ -12,6 +13,7 @@ class DNSRecords extends React.Component {
         super(props);
         this.state = { };
         this.createDNSRecord = this.createDNSRecord.bind(this);
+        this.deleteDNSRecord = this.deleteDNSRecord.bind(this);
     }
      
     componentDidMount(){
@@ -21,6 +23,11 @@ class DNSRecords extends React.Component {
     createDNSRecord() {
         this.props.createDNSRecord(this.state);
     }
+
+    deleteDNSRecord(e, id){
+        e.preventDefault();
+        this.props.deleteDNSRecord(id);
+    }
     
     render() {
 
@@ -28,20 +35,20 @@ class DNSRecords extends React.Component {
          <div>
              <div className="container" style={{padding: 'unset'}}>
                 <div className="float-right">
-                    <button className="right button">Add Record</button>
+                <DNSRecordForm zone_id={ this.props.match.params.id} fetchDNSRecords={this.props.fetchDNSRecords}/>
                 </div>
                 <div style={{clear: 'right'}}></div>
             </div>
             { this.props.dnsrecords.length !== 0 &&
             <div className="white panel">
                 <h3>DNS Records</h3>
-                <DNSRecordsTable dnsrecords={this.props.dnsrecords}/>
+                <DNSRecordsTable delete={this.deleteDNSRecord} dnsrecords={this.props.dnsrecords}/>
             </div>
             }
 
             { this.props.dnsrecords.length === 0 &&
             <div className="white panel">
-                <p class="lead">Nothing here yet! Create an app, assign DNS to the app and they will appear here.</p>
+                <p className="lead">Nothing here yet! Create an app, assign domain to the app and they will appear here.</p>
             </div>
             }
         </div>
@@ -64,6 +71,7 @@ const mapStoreToProps = (storeState) => (
 
 const mapDispatchToProps = (dispatch) => ({
   fetchDNSRecords: (params) => dispatch(DNSAction.fetchDNSRecords(params)),
+  deleteDNSRecord: (params) => dispatch(DNSAction.deleteDNSRecord(params)),
   isWorking: ()=> dispatch(isWorking()),
   isDoneWorking: ()=> dispatch(isDoneWorking()),
 });

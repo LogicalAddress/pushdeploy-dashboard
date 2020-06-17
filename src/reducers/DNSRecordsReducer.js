@@ -23,9 +23,13 @@ const dnsrecords = (state = initialState, action = initialAction) => {
       error('Notification', action.payload.error || "Unable to fetch DNS record list, please reload the page");
       return state;
     case constants.DELETE_DNS_RECORD_SUCCESS:
-        // TODO: pull out of array
+        let data = [];
+        for(let i = 0; i < state.length; i++){
+          if(state[i]._id === action.payload.response.body.data) continue;
+          data.push(state[i]);
+        }
         success('Notification', 'Delete record success');
-        return state;
+        return data;
     case constants.DELETE_DNS_RECORD_ERROR:
         error('Notification', action.payload.error || "unable to delete record");
         return state;

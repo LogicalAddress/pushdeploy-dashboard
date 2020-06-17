@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 var Link = require('react-router-dom').Link;
 
 class DNSZonesRow extends React.Component {
@@ -10,6 +12,7 @@ class DNSZonesRow extends React.Component {
           <td>{this.props.data.provider.toUpperCase()}</td>
           <td>{this.props.data.owner.toUpperCase()}</td>
           {/* <td>{this.props.data.created_at}</td> */}
+          <td><a href="/dns/zones" onClick={(e)=>this.props.delete(e, this.props.data._id)} data-id={this.props.data._id}><FontAwesomeIcon icon={faTrash } color="#9b4dca"/></a></td>
         </tr>
       );
     }

@@ -8,17 +8,17 @@ class DNSRecordsTable extends React.Component {
           <table className="table">
             <thead>
               <tr>
-                <th>app</th>
-                <th>label</th>
+                <th>Hostname</th>
                 {/* <th>Class</th> */}
-                <th>type</th>
-                <th>ttl</th>
-                <th>value</th>
+                <th>Type</th>
+                <th>TTL (seconds)</th>
+                <th>Value</th>
                 {/* <th>Created At</th> */}
+                <th>#</th>
               </tr>
             </thead>
             <tbody>
-              {this.props.dnsrecords.map((item, i) => <DNSRecordsRow key={i} data={item} />)}
+              {this.props.dnsrecords.map((item, i) => <DNSRecordsRow delete={this.props.delete} key={i} data={item} />)}
             </tbody>
           </table>
         );
@@ -27,6 +27,7 @@ class DNSRecordsTable extends React.Component {
 
 DNSRecordsTable.propTypes = {
   dnsrecords: PropTypes.array,
+  delete: PropTypes.func,
 };
 
 export default DNSRecordsTable;

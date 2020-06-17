@@ -12,14 +12,16 @@ class DNSZones extends React.Component {
     constructor(props) {
         super(props);
         this.state = { };
+        this.deleteDNSZone = this.deleteDNSZone.bind(this);
     }
      
     componentDidMount(){
         this.props.fetchDNSZones();
      }
-    
-    createDatabase() {
-        this.props.createDatabase(this.state);
+
+     deleteDNSZone(e, id){
+        e.preventDefault();
+        this.props.deleteDNSZone(id);
     }
     
     render() {
@@ -29,20 +31,20 @@ class DNSZones extends React.Component {
             <div className="container" style={{padding: 'unset'}}>
                 <div className="float-right">
                     {/* <button className="right button">Add Record</button> */}
-                    <DNSZoneForm />
+                    <DNSZoneForm reloadZones={this.props.fetchDNSZones}/>
                 </div>
                 <div style={{clear: 'right'}}></div>
             </div>
             { this.props.dnszones.length !== 0 &&
             <div className="white panel">
                 <h3>Domains</h3>
-                <DNSZonesTable dnszones={this.props.dnszones}/>
+                <DNSZonesTable delete={this.deleteDNSZone} dnszones={this.props.dnszones}/>
             </div>
             }
 
             { this.props.dnszones.length === 0 &&
             <div className="white panel">
-                <p class="lead">Nothing here yet! Create an app, assign DNS to the app and they will appear here.</p>
+                <p className="lead">Nothing here yet! Create an app, assign domain to the app and they will appear here.</p>
             </div>
             }
                    
@@ -66,6 +68,7 @@ const mapStoreToProps = (storeState) => (
 
 const mapDispatchToProps = (dispatch) => ({
   fetchDNSZones: () => dispatch(DNSAction.fetchDNSZones()),
+  deleteDNSZone: (params) => dispatch(DNSAction.deleteDNSZone(params)),
   isWorking: ()=> dispatch(isWorking()),
   isDoneWorking: ()=> dispatch(isDoneWorking()),
 });

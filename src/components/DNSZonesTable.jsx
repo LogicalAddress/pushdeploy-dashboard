@@ -8,14 +8,15 @@ class DNSZonesTable extends React.Component {
           <table className="table">
             <thead>
               <tr>
-                <th>app</th>
-                <th>provider</th>
-                <th>owner</th>
+                <th>Domain</th>
+                <th>Provider</th>
+                <th>Owner</th>
                 {/* <th>Created At</th> */}
+                <th>#</th>
               </tr>
             </thead>
             <tbody>
-              {this.props.dnszones.map((item, i) => <DNSZonesRow key={i} data={item} />)}
+              {this.props.dnszones.map((item, i) => <DNSZonesRow delete={this.props.delete} key={i} data={item} />)}
             </tbody>
           </table>
         );
@@ -24,6 +25,7 @@ class DNSZonesTable extends React.Component {
 
 DNSZonesTable.propTypes = {
     dnszones: PropTypes.array,
+    delete: PropTypes.func,
 };
 
 export default DNSZonesTable;

@@ -22,9 +22,13 @@ const dnszones = (state = initialState, action = initialAction) => {
       error('Notification', action.payload.error || "Unable to fetch DNS zone list, please reload the page");
       return state;
     case constants.DELETE_DNS_ZONE_SUCCESS:
-        // TODO: pull out of array
-        success('Notification', 'Delete record success');
-        return state;
+        let data = [];
+        for(let i = 0; i < state.length; i++){
+          if(state[i]._id === action.payload.response.body.data) continue;
+          data.push(state[i]);
+        }
+        success('Notification', 'Delete zone success');
+        return data;
     case constants.DELETE_DNS_ZONE_ERROR:
         error('Notification', action.payload.error || "unable to delete record");
         return state;

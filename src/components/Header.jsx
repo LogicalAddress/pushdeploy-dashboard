@@ -20,7 +20,7 @@ class Header extends React.Component {
                   <Link to="/apps">Apps</Link>
                 </li>
                 <li>
-                  <Link to="/dns">DNS</Link>
+                  <Link to="/dns">Domains</Link>
                 </li>
                 {/*
                 <li className="dropdown">

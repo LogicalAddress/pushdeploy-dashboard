@@ -9,6 +9,9 @@
     "npm": ">=5.6.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.10",
     "@stripe/stripe-js": "^1.5.0",
     "autosize": "^4.0.2",
     "axios": "^0.16.1",
@@ -19,6 +22,7 @@
     "react": "^16.4.1",
     "react-addons-update": "^15.5.2",
     "react-dom": "^16.4.1",
+    "react-fontawesome": "^1.7.1",
     "react-google-recaptcha": "^2.0.1",
     "react-redux": "^5.0.4",
     "react-router": "^4.0.0",
