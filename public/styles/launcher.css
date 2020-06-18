@@ -264,3 +264,9 @@ https://stackoverflow.com/questions/396145/how-to-vertically-center-a-div-for-al
     text-align: left !important;
 
 }
+
+.popup-content{
+    /* background: #9b4dca !important; */
+    /* border: 1px solid #9b4dca; */
+    /* padding: 0px !important */
+}

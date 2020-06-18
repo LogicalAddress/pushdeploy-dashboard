@@ -8,6 +8,7 @@ import UpdateEnvAction from '../actions/UpdateEnvAction';
 import {error, success} from '../utils/toastr';
 import AppSetupAction from '../actions/AppSetup';
 import AppsAction from '../actions/AppsAction';
+import DNSAction from '../actions/DNSAction';
 import io from "socket.io-client";
 import constants from '../Constants';
 import autosize from "autosize";
@@ -29,6 +30,7 @@ class App extends React.Component {
         this.handleAppShellSubmit = this.handleAppShellSubmit.bind(this);
         this.runArtisanCommand = this.runArtisanCommand.bind(this);
         this.updateLaravelEnvFile = this.updateLaravelEnvFile.bind(this);
+        this.assignCustomDomain = this.assignCustomDomain.bind(this);
         this.socket = io.connect(constants.API_URL, {
             query: {
               token: req.getJwt(),
@@ -39,7 +41,9 @@ class App extends React.Component {
 
     componentDidMount(){
         this.props.getApp(this.props.match.params.id);
+        this.props.fetchZone(this.props.match.params.id);
         this.getDotEnv(this.props.match.params.id);
+        this.props.getDNSPassFlag();
         this.socket.on('APP_DOT_ENV', (data) => {
             console.log({data});
             this.setState({app_env_file: data});
@@ -135,6 +139,19 @@ class App extends React.Component {
         });
     }
 
+    assignCustomDomain(e){
+        e.preventDefault();
+        this.props.createZoneAndARecord({
+            app: this.props.app._id,
+            name: this.props.app.app_name,
+            label: '@',
+            ttl: '3600',
+            class: 'IN',
+            type: 'A',
+            rdata: this.props.app.server.ipv4,
+        });
+    }
+
     getDotEnv(appId){
         this.setState({updatingEnvFile: true});
         req.get(`/v1/dotEnv/${appId}`)
@@ -211,7 +228,7 @@ class App extends React.Component {
                             <div className="clear"></div>
                         </div>
                         <div className="row">
-                            <div className="lead">
+                            <div className="lead" style={{width: '100%'}}>
                             Auto deploy allows you to easily deploy your projects when you push to source control. When you push to your master branch, PushDeploy will pull your latest code from source control, install relavant dependencies, and start or restart the server.
                             </div>
                         </div>
@@ -241,7 +258,7 @@ class App extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="lead">
+                            <div className="lead" style={{width: '100%'}}>
                             export ENVIRONMENT_VARIABLE=VALUE notation each per line. The environment variables typed in here will be exported to your running program.
                             </div>
                         </div>
@@ -268,7 +285,7 @@ class App extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="lead">
+                            <div className="lead" style={{width: '100%'}}>
                             ENVIRONMENT_VARIABLE=VALUE notation each per line. The environment variables typed in here will be exported to your running program.
                             </div>
                         </div>
@@ -294,7 +311,7 @@ class App extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="lead">
+                            <div className="lead" style={{width: '100%'}}>
                             Run <code>php artisan ..</code> Note: <code>php artisan migrate</code> is run everytime your app is deployed.
                             </div>
                         </div>
@@ -312,6 +329,44 @@ class App extends React.Component {
                             </div>
                         </div>
                     </div>}
+
+                    {true && this.props.app.app_name !== 'default' && <div className="white panel" id="custom_domain">
+                        <div className="row">
+                            <div className="column">
+                               <h3>Custom Domain (DNS)</h3>
+                            </div>
+                        </div>
+                        <div className="row">
+                            {!this.props.dnszone._id && <div className="lead" style={{width: '100%'}}>
+                            DNS lets your app be accessible from anywhere around the world e.g. <code>https://{this.props.app.app_name}</code>
+                            </div>}
+                            {this.props.dnszone._id && <div className="lead" style={{width: '100%'}}>
+                            You are good to go if your domain name with your registrar is pointed to these nameservers <code>{this.props.dnszone.nameservers}</code>
+                            </div>}
+                        </div>
+                        <div className="row upspace">
+                            <div className="column">
+                               {!this.props.dnszone._id && this.props.dnspass === true && <form onSubmit={this.assignCustomDomain}>
+                                <div className="row">
+                                    <div className="column">
+      <button disabled={this.state.isDeploying || this.state.enablingSSL || this.props.app.lock } className="button">Create DNS for {this.props.app.app_name}</button>
+                                    </div>
+                                </div>
+                               </form>}
+                               {!this.props.dnszone._id && this.props.dnspass === false && 
+                                <div className="row">
+                                    <p className="lead" style={{width: '100%'}}>Upgrade to <code>Pushdeploy Pro</code> to have unlimited DNS access. <Link to='/account/plans'>Take me to upgrade page</Link>
+                                    </p>
+                                </div>}
+                               {this.props.dnszone._id &&
+                                <div className="row">
+                                    <div className="column">
+                                        <a href={'http://' + this.props.app.app_name} className="button">Visit Website http://{this.props.app.app_name}</a>
+                                    </div>
+                                </div>}
+                            </div>
+                        </div>
+                    </div>}
                     
                     <div className="white panel" id="ssl">
                         <div className="row">
@@ -320,7 +375,7 @@ class App extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="lead">
+                            <div className="lead" style={{width: '100%'}}>
                                 Secure your site with Let’s Encrypt. It is a free, automated, and open Certificate Authority brought to you by the non-profit Internet Security Research Group (ISRG). 
                             </div>
                         </div>
@@ -342,6 +397,7 @@ class App extends React.Component {
 App.propTypes = {
   app: PropTypes.object,
   credentials: PropTypes.object.isRequired,
+  dnszone: PropTypes.object,
 }
 
 const mapDispatchToProps = (dispatch) => (
@@ -350,6 +406,10 @@ const mapDispatchToProps = (dispatch) => (
         getApp: (params) => dispatch(AppsAction.getApp(params)),
         toggleAutoDeploy: (app) => dispatch(AppSetupAction.toggleAutoDeploy(app)),
         updateAppField: (params) => dispatch(AppsAction.updateAppField(params)),
+        fetchZone: (params) => dispatch(DNSAction.fetchZone(params)),
+        fetchAppDNSZone: (params) => dispatch(DNSAction.fetchAppDNSZone(params)),
+        createZoneAndARecord: (params) => dispatch(DNSAction.createZoneAndARecord(params)),
+        getDNSPassFlag: () => dispatch(DNSAction.getDNSPassFlag()),
       }
     );
 
@@ -357,6 +417,8 @@ const mapStoreToProps = (storeState) => (
     {
         credentials: storeState.credentials,
         app: storeState.app,
+        dnszone: storeState.dnszone,
+        dnspass: storeState.dnspass,
     }
 )
 

@@ -27,6 +27,8 @@ import SubscriptionCancelled from './components/SubscriptionCancelled';
 import ConfirmAccount from './components/Account/ConfirmAccount';
 import PasswordRecovery from './components/Account/PasswordRecovery';
 import ResetPassword from './components/Account/ResetPassword';
+import DNSZones from './components/DNSZones';
+import DNSRecords from './components/DNSRecords';
 
 import  './lib/toastr.min.css';
 
@@ -56,6 +58,8 @@ ReactDom.render((
                 <Route exact={true} path="/confirmAccount/:code" component={ConfirmAccount}/>
                 <Route exact={true} path="/password-recovery" component={PasswordRecovery}/>
                 <Route exact={true} path="/reset-password/:token" component={ResetPassword}/>
+                <Route exact={true} path="/dns" component={DNSZones} />
+                <Route exact={true} path= "/dns/:id" component={DNSRecords} />
             </Launcher>
         </ConnectedRouter>
     </Provider>

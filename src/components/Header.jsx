@@ -19,6 +19,9 @@ class Header extends React.Component {
                 <li>
                   <Link to="/apps">Apps</Link>
                 </li>
+                <li>
+                  <Link to="/dns">Domains</Link>
+                </li>
                 {/*
                 <li className="dropdown">
                   <Link to="/">Functions</Link>
