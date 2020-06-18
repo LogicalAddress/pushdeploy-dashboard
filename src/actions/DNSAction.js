@@ -23,6 +23,26 @@ let DNSAction = {
     }
   },
 
+  getDNSPassFlag(payload, blocking = true) {
+    return (dispatch) => {
+      dispatchAsync(DNS.getDNSPassFlag, dispatch, {
+        request: constants.FETCH_DNS_PASS_FLAG,
+        success: constants.FETCH_DNS_PASS_FLAG_SUCCESS,
+        failure: constants.FETCH_DNS_PASS_FLAG_ERROR
+      }, payload, blocking);
+    }
+  },
+
+  fetchZone(payload, blocking = true) {
+    return (dispatch) => {
+      dispatchAsync(DNS.fetchZone, dispatch, {
+        request: constants.FETCH_DNS_ZONE,
+        success: constants.FETCH_DNS_ZONE_SUCCESS,
+        failure: constants.FETCH_DNS_ZONE_ERROR
+      }, payload, blocking);
+    }
+  },
+
   deleteDNSZone(payload) {
     return (dispatch) => {
       dispatchAsync(DNS.deleteDNSZone, dispatch, {

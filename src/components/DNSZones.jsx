@@ -30,7 +30,6 @@ class DNSZones extends React.Component {
         <div>
             <div className="container" style={{padding: 'unset'}}>
                 <div className="float-right">
-                    {/* <button className="right button">Add Record</button> */}
                     <DNSZoneForm reloadZones={this.props.fetchDNSZones}/>
                 </div>
                 <div style={{clear: 'right'}}></div>

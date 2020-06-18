@@ -16,6 +16,8 @@ import credentials from './CredentialsReducer';
 import database from './DatabaseReducer';
 import dnszones from './DNSZonesReducer';
 import dnsrecords from './DNSRecordsReducer';
+import dnszone from './DNSZoneReducer';
+import dnspass from './DNSPassReducer';
 
 const reducers = combineReducers({
   profile,
@@ -35,6 +37,8 @@ const reducers = combineReducers({
   database,
   dnszones,
   dnsrecords,
+  dnszone,
+  dnspass,
 });
 
 export default reducers;

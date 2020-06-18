@@ -9,6 +9,7 @@ class DNSZonesRow extends React.Component {
       return (
         <tr>
           <td><Link to={ '/dns/' + this.props.data._id }>{this.props.data.name.toUpperCase()}</Link></td>
+          <td>{this.props.data.app && this.props.data.app._id && <Link to={`/apps/${this.props.data.app._id}`}>{this.props.data.app.app_name.toUpperCase()}</Link> }</td>
           <td>{this.props.data.provider.toUpperCase()}</td>
           <td>{this.props.data.owner.toUpperCase()}</td>
           {/* <td>{this.props.data.created_at}</td> */}

@@ -9,6 +9,7 @@ class DNSZonesTable extends React.Component {
             <thead>
               <tr>
                 <th>Domain</th>
+                <th>App</th>
                 <th>Provider</th>
                 <th>Owner</th>
                 {/* <th>Created At</th> */}

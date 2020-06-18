@@ -14,7 +14,6 @@ class DNSRecordsRow extends React.Component {
           <td>{this.props.data.rdata}</td>
           {/* <td>{this.props.data.created_at}</td> */}
           <td><a href="/dns/records" onClick={(e)=>this.props.delete(e, this.props.data._id)} data-id={this.props.data._id}><FontAwesomeIcon icon={faTrash } color="#9b4dca"/></a></td>
-          {/* <td><a href="/dns/records" onClick={(e)=>this.props.delete(e)} data-id={this.props.data._id}>DELETE</a></td> */}
         </tr>
       );
     }

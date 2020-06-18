@@ -10,6 +10,14 @@ let DNS = {
         return req.get('/v1/dns/zone');
     },
 
+    fetchZone(payload) {
+        return req.get(`/v1/dns/zone/${payload}`);
+    },
+
+    getDNSPassFlag(){
+        return req.get('/v1/dnspassflag');
+    },
+
     deleteDNSZone(payload) {
         return req.del(`/v1/dns/zone/${payload}`);
     },

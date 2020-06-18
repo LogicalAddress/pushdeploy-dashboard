@@ -34,11 +34,11 @@ const dnsrecords = (state = initialState, action = initialAction) => {
         error('Notification', action.payload.error || "unable to delete record");
         return state;
     case constants.CREATE_DNS_ZONE_RECORD_SUCCESS:
-      success('Notification', 'Create DNS record success')
+      // success('Notification', 'Create DNS record success')
       state.push(action.payload.response.body.data.record);
       return state;
     case constants.CREATE_DNS_ZONE_RECORD_ERROR:
-      error('Notification', action.payload.error || "Unable to create DNS record");
+      // error('Notification', action.payload.error || "Unable to create DNS record");
       return state;
     default:
       return state;

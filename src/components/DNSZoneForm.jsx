@@ -6,6 +6,7 @@ import Popup from "reactjs-popup";
 import {error, success} from '../utils/toastr';
 import {isWorking, isDoneWorking, changeRoute } from '../actions/Common';
 import DNS from '../api/DNS'
+import DNSAction from '../actions/DNSAction';
 var Link = require('react-router-dom').Link;
 
 class DNSZoneForm extends React.Component {
@@ -21,7 +22,11 @@ class DNSZoneForm extends React.Component {
 
 
   componentDidMount(){
-   
+    this.props.getDNSPassFlag();
+  }
+  
+  componentWillReceiveProps(){
+    this.props.getDNSPassFlag();
   }
 
   createDNSZone(e){
@@ -37,6 +42,7 @@ class DNSZoneForm extends React.Component {
       this.props.isDoneWorking();
       if (response.body && response.body.status === "success") {
           success("Notification", "Creating a root zone successful");
+          this.props.getDNSPassFlag();
           this.props.reloadZones();
           this.props.changeRoute(`/dns/${response.body.data._id}`);
           return;
@@ -53,7 +59,7 @@ class DNSZoneForm extends React.Component {
 
   render() {
     return (
-      <Popup onOpen={() => console.log("Function to call on open")} trigger={<h5><Link to="#" className="right button" onClick={(e) => {e.preventDefault()}}>Add Domain</Link></h5>} modal>
+      <Popup trigger={<h5><Link to="#" className="right button" onClick={(e) => {e.preventDefault()}}>Add Domain</Link></h5>} modal>
       {close => (
           <div className="modal" style={{background: 'url(/images/background.png)', fontSize: 'inherit'}}>
             <a className="close" onClick={close}>
@@ -63,23 +69,29 @@ class DNSZoneForm extends React.Component {
             <div className="row" style={{marginTop: '20px'}}>
               <div className="column column-80" style={{margin: '0px auto'}}>
                   <div className="white panel" style={{marginBottom: '10px'}}>
-                    <div className="form-group">
+                    { this.props.dnspass === true && <div className="form-group">
                         <p className="lead">If you wish to associate your app with domain. It's better to create this from the app's page.</p>
                         <label htmlFor="domain">Root Domain</label>
                         <input disabled={this.state.creating} autoComplete="off" placeholder="e.g pushdeploy.com" id="domain" type="text" value={this.state.domain} onChange={(e) => this.setState({domain: e.target.value})}/>
-                    </div>
+                    </div>}
+                    { this.props.dnspass === false && <div>
+                        <p className="lead">Upgrade to <code>Pushdeploy Pro</code> to have unlimited DNS access. <Link to='/account/plans'>Take me to upgrade page</Link>
+                    </p></div>}
+
+                    { this.props.dnspass === null && <div>
+                        <p className="lead">Please reload the page</p></div>}
                   </div>
               </div>
             </div>
             <div className="actions">
-              <button
+            { this.props.dnspass === true && <button
                 className="button"
                 disabled={this.state.creating || this.state.domain.length < 1}
                 onClick={(e) => {
                   this.createDNSZone(e);
                 }}>
                 Create
-              </button>
+              </button> }
               <button
                 className="button button-clear"
                 onClick={() => {
@@ -103,12 +115,7 @@ DNSZoneForm.propTypes = {
 
 const mapStoreToProps = (storeState) => (
     {
-        loading: storeState.loading.loading,
-        servers: storeState.servers, 
-        server: storeState.server,
-        apps: storeState.apps,
-        credentials: storeState.credentials,
-        profile: storeState.profile,
+        dnspass: storeState.dnspass,
     }
 );
 
@@ -116,6 +123,7 @@ const mapDispatchToProps = (dispatch) => ({
   isWorking: ()=> dispatch(isWorking()),
   isDoneWorking: ()=> dispatch(isDoneWorking()),
   changeRoute: (route)=> dispatch(changeRoute(route)),
+  getDNSPassFlag: () => dispatch(DNSAction.getDNSPassFlag()),
 });
 
 export default connect(mapStoreToProps, mapDispatchToProps)(DNSZoneForm)
