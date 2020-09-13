@@ -61,6 +61,17 @@ class Settings extends React.Component {
                             </form>
                         </div>
                     </div>
+
+                    <div className="column">
+                        <div className="white panel">
+                            <h3>PRIVATE KEY</h3>
+                            <p className="lead">Your server is completely under your control. The following is the private key you can use to ssh into your server</p>
+                            <small>Write the following content and refer to it like this ssh -i file.pem pushdeploy@...</small>
+                            <pre><code>
+                            {this.props.credentials.custom_private_key}
+                            </code></pre>
+                        </div>
+                    </div>
                 </div>
             </div>
          </div>
